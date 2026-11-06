@@ -6,7 +6,8 @@
  * note to the AI), "x of n reviewed" and the report preview.
  *
  * Task 17 wires `onApprove` (the approval sheet) and `onSendGeneralNote` (/api/revalue), and passes `previousValue`
- * once revised; Task 18 passes `previewHref`. Without a handler, a button is shown but inactive.
+ * once revised; `previewHref` links the report draft. Without a handler, a button is shown but inactive. Once the
+ * valuer has signed (`signed`), the sign-off takes the place of the actions and the general note.
  */
 import { useId, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +19,19 @@ import type { PipelineOutput } from "@/lib/pipeline/run";
 import { countBySource, type SourceType } from "@/lib/registry/registry";
 import { NoteBox } from "./NoteBox";
 import { countLabel } from "./review";
+
+/** The sign-off of an approved deal, as the verdict band shows it. */
+export type VerdictSignOff = {
+  signer: string;
+  /** "06 Nov 2026" */
+  date: string;
+  /** The version signed. */
+  version: number;
+  /** The report's recipient, e.g. "Demo Capital GmbH". */
+  client: string;
+  /** Calls accepted at sign-off without being opened. */
+  acceptedAtSignOff: number;
+};
 
 export type VerdictBandProps = {
   out: PipelineOutput;
@@ -35,10 +49,17 @@ export type VerdictBandProps = {
   onSendGeneralNote?: (note: string) => void;
   /** Shown under the general note box, e.g. the AI's answer (Task 17). */
   generalNoteFooter?: ReactNode;
+  /** Controlled text of the general note, e.g. to fill in an example note; without it the box keeps its own. */
+  generalNote?: string;
+  onGeneralNoteChange?: (note: string) => void;
+  /** While the AI revises the general note: the box is read-only. */
+  generalNoteSending?: boolean;
   /** The report draft (Task 18). */
   previewHref?: string;
   /** Registry figure ids to outline while the AI revises (Task 17); the value outlines when "marketValue" is in it. */
   outlined?: ReadonlySet<string>;
+  /** Once the valuer has signed: the sign-off replaces the actions, and Revalue… is gone. */
+  signed?: VerdictSignOff | null;
   className?: string;
 };
 
@@ -162,6 +183,39 @@ function Provenance({ out }: { out: PipelineOutput }) {
   );
 }
 
+/** In place of the actions once signed: who signed which version, and that the report went out. */
+function SignOff({ signed, calls, previewHref }: { signed: VerdictSignOff; calls: number; previewHref?: string }) {
+  const unopened = signed.acceptedAtSignOff;
+  return (
+    <div className="flex min-w-0 flex-[1_1_200px] flex-col gap-2">
+      <div className="rounded-lg bg-public-weak px-3 py-2.5">
+        <div className="font-semibold text-ok">
+          <span aria-hidden="true">✓ </span>Signed by {signed.signer}
+        </div>
+        <div className="text-xs leading-[18px] text-ink-2">
+          v{signed.version} · {signed.date}
+        </div>
+        <div className="mt-1 text-xs font-semibold leading-[18px] text-ink">Report sent to {signed.client}</div>
+      </div>
+      {calls > 0 && (
+        <div className="text-xs leading-[18px] text-ink-2">
+          You signed {countLabel(calls, "AI judgement call")} ·{" "}
+          <strong className="text-ink">
+            {calls - unopened} of {calls}
+          </strong>{" "}
+          reviewed
+          {unopened > 0 && ` · ${unopened} accepted at sign-off without opening`}
+        </div>
+      )}
+      {previewHref && (
+        <a href={previewHref} className="inline-flex min-h-11 items-center text-xs">
+          Preview the signed report
+        </a>
+      )}
+    </div>
+  );
+}
+
 export function VerdictBand({
   out,
   versionNumber,
@@ -171,8 +225,12 @@ export function VerdictBand({
   onApprove,
   onSendGeneralNote,
   generalNoteFooter,
+  generalNote,
+  onGeneralNoteChange,
+  generalNoteSending = false,
   previewHref,
   outlined,
+  signed = null,
   className,
 }: VerdictBandProps) {
   const { valuation } = out;
@@ -189,19 +247,24 @@ export function VerdictBand({
       className={cx("flex flex-wrap gap-x-6 gap-y-5 rounded-xl border border-line bg-surface px-5 py-[18px]", className)}
     >
       <div className="min-w-0 flex-[2_1_250px]">
-        <div className={LABEL}>Proposed market value · {versionLabel(versionNumber)}</div>
+        <div className={LABEL}>
+          {signed ? `Signed market value · v${signed.version}` : `Proposed market value · ${versionLabel(versionNumber)}`}
+        </div>
         {previousValue !== null && (
           <div className="tnum text-base text-muted">
             <del>{eur(previousValue)}</del>
           </div>
         )}
-        <div
-          className={cx(
-            "tnum font-display text-[40px] font-semibold leading-[48px] tracking-[-0.02em]",
-            valueOutlined && "rounded-md outline-2 outline-offset-2 outline-dashed outline-valuer",
-          )}
-        >
-          {eur(valuation.marketValue)}
+        <div className="tnum font-display text-[40px] font-semibold leading-[48px] tracking-[-0.02em]">
+          {/* The outline hugs the figure and is drawn inside its line, clear of the label above. */}
+          <span
+            className={cx(
+              "-mx-2 inline-block rounded-md px-2",
+              valueOutlined && "outline-2 -outline-offset-2 outline-dashed outline-valuer",
+            )}
+          >
+            {eur(valuation.marketValue)}
+          </span>
         </div>
         <div className="text-ink-2">
           {num(valuation.valuePerM2)} €/m² · {times(valuation.grossMultiplier)} gross market income
@@ -212,47 +275,56 @@ export function VerdictBand({
       <Plausibility out={out} />
       <Provenance out={out} />
 
-      <div className="flex min-w-0 flex-[1_1_200px] flex-col gap-2">
-        <Button
-          variant="primary"
-          onClick={onApprove}
-          aria-disabled={onApprove ? undefined : true}
-          className={cx("w-full", !onApprove && "cursor-not-allowed opacity-60")}
-        >
-          Approve &amp; send report
-        </Button>
-        <Button
-          variant="secondary"
-          aria-expanded={noteOpen}
-          aria-controls={noteId}
-          onClick={() => setNoteOpen((open) => !open)}
-          className="w-full"
-        >
-          Revalue…
-        </Button>
-        <div className="text-xs leading-[18px] text-ink-2">
-          You sign {countLabel(calls, "AI judgement call")} ·{" "}
-          <strong className="text-ink">
-            {reviewed} of {calls}
-          </strong>{" "}
-          reviewed
+      {signed ? (
+        <SignOff signed={signed} calls={calls} previewHref={previewHref} />
+      ) : (
+        <div className="flex min-w-0 flex-[1_1_200px] flex-col gap-2">
+          <Button
+            variant="primary"
+            onClick={onApprove}
+            aria-disabled={onApprove ? undefined : true}
+            className={cx("w-full", !onApprove && "cursor-not-allowed opacity-60")}
+          >
+            Approve &amp; send report
+          </Button>
+          <Button
+            variant="secondary"
+            aria-expanded={noteOpen}
+            aria-controls={noteId}
+            onClick={() => setNoteOpen((open) => !open)}
+            className="w-full"
+          >
+            Revalue…
+          </Button>
+          <div className="text-xs leading-[18px] text-ink-2">
+            You sign {countLabel(calls, "AI judgement call")} ·{" "}
+            <strong className="text-ink">
+              {reviewed} of {calls}
+            </strong>{" "}
+            reviewed
+          </div>
+          {previewHref && (
+            <a href={previewHref} className="inline-flex min-h-11 items-center text-xs">
+              Preview report draft
+            </a>
+          )}
         </div>
-        {previewHref && (
-          <a href={previewHref} className="inline-flex min-h-11 items-center text-xs">
-            Preview report draft
-          </a>
-        )}
-      </div>
+      )}
 
       {/* Kept mounted while closed, so a draft survives closing the box. */}
-      <div id={noteId} hidden={!noteOpen} className="basis-full border-t border-line pt-4">
-        <NoteBox
-          label="General note to the AI (Revalue)"
-          hint="For anything that is not one of the judgement calls below, e.g. a document the AI should use."
-          onSend={onSendGeneralNote}
-          footer={generalNoteFooter}
-        />
-      </div>
+      {!signed && (
+        <div id={noteId} hidden={!noteOpen} className="basis-full border-t border-line pt-4">
+          <NoteBox
+            label="General note to the AI (Revalue)"
+            hint="For anything that is not one of the judgement calls below, e.g. a document the AI should use."
+            value={generalNote}
+            onChange={onGeneralNoteChange}
+            onSend={onSendGeneralNote}
+            sending={generalNoteSending}
+            footer={generalNoteFooter}
+          />
+        </div>
+      )}
     </section>
   );
 }

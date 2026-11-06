@@ -7,7 +7,8 @@
  * the ledger of the figures verified automatically.
  *
  * The page owns the focus and the store actions. Task 17 passes `onSendNote` (it posts the note to /api/revalue),
- * `sendingFlagId` while the AI revises and `noteFooter` for the AI's answer or the example notes.
+ * `sendingFlagId` while the AI revises, `noteFooter` for the AI's answer or the example notes, `titleNotes` for the
+ * "(was 3.0 %)" of a call the valuer changed, and `readOnly` once the valuer has signed.
  */
 import { useId, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
@@ -59,6 +60,12 @@ export type NeedsYourEyeProps = {
   /** Controlled note texts by call id (Task 17, e.g. to fill in an example note); without them each box keeps its own. */
   notes?: Record<string, string>;
   onNoteChange?: (flagId: string, note: string) => void;
+  /** Added to a call's title by id, e.g. " (was 3.0 %)" once the valuer changed it (Task 17). */
+  titleNotes?: Record<string, string>;
+  /** The deal is signed: calls can be read and their evidence shown, but no longer accepted, reopened or revalued. */
+  readOnly?: boolean;
+  /** Calls accepted at sign-off without being opened (the approval's log). */
+  acceptedAtSignOff?: readonly string[];
   className?: string;
 };
 
@@ -101,6 +108,10 @@ type FlagRowProps = {
   out: PipelineOutput;
   note: string;
   onNote: (note: string) => void;
+  titleNote: string;
+  readOnly: boolean;
+  /** Accepted at sign-off without being opened. */
+  atSignOff: boolean;
 } & Pick<NeedsYourEyeProps, "onFocusFlag" | "onAccept" | "onReopen" | "onSendNote" | "sendingFlagId" | "noteFooter">;
 
 function FlagRow({
@@ -112,6 +123,9 @@ function FlagRow({
   out,
   note,
   onNote,
+  titleNote,
+  readOnly,
+  atSignOff,
   onFocusFlag,
   onAccept,
   onReopen,
@@ -145,10 +159,13 @@ function FlagRow({
         <span className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
           <span id={titleId} className={cx("font-semibold", open && "text-[15px]")}>
             {number} · {flag.title}
+            {titleNote}
           </span>
           <span id={statusId} className={STATUS_CLASS[status]}>
             {status === "open" && <span aria-hidden="true">≈ </span>}
-            {flagStatusText(flag, status, out)}
+            {status === "accepted" && atSignOff
+              ? `Accepted at sign-off · ${VALUER_INITIALS}`
+              : flagStatusText(flag, status, out)}
           </span>
         </span>
         {!open && swing && (
@@ -208,30 +225,39 @@ function FlagRow({
           {status === "accepted" && (
             <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-ok">
               <span className="font-semibold">
-                <span aria-hidden="true">✓ </span>You accepted the AI&apos;s call · {VALUER_INITIALS}
+                <span aria-hidden="true">✓ </span>
+                {atSignOff
+                  ? `Accepted at sign-off without opening · ${VALUER_INITIALS}`
+                  : `You accepted the AI's call · ${VALUER_INITIALS}`}
               </span>
-              <Button variant="ghost" onClick={() => onReopen(flag.id)}>
-                Reopen
-              </Button>
+              {!readOnly && (
+                <Button variant="ghost" onClick={() => onReopen(flag.id)}>
+                  Reopen
+                </Button>
+              )}
             </div>
           )}
 
-          <NoteBox
-            className="mt-3.5"
-            label="Note to the AI (Revalue)"
-            value={note}
-            onChange={onNote}
-            onSend={onSendNote ? (text) => onSendNote(flag.id, text) : undefined}
-            sending={sendingFlagId === flag.id}
-            actions={
-              status === "open" ? (
-                <Button variant="primary" onClick={() => onAccept(flag.id)}>
-                  {flag.acceptLabel}
-                </Button>
-              ) : null
-            }
-            footer={noteFooter?.(flag.id)}
-          />
+          {readOnly ? (
+            <p className="mt-3 text-xs leading-[18px] text-muted">The valuation is signed; this call is final.</p>
+          ) : (
+            <NoteBox
+              className="mt-3.5"
+              label="Note to the AI (Revalue)"
+              value={note}
+              onChange={onNote}
+              onSend={onSendNote ? (text) => onSendNote(flag.id, text) : undefined}
+              sending={sendingFlagId === flag.id}
+              actions={
+                status === "open" ? (
+                  <Button variant="primary" onClick={() => onAccept(flag.id)}>
+                    {flag.acceptLabel}
+                  </Button>
+                ) : null
+              }
+              footer={noteFooter?.(flag.id)}
+            />
+          )}
         </div>
       )}
     </div>
@@ -242,12 +268,14 @@ function SpotCheckRow({
   spot,
   focused,
   out,
+  readOnly,
   onFocus,
   onMatches,
 }: {
   spot: SpotCheck;
   focused: boolean;
   out: PipelineOutput;
+  readOnly: boolean;
   onFocus: () => void;
   onMatches: () => void;
 }) {
@@ -277,6 +305,8 @@ function SpotCheckRow({
         <span className="text-xs font-semibold text-ok">
           <span aria-hidden="true">✓ </span>Matches · {VALUER_INITIALS}
         </span>
+      ) : readOnly ? (
+        <span className="text-xs text-muted">Not checked</span>
       ) : (
         <Button variant="secondary" onClick={onMatches}>
           Matches
@@ -301,6 +331,9 @@ export function NeedsYourEye({
   noteFooter,
   notes,
   onNoteChange,
+  titleNotes,
+  readOnly = false,
+  acceptedAtSignOff = [],
   className,
 }: NeedsYourEyeProps) {
   const { flags } = out;
@@ -337,6 +370,9 @@ export function NeedsYourEye({
           out={out}
           note={noteOf(flag.id)}
           onNote={(note) => setNote(flag.id, note)}
+          titleNote={titleNotes?.[flag.id] ?? ""}
+          readOnly={readOnly}
+          atSignOff={acceptedAtSignOff.includes(flag.id)}
           onFocusFlag={onFocusFlag}
           onAccept={onAccept}
           onReopen={onReopen}
@@ -350,6 +386,7 @@ export function NeedsYourEye({
           spot={spotCheck}
           focused={focus?.kind === "spot"}
           out={out}
+          readOnly={readOnly}
           onFocus={onFocusSpotCheck}
           onMatches={onSpotCheckMatches}
         />
