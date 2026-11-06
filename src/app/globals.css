@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/* Censio design tokens — copied from the chosen mockup (docs/superpowers/specs/mockups/valuer-review-A2.dc.html). */
+@theme {
+  --color-page: #f2f4f7;
+  --color-surface: #ffffff;
+  --color-subtle: #f9fafb;
+  --color-line: #e4e7ec;
+  --color-line-strong: #d0d5dd;
+  --color-ink: #101828;
+  --color-ink-2: #475467;
+  --color-muted: #5b6576;
+  --color-faint: #98a2b3;
+
+  --color-brand: #0b5d4b;
+  --color-brand-weak: #e6f2ee;
+  --color-brand-accent: #7fd1b9;
+
+  --color-doc: #1849a9;
+  --color-doc-weak: #eaf1ff;
+  --color-public: #0e6f67;
+  --color-public-weak: #e3f5f2;
+  --color-rule: #475467;
+  --color-rule-weak: #eef0f3;
+  --color-calc: #d0d5dd;
+  --color-ai: #a3410a;
+  --color-ai-weak: #fff4e5;
+  --color-ai-strong: #f79009;
+  --color-ai-mid: #fec84b;
+  --color-ai-light: #fedf89;
+  --color-ai-row: #fffaf2;
+  --color-valuer: #5b3cc4;
+  --color-valuer-weak: #f1edff;
+  --color-valuer-line: #bdb4fe;
+  --color-hl: #fef7c3;
+  --color-hl-line: #eaaa08;
+  --color-ok: #0e6f67;
+  --color-pen: #b42318;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.hatch-ai {
+  background: repeating-linear-gradient(135deg, #f79009 0 3px, #fedf89 3px 6px);
+}
+
+/* Highlight used by the PDF viewer for cited passages. */
+mark.censio-hl {
+  background: rgba(254, 223, 137, 0.75);
+  color: transparent;
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px rgba(234, 170, 8, 0.55);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+button {
+  cursor: pointer;
+}
