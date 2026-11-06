@@ -1,0 +1,22 @@
+{
+  "documentType": "zoning_plan",
+  "summary": "Zoning plan · general residential area (WA) · residential use permitted",
+  "tenantList": null,
+  "landRegister": null,
+  "energyCertificate": null,
+  "refurbishmentSheet": null,
+  "zoningPlan": {
+    "areaType": {
+      "value": "General residential area (WA)",
+      "page": 1,
+      "quote": "Allgemeines Wohngebiet (WA)",
+      "confidence": "high"
+    },
+    "residentialAllowed": {
+      "value": true,
+      "page": 1,
+      "quote": "Wohnnutzung zulässig",
+      "confidence": "high"
+    }
+  }
+}

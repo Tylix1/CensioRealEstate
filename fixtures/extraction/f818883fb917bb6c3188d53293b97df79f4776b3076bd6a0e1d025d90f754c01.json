@@ -1,0 +1,52 @@
+{
+  "documentType": "energy_certificate",
+  "summary": "Energy certificate · gas, heating from 2019 · class D · 128 kWh/(m²·a) · 565 m²",
+  "tenantList": null,
+  "landRegister": null,
+  "energyCertificate": {
+    "address": {
+      "value": "Musterstraße 12, 04109 Leipzig",
+      "page": 1,
+      "quote": "Musterstraße 12, 04109 Leipzig",
+      "confidence": "high"
+    },
+    "builtYear": {
+      "value": 1912,
+      "page": 1,
+      "quote": "Baujahr Gebäude 1912",
+      "confidence": "high"
+    },
+    "heatingYear": {
+      "value": 2019,
+      "page": 1,
+      "quote": "Baujahr Wärmeerzeuger 2019",
+      "confidence": "high"
+    },
+    "energyCarrier": {
+      "value": "Gas",
+      "page": 1,
+      "quote": "Erdgas",
+      "confidence": "high"
+    },
+    "energyClass": {
+      "value": "D",
+      "page": 1,
+      "quote": "Effizienzklasse D",
+      "confidence": "high"
+    },
+    "demandKwh": {
+      "value": 128,
+      "page": 1,
+      "quote": "128 kWh/(m²·a)",
+      "confidence": "high"
+    },
+    "livingAreaM2": {
+      "value": 565,
+      "page": 1,
+      "quote": "Gebäudenutzfläche (Wohnfläche) 565 m²",
+      "confidence": "high"
+    }
+  },
+  "refurbishmentSheet": null,
+  "zoningPlan": null
+}

@@ -1,0 +1,366 @@
+{
+  "documentType": "tenant_list",
+  "summary": "Tenant list · 8 units · 565 m² · €5,040.30 net cold rent per month",
+  "tenantList": {
+    "units": [
+      {
+        "label": {
+          "value": "GF left",
+          "page": 2,
+          "quote": "EG links",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "GF",
+          "page": 2,
+          "quote": "EG links",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 62,
+          "page": 2,
+          "quote": "62,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 2,
+          "page": 2,
+          "quote": "2 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 520.8,
+          "page": 2,
+          "quote": "520,80 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2009,
+          "page": 2,
+          "quote": "seit 2009",
+          "confidence": "high"
+        },
+        "features": [
+          "courtyard"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "GF right",
+          "page": 2,
+          "quote": "EG rechts",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "GF",
+          "page": 2,
+          "quote": "EG rechts",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 68,
+          "page": 2,
+          "quote": "68,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 2.5,
+          "page": 2,
+          "quote": "2,5 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 591.6,
+          "page": 2,
+          "quote": "591,60 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2012,
+          "page": 2,
+          "quote": "seit 2012",
+          "confidence": "high"
+        },
+        "features": [
+          "street"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "1F left",
+          "page": 2,
+          "quote": "1. OG links",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "1F",
+          "page": 2,
+          "quote": "1. OG links",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 71,
+          "page": 2,
+          "quote": "71,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 3,
+          "page": 2,
+          "quote": "3 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 653.2,
+          "page": 2,
+          "quote": "653,20 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2022,
+          "page": 2,
+          "quote": "seit 2022",
+          "confidence": "high"
+        },
+        "features": [
+          "renovated_bath"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "1F right",
+          "page": 2,
+          "quote": "1. OG rechts",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "1F",
+          "page": 2,
+          "quote": "1. OG rechts",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 75,
+          "page": 2,
+          "quote": "75,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 3,
+          "page": 2,
+          "quote": "3 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 705,
+          "page": 2,
+          "quote": "705,00 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2025,
+          "page": 2,
+          "quote": "seit 2025",
+          "confidence": "high"
+        },
+        "features": [
+          "balcony"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "2F left",
+          "page": 2,
+          "quote": "2. OG links",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "2F",
+          "page": 2,
+          "quote": "2. OG links",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 62,
+          "page": 2,
+          "quote": "62,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 2,
+          "page": 2,
+          "quote": "2 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 533.2,
+          "page": 2,
+          "quote": "533,20 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2011,
+          "page": 2,
+          "quote": "seit 2011",
+          "confidence": "high"
+        },
+        "features": [
+          "courtyard"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "2F right",
+          "page": 2,
+          "quote": "2. OG rechts",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "2F",
+          "page": 2,
+          "quote": "2. OG rechts",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 68,
+          "page": 2,
+          "quote": "68,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 2.5,
+          "page": 2,
+          "quote": "2,5 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 598.4,
+          "page": 2,
+          "quote": "598,40 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2016,
+          "page": 2,
+          "quote": "seit 2016",
+          "confidence": "high"
+        },
+        "features": [
+          "balcony"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "3F left",
+          "page": 2,
+          "quote": "3. OG links",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "3F",
+          "page": 2,
+          "quote": "3. OG links",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 71,
+          "page": 2,
+          "quote": "71,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 3,
+          "page": 2,
+          "quote": "3 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 646.1,
+          "page": 2,
+          "quote": "646,10 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2021,
+          "page": 2,
+          "quote": "seit 2021",
+          "confidence": "high"
+        },
+        "features": [
+          "renovated_bath"
+        ],
+        "vacant": false
+      },
+      {
+        "label": {
+          "value": "Attic",
+          "page": 2,
+          "quote": "DG",
+          "confidence": "high"
+        },
+        "floor": {
+          "value": "attic",
+          "page": 2,
+          "quote": "DG",
+          "confidence": "high"
+        },
+        "areaM2": {
+          "value": 88,
+          "page": 2,
+          "quote": "88,0 m²",
+          "confidence": "high"
+        },
+        "rooms": {
+          "value": 3.5,
+          "page": 2,
+          "quote": "3,5 Zi.",
+          "confidence": "high"
+        },
+        "rentPerMonth": {
+          "value": 792,
+          "page": 2,
+          "quote": "792,00 €",
+          "confidence": "high"
+        },
+        "leaseSinceYear": {
+          "value": 2019,
+          "page": 2,
+          "quote": "seit 2019",
+          "confidence": "high"
+        },
+        "features": [
+          "roof_terrace"
+        ],
+        "vacant": false
+      }
+    ],
+    "totalAreaM2": {
+      "value": 565,
+      "page": 2,
+      "quote": "Wohnfläche gesamt 565,0 m²",
+      "confidence": "high"
+    },
+    "totalRentPerMonth": {
+      "value": 5040.3,
+      "page": 2,
+      "quote": "Summe Nettokaltmiete / Monat 5.040,30 €",
+      "confidence": "high"
+    },
+    "address": {
+      "value": "Musterstraße 12, 04109 Leipzig",
+      "page": 1,
+      "quote": "Musterstraße 12, 04109 Leipzig",
+      "confidence": "high"
+    }
+  },
+  "landRegister": null,
+  "energyCertificate": null,
+  "refurbishmentSheet": null,
+  "zoningPlan": null
+}

@@ -1,0 +1,41 @@
+{
+  "documentType": "land_register",
+  "summary": "Land register · plot 480 m² · 1 easement in section II",
+  "tenantList": null,
+  "landRegister": {
+    "kind": "Grundbuch",
+    "parcel": {
+      "value": "Gemarkung Leipzig, Flur 12, Flurstück 123/4",
+      "page": 1,
+      "quote": "Flurstück 123/4",
+      "confidence": "high"
+    },
+    "plotM2": {
+      "value": 480,
+      "page": 1,
+      "quote": "480 m²",
+      "confidence": "high"
+    },
+    "address": {
+      "value": "Musterstraße 12",
+      "page": 1,
+      "quote": "Musterstraße 12",
+      "confidence": "high"
+    },
+    "easements": [
+      {
+        "text": {
+          "value": "Beschränkte persönliche Dienstbarkeit (Leitungsrecht) für die städtischen Versorgungsbetriebe; eingetragen am 14.03.1998.",
+          "page": 4,
+          "quote": "Beschränkte persönliche Dienstbarkeit (Leitungsrecht) für die städtischen Versorgungsbetriebe; eingetragen am 14.03.1998.",
+          "confidence": "high"
+        },
+        "translationEn": "Limited personal easement (utility line right) for the municipal utility; registered 14 Mar 1998."
+      }
+    ],
+    "landChargesCount": 1
+  },
+  "energyCertificate": null,
+  "refurbishmentSheet": null,
+  "zoningPlan": null
+}

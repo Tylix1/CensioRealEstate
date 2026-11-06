@@ -1,0 +1,108 @@
+{
+  "documentType": "refurbishment_sheet",
+  "summary": "Refurbishment sheet · 6 measures 2014–2019",
+  "tenantList": null,
+  "landRegister": null,
+  "energyCertificate": null,
+  "refurbishmentSheet": {
+    "measures": [
+      {
+        "name": {
+          "value": "Roof incl. insulation",
+          "page": 1,
+          "quote": "Dacherneuerung inkl. Wärmedämmung",
+          "confidence": "high"
+        },
+        "year": {
+          "value": 2016,
+          "page": 1,
+          "quote": "2016",
+          "confidence": "high"
+        },
+        "category": "roof",
+        "extent": "full"
+      },
+      {
+        "name": {
+          "value": "Windows",
+          "page": 1,
+          "quote": "Erneuerung der Fenster",
+          "confidence": "high"
+        },
+        "year": {
+          "value": 2014,
+          "page": 1,
+          "quote": "2014",
+          "confidence": "high"
+        },
+        "category": "windows",
+        "extent": "full"
+      },
+      {
+        "name": {
+          "value": "Pipes / electrics",
+          "page": 1,
+          "quote": "Erneuerung der Leitungssysteme (Strom, Wasser, Abwasser)",
+          "confidence": "high"
+        },
+        "year": {
+          "value": 2014,
+          "page": 1,
+          "quote": "2014",
+          "confidence": "high"
+        },
+        "category": "pipes",
+        "extent": "full"
+      },
+      {
+        "name": {
+          "value": "Heating",
+          "page": 1,
+          "quote": "Einbau Gas-Brennwertkessel",
+          "confidence": "high"
+        },
+        "year": {
+          "value": 2019,
+          "page": 1,
+          "quote": "2019",
+          "confidence": "high"
+        },
+        "category": "heating",
+        "extent": "full"
+      },
+      {
+        "name": {
+          "value": "Bathrooms",
+          "page": 1,
+          "quote": "Modernisierung der Bäder",
+          "confidence": "high"
+        },
+        "year": {
+          "value": 2014,
+          "page": 1,
+          "quote": "2014",
+          "confidence": "high"
+        },
+        "category": "bathrooms",
+        "extent": "full"
+      },
+      {
+        "name": {
+          "value": "Interior, partial",
+          "page": 1,
+          "quote": "Innenausbau teilweise (Böden, Türen)",
+          "confidence": "high"
+        },
+        "year": {
+          "value": 2014,
+          "page": 1,
+          "quote": "2014",
+          "confidence": "high"
+        },
+        "category": "interior",
+        "extent": "partial"
+      }
+    ]
+  },
+  "zoningPlan": null
+}

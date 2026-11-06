@@ -1,0 +1,22 @@
+{
+  "Mieterliste_Musterstrasse12.pdf": {
+    "sha256": "a65cd2eed48012518891a5c85eb8cbc81ab3dc005dd8b2eeadc7548b352da67f",
+    "source": "demo-fixture"
+  },
+  "Grundbuch_Musterstrasse12.pdf": {
+    "sha256": "ab8d1a62372db77573dca16f377844ab67d470355bcf0e0051bdc01b74465c26",
+    "source": "demo-fixture"
+  },
+  "Energieausweis_Musterstrasse12.pdf": {
+    "sha256": "f818883fb917bb6c3188d53293b97df79f4776b3076bd6a0e1d025d90f754c01",
+    "source": "demo-fixture"
+  },
+  "Sanierungsuebersicht_Musterstrasse12.pdf": {
+    "sha256": "579e9ac10eab4981a0c641c2a0837b9c27a7b8833f89bf657a92a5578dd48d94",
+    "source": "demo-fixture"
+  },
+  "B-Plan_Auszug_Musterstrasse12.pdf": {
+    "sha256": "1a4721123a7f2630ffefd9ffc4242aac60871a8692e9ddbd4112af5f75ab2439",
+    "source": "demo-fixture"
+  }
+}
