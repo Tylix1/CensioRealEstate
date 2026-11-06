@@ -1,9 +1,10 @@
-# Censio RE — Clickable Prototype: Design
+# Censio RE — Clickable Prototype: Design (v2)
 
-- **Status:** draft for founder approval
+- **Status:** draft v2 for founder approval. Updated with the founders' answers: real document extraction, and live AI with usage limits.
 - **Date:** 2026-11-06
 - **Mockups:** Claude Design canvas "Censio Valuer Review Mockups" (private link held by the founders). The chosen direction is the artboard **"A v2"**. A source copy is in [`mockups/valuer-review-A2.dc.html`](mockups/valuer-review-A2.dc.html). Read it as markup and style reference; it needs the canvas runtime to render.
-- **Status of values:** all numbers in this document are canonical. Where the mockup differs by rounding, this document wins.
+- **Values:** every number in this document is canonical. Where the mockup differs by rounding, this document wins.
+- **"My call":** marks a decision the designer made where the founders gave no direction. The founders can overrule any of them.
 
 ---
 
@@ -17,57 +18,63 @@ Censio RE is an AI-native B2B property-valuation venture in Germany. A client, f
 - estimates market rent,
 - computes the value with the German income approach (Ertragswertverfahren, ImmoWertV §§ 27–34).
 
-**What the senior valuer does:** an "eye test" only. They do not redo the work. They either:
-- **Approve**, and a PDF report goes to the client by email, or
-- **Revalue**, by typing a free-text note that goes back to the AI, like handing work back to a junior. The AI then revises the valuation.
+**What the senior valuer does:** an "eye test" only, without redoing the work. They either:
+- **Approve:** a PDF report goes to the client by email.
+- **Revalue:** they type a free-text note that goes back to the AI, like handing work back to a junior, and the AI revises the valuation.
 
-This document specifies a **clickable prototype** of that process. It does not specify the product.
+This document specifies a **clickable prototype** of that process, not the product.
 
 ### 1.1 Why, and for whom
 
-1. **A short promo video** (screen recording) that shows the main features. The demo path must run identically in every take.
-2. **A university class and its professor.** The class is taught in English, and the professor is not a valuation expert. The prototype must make four things obvious:
+1. **A short promo video** (screen recording) showing the main features.
+2. **A university class and its professor.** The class is taught in English. The professor is not a valuation expert. The prototype must make four things obvious:
    - where the AI does the work,
    - where the human only checks,
-   - why the process scales,
-   - that it is state-of-the-art and "AI-native".
+   - why it scales,
+   - that it is state of the art ("AI-native").
 
-   The founders may present the prototype themselves, or the professor may click through it alone via a link. **Both must work**, so the app has to explain itself and stay robust when someone types their own input.
+The founders may present the prototype themselves, or the professor may click through it alone via a link. **Both must work.** That means the app has to explain itself and stay robust against the professor's own input.
 
 ### 1.2 Success looks like
 
-- A non-expert grasps the following within about 3 minutes:
-  - the AI prepares;
-  - the valuer checks only the AI's flagged judgement calls;
-  - every number traces back to a source;
-  - the valuer can send work back with a note and see a revision;
+- **Within about 3 minutes, a non-expert grasps that:**
+  - the AI reads the documents and prepares the valuation;
+  - the valuer only checks the flagged judgement calls;
+  - every number traces back to a source, down to the highlighted line in the PDF;
+  - the valuer can send work back with a note;
   - one valuer can handle many deals.
-- The full demo path (§5.2) runs end to end on the hosted link without errors.
-- All numbers are internally consistent. Precision of the valuation itself is **not** a goal.
+- **The full demo path runs end to end on the hosted link:** upload the sample PDFs, real extraction, review, revalue, approve, PDF report.
+- **All numbers are internally consistent.** Precision of the valuation itself is *not* a goal.
 
 ### 1.3 Goals, non-goals, anti-goals
 
 **Goals**
 - A full click path covering both roles: client → AI → senior valuer → client.
-- The review screen of direction A v2 (§5.4), with real recalculation.
-- A real Revalue loop, powered by live AI when an API key is configured (§6).
+- **Real AI extraction from uploaded PDFs.**
+  - The founders upload the bundled sample documents, or similar documents they make themselves.
+  - The AI reads them.
+  - The extracted data drives everything downstream: units, valuation, flags and report.
+- **A PDF viewer** that shows the source page and highlights the passage a figure came from.
+- The valuer review screen of direction A v2 (§5.4), with real recalculation.
+- A real Revalue loop with live AI (§6.2).
 - A real, downloadable PDF report.
+- **Usage limits**, so the API key cannot run up costs (§6.4).
 
 **Non-goals**
 - Real accounts, authentication or email delivery.
 - A database, or persistence across devices.
-- Processing arbitrary uploaded documents. Only the bundled sample documents are "read".
-- Live lookups in BORIS (land values) or the valuation committees' market reports.
-- A trained rent model.
-- The comparison approach (Vergleichswertverfahren) and the cost approach (Sachwertverfahren).
-- Valuation logic for Commercial or Hotel properties.
+- Robust extraction from arbitrary real-world documents: scans, handwriting, unusual layouts. Extraction targets the five document types (§5.3.2) and is tested on the bundled samples.
+- Live lookups in BORIS (land values) or in the valuation committees' market reports. Bundled sample lookup tables are used instead (§5.3.7).
+- A trained rent model. A deterministic estimator on a bundled sample set of comparable listings is used instead (§6.3).
+- Photo analysis. Photos are displayed, not interpreted.
+- Comparison and cost approaches; valuation logic for Commercial, Hotel or single condominium units.
 - A legally valid valuation report.
 
-**Anti-goals.** Each of these would make the prototype a failure even if it technically works:
+**Anti-goals.** Each would make the prototype a failure even if it technically works:
 - It looks like a form with a calculator, and the AI is invisible.
 - The AI looks like it decides alone. The human in the loop and accountability must stay visible: the valuer is the signatory of record, the AI is the preparer.
-- A viewer's free-text input breaks the demo or produces nonsense.
-- Sample data looks real. Everything fake is visibly labelled "Sample data", and the sample PDFs carry "MUSTER / SAMPLE".
+- A viewer's own input breaks the demo or produces nonsense.
+- Sample data looks real. Everything fake is visibly labelled "Sample data"; the sample PDFs carry "MUSTER / SAMPLE".
 
 ---
 
@@ -76,26 +83,27 @@ This document specifies a **clickable prototype** of that process. It does not s
 | Topic | Decision |
 |---|---|
 | UI language | English. German legal terms keep their German name plus a short English gloss, e.g. "Grundbuch (land register)". |
-| Valuation method | Income approach only: Ertragswertverfahren, general method (§ 28 ImmoWertV). Basis: market value under § 194 BauGB. |
-| Usage types | Living, Commercial and Hotel can all be selected. Only Living is computed. |
-| Scope | The client chooses "whole building" or "single unit". *My call:* "single unit" can be selected, but the prototype then continues with the whole-building sample and shows a note, the same way as for Commercial and Hotel. A real single-unit (condominium) case would need a Wohnungsgrundbuch, a Teilungserklärung and condominium-specific costs. |
-| Units | The AI creates the units from the uploaded tenant list, and the client only reviews and edits them. A manual per-unit form exists as a fallback, e.g. for a vacant unit with no lease. Photos per unit are optional. |
-| Valuer review screen | Direction **A v2, "exceptions first"**, with units expandable and a map and property photo added (§5.4). |
-| Revalue result | Shown as a revision with tracked changes (v1 → v2 diff, plus "Back to v1"). |
-| Accounts | Not built. One-click demo sign-in. |
-| Email / PDF | The email is simulated (preview card). The PDF is real and downloadable. |
-| Build approach | A web app in this repository, hosted on Vercel (approach 1, §4). |
-| AI | Live Claude for the Revalue note when an API key is configured. Otherwise a scripted fallback (§6). |
-| Land register (Grundbuch) | There is one Grundbuch per plot. A condominium-split building instead has one Wohnungsgrundbuch per unit, plus a Teilungserklärung (§ 7 WEG). The sample deal is an **undivided** building, so it has **one** Grundbuch. |
+| Valuation method | Income approach only (Ertragswertverfahren, general method, § 28 ImmoWertV). Basis: market value (§ 194 BauGB). |
+| Usage types | Living, Commercial and Hotel can be selected. Only Living is computed. |
+| Scope | Whole building or single unit. *My call:* if "single unit" is chosen, the prototype continues with the whole-building sample and shows a note, as it does for Commercial and Hotel. A real condominium case would need a Wohnungsgrundbuch, a Teilungserklärung and condominium costs. |
+| Documents | The client uploads PDFs, and **the AI really reads them**. Sample documents are bundled with the app. |
+| Units | The AI creates the units from the uploaded tenant list. The client reviews and edits them, and can add a unit by hand, e.g. a vacant one. Photos per unit are optional. **Client edits flow into the valuation.** *This is my reading of the founders' answer:* the data comes from the documents, so the pipeline is data-driven anyway. |
+| Valuer review screen | Direction **A v2, "exceptions first"**: units can be expanded, with a map and the property photo (§5.4). |
+| Revalue result | A revision with tracked changes. *My call:* versions form a linear history with undo (§5.2, V3). |
+| Accounts | Not built; a one-click demo sign-in instead. |
+| Email and PDF | The email is simulated (a preview card). The PDF is real and downloadable. |
+| Build | A web app in this repository, hosted on Vercel (approach 1, §4). |
+| AI | Live Claude for document extraction and for the Revalue note. The founders said: use a key, but **limit usage** (§6.4). Demo mode is the fallback. |
+| Land register (Grundbuch) | There is one Grundbuch per plot. A building split into condominiums has one Wohnungsgrundbuch per unit plus a Teilungserklärung (§ 7 WEG). The sample deal is an **undivided** building, so it has **one** Grundbuch. |
 
 ---
 
 ## 3. Constraints
 
-- **Devices:** desktop Chrome and Safari are primary. Layouts must not break at 390 px phone width, but phone is not optimised.
-- **Cost:** free tiers only — Vercel Hobby, and OpenStreetMap tiles with attribution. The Claude API costs only when live mode is used, at roughly cents per Revalue.
-- **Secrets:** none in the repo. The API key lives only in a Vercel environment variable (`ANTHROPIC_API_KEY`).
-- **Sample data:** no real persons or companies. The client is "Demo Capital GmbH" and the address is "Musterstraße 12, 04109 Leipzig". Real public sources (BORIS Sachsen, the Leipzig valuation committee) may be **named** as data sources, but every excerpt shown is labelled sample.
+- **Devices.** Desktop Chrome and Safari are primary. Layouts must not break at 390 px (phone width), but are not optimised for it.
+- **Cost.** Free tiers wherever possible: Vercel Hobby, and OpenStreetMap tiles with attribution. The Claude API is pay-per-use, under hard caps (§6.4).
+- **Secrets.** None in the repo. The key lives only in Vercel environment variables.
+- **Sample data.** No real persons or companies. The client is "Demo Capital GmbH" and the address is "Musterstraße 12, 04109 Leipzig". Real public sources (BORIS Sachsen, the Leipzig valuation committee) may be **named** as data sources, but every value from them is sample data and labelled as such.
 
 ---
 
@@ -103,10 +111,10 @@ This document specifies a **clickable prototype** of that process. It does not s
 
 | # | Approach | Trade-offs | Verdict |
 |---|---|---|---|
-| 1 | **Web app in this repo, hybrid AI.** Next.js on Vercel. A real valuation engine, a scripted sample deal, live Claude for Revalue with a fallback, a real PDF and a real map. | **For:** serves both audiences, since the video path is deterministic and the professor can type real notes. It is also the first brick of the product. **Against:** most effort. Needs a Vercel account, and optionally an API key. | **Chosen** |
-| 2 | **Click-through on the design canvas.** The mockups become linked artboards, and everything is scripted. | **For:** fastest. **Against:** no real AI or PDF; reacts only to canned input; lives on claude.ai, so it has to be shared there; not reusable for the product. | Rejected |
-| 3 | **Everything live.** Any uploaded documents, real BORIS lookups, a trained rent model. | This is the product, not a prototype. It means weeks of work and is fragile for a video. | Rejected |
-| – | **Lovable / v0.** | Possible, but the agreed design would have to be re-translated into the tool. | Rejected |
+| 1 | **Web app in this repo, live AI where it matters.** Next.js on Vercel, with a real valuation engine, real PDF extraction, live Claude for Revalue, a real PDF report and a real map. | **For:** serves both audiences and is the first building block of the product. **Against:** most effort; needs a Vercel account and an API key. | **Chosen** |
+| 2 | **Click-through on the design canvas.** Linked artboards, everything scripted. | **For:** fastest. **Against:** no real AI or PDF; reacts only to canned input; lives on claude.ai; not reusable for the product. | Rejected |
+| 3 | **Everything live and general.** Any document, real BORIS lookups, a trained rent model. | This is the product, not a prototype: weeks of work, and fragile for a video. | Rejected |
+| – | **Lovable / v0.** | The agreed design would have to be re-translated into another tool. | Rejected |
 
 ---
 
@@ -114,16 +122,16 @@ This document specifies a **clickable prototype** of that process. It does not s
 
 ### 5.1 Roles and navigation
 
-One app serves two roles:
-- **Client:** Demo Capital GmbH.
-- **Senior Valuer:** K. Vogel.
+One app serves two roles: **Client** (Demo Capital GmbH) and **Senior Valuer** (K. Vogel).
 
-A small, always-visible **demo bar** holds three controls:
-- a role switch ("View as: Client / Senior Valuer");
+A small demo bar is always visible. It holds:
+- a role switch: "View as: Client / Senior Valuer";
 - **Reset demo**, which restores the initial state;
-- a "Live AI / Demo mode" badge (§6).
+- a "Live AI / Demo mode" badge (§6.4).
 
-First-time viewers get a short orientation overlay of 3 steps, which can be dismissed and reopened from the demo bar: "AI prepares → you check the flagged calls → you decide".
+On first visit, a short orientation overlay explains the flow in three steps: "AI reads and prepares → you check the flagged calls → you decide". It can be dismissed and reopened from the demo bar.
+
+*My call:* the URL flag `?recording=1` hides the demo bar for clean video takes.
 
 ### 5.2 Screens and the demo path
 
@@ -132,71 +140,67 @@ First-time viewers get a short orientation overlay of 3 steps, which can be dism
 | ID | Screen | What happens |
 |---|---|---|
 | C1 | Sign in / Create account | Visual only. "Continue as Demo Capital GmbH" or "Continue as Senior Valuer". No validation. |
-| C2 | Client dashboard | Lists valuation requests with their status: one earlier report already "Delivered", plus the new one once submitted. Button: **New valuation**. |
-| C3.1 | New valuation · Property | Choose usage type (Living / Commercial / Hotel) and scope (whole building / single unit). Enter the address with a map preview; the sample address is prefilled. Basis (market value § 194 BauGB) and valuation date are shown read-only. Choosing Commercial, Hotel or "single unit" shows a note: "Prototype computes the Living whole-building sample only — continue with sample". |
-| C3.2 | New valuation · Documents | A drop zone, plus **"Use sample documents"**, which loads 5 PDFs and 3 photos (§5.3.2). The AI "reads" each file with a per-file status line, e.g. "Land register: plot 480 m², 1 easement in section II". It also detects the document type. A Wohnungsgrundbuch would mean a condominium, so it would ask for the Teilungserklärung; this is a scripted branch, shown in copy only. A missing required document is listed as "missing", but it does not block submission. |
-| C3.3 | New valuation · Units | "The AI created 8 units from your tenant list." An editable table with an optional photo slot per unit and "Add unit manually" as the fallback. |
-| C3.4 | Review and submit | Summary, then **Submit**. |
-| C4 | AI at work | A live run log of the AI's 10 steps (§5.3.4) with per-step results, sped up to about 15–20 s. It shows the nominal durations, which total 3 min 40 s. It ends with "With senior valuer for review". |
+| C2 | Client dashboard | Lists the valuation requests with their status: one earlier report already "Delivered", plus new requests. Button: **New valuation**. |
+| C3.1 | New valuation · Property | <ul><li>Usage type and scope.</li><li>Address with a map preview; the sample address is prefilled.</li><li>Basis and valuation date, read-only.</li><li>Choosing Commercial, Hotel or single unit shows: "Prototype computes the Living whole-building sample only — continue with sample".</li></ul> |
+| C3.2 | New valuation · Documents | <ul><li>**Input:** a drop zone, plus **Use sample documents**, which adds the 5 bundled PDFs and 3 photos as if dropped, and **Download sample documents**, so the video can show a real drag and drop.</li><li>**Reading:** each PDF is **sent to the AI**. Per file the screen shows a live status, the detected document type and the key findings, e.g. "Land register · plot 480 m² · 1 easement in section II · land charge (financing, not value-relevant)". Clicking a file opens it in the PDF viewer with the found passages highlighted.</li><li>**Wohnungsgrundbuch:** a detected Wohnungsgrundbuch triggers "This looks like a condominium — please add the Teilungserklärung".</li><li>**Missing documents** are listed. They do not block the request but become flags.</li><li>**Unsure fields** are shown with "AI unsure — please confirm".</li></ul> |
+| C3.3 | New valuation · Units | <ul><li>"The AI created 8 units from your tenant list."</li><li>The table can be edited: area, rent, lease start, features. Edits are marked "Changed by client".</li><li>Each unit has an optional photo slot.</li><li>**Add unit manually** covers the fallback, e.g. a vacant unit.</li></ul> |
+| C3.4 | Review & submit | Summary, then **Submit**. |
+| C4 | AI at work | <ul><li>The **real run log** of the remaining steps, with real durations: lookups, rent estimation, scoring, computation, cross-checks, flagging, report draft.</li><li>The extraction steps from C3.2 are listed at the top with the time they took.</li><li>It ends with "With senior valuer for review".</li></ul> |
 
 **Valuer side**
 
 | ID | Screen | What happens |
 |---|---|---|
-| V1 | Review queue | Rail and list of deals. Each row shows the number of checks and an estimated review time (§5.4). |
+| V1 | Review queue | <ul><li>A rail and a list of deals.</li><li>Each row shows the number of checks and an estimated review time.</li><li>The other deals in the queue are static sample rows.</li></ul> |
 | V2 | Deal review | Direction A v2 (§5.4). |
-| V3 | Revision | Happens inside V2. *My call:* versions form a **linear history** (v1, v2, v3 …).<br>**Starting a revision:** each check has its own note box, which sends that check's context. The "Revalue…" button in the verdict band opens a general note.<br>**While it runs:** after **Send note & revalue**, a working state appears ("AI is revising…"), with the figures that depend on the changed inputs outlined.<br>**The banner:** "Revision n" shows the note and a table of changes **against the previous version**, plus **Undo last revision**.<br>**The history:** every version, including undone ones (marked "undone"), stays in the review log. |
-| V4 | Approve | A soft gate, never a hard block. *My call:* the sheet lists the value, the version being signed, and every AI judgement call with one of three statuses:<br>• *accepted*<br>• *changed by valuer* (with the note)<br>• *not opened*<br>An **Accept remaining** button turns all "not opened" calls into accepted with one click. If the valuer signs with calls still unopened, they are logged as *"accepted at sign-off without opening"*.<br>Then: **Sign & send** → "Report sent to Demo Capital GmbH". |
+| V3 | Revision (inside V2) | *My call:* **linear version history** (v1, v2, v3 …). <ul><li>**Where notes come from:** each check has its own note box, which sends that check's context. The verdict band's "Revalue…" opens a general note.</li><li>**While the AI works:** after **Send note & revalue** comes a working state ("AI is revising…"), with the figures that depend on the change outlined.</li><li>**The result:** a "Revision n" banner with the note, a table of changes **against the previous version**, the AI note, and **Undo last revision**.</li><li>**The review log** keeps every version, including undone ones (marked "undone").</li></ul> |
+| V4 | Approve | A soft gate. *My call:* <ul><li>**What the sheet shows:** the value, the version being signed, and every AI judgement call with its status — accepted, changed by valuer (with the note), or not opened.</li><li>**Accept remaining** accepts all unopened calls with one click.</li><li>**Signing with calls unopened** logs them as "accepted at sign-off without opening".</li><li>**Sign & send** shows "Report sent to Demo Capital GmbH".</li></ul> |
 
-**Back to the client, and the explainer**
+**Back to the client, and the class explainer**
 
 | ID | Screen | What happens |
 |---|---|---|
 | C5 | Report delivered | A simulated email card ("Your valuation report is ready") and a report page with **Download PDF**. |
-| P1 | How Censio works | Explainer for the class; priority P2, my call — drop it if time is short. Contents: a pipeline diagram (documents → AI agents → valuation engine → senior valuer → report); what is AI and what is human; the learning loop (valuer corrections become training data and calibrate defaults per district); roadmap (comparison and cost approach, Commercial, Hotel). |
+| P1 | How Censio works | *My call, priority P2* (dropped first if time runs short). An explainer for the class: <ul><li>the pipeline: documents → AI extraction → lookups and rent estimate → valuation engine → senior valuer → report;</li><li>what is AI and what is human;</li><li>the learning loop: valuer corrections become training data and calibrate district defaults;</li><li>the roadmap: comparison and cost approach, Commercial, Hotel, condominiums.</li></ul> |
 
-**Demo script for the video (≈ 60–90 s)**
-1. Client creates a new valuation and clicks "Use sample documents". The AI reads the documents and creates 8 units.
-2. Client submits; "AI at work" plays.
-3. Switch to the valuer:
-   1. open the deal from the queue;
-   2. open check 1 and look at the evidence;
-   3. type the note;
-   4. Revision 2 appears.
-4. Accept checks 2–4, about 5 s. This is my call: it puts "4 of 4 reviewed" on the sign-off sheet, so the video never shows the valuer signing unchecked AI calls.
-5. Approve, then the client view shows the email and opens the PDF.
-
-*My call:* the URL flag `?recording=1` hides the demo bar for clean takes. Everything else behaves the same.
+**Demo script for the video (≈ 60–90 s, my call)**
+1. Client: **New valuation**. Drag in the sample PDFs. The AI reads them live, shows its findings, and creates 8 units.
+2. Submit. "AI at work" runs.
+3. Switch to the valuer. Open the deal from the queue, then open check 1 and its evidence.
+4. Type the note. Revision 2 appears.
+5. Accept checks 2–4. This takes about 5 s and makes the sheet show "4 of 4 reviewed", so the video never shows unchecked AI calls being signed.
+6. Approve. The client receives the email and opens the PDF.
 
 ### 5.3 Data: the sample deal (canonical)
+
+The bundled sample documents are the ground truth. Extracting them and running the engine must reproduce exactly the values below.
 
 #### 5.3.1 Deal and property
 
 | Field | Value |
 |---|---|
 | Deal ID | CEN-2026-0147 |
-| Client | Demo Capital GmbH, buy-side |
-| Requested | 2 days before the valuation date |
+| Client | Demo Capital GmbH (buy-side) |
 | Valuation date | 06 Nov 2026 |
-| Basis | Market value (§ 194 BauGB), desktop valuation, no internal inspection |
-| Address | Musterstraße 12, 04109 Leipzig (fictional). The map pin goes at a plausible central-Leipzig coordinate labelled "approximate · sample". |
-| Property | Multi-family house (Mehrfamilienhaus), whole building, not split into condominiums |
-| Construction | Built 1912; modernised 2014–2019 |
-| Size | 8 units, 565 m² living area |
-| Plot | 480 m² — Gemarkung Leipzig, Flur 12, Flurstück 123/4 |
+| Basis and scope | Market value (§ 194 BauGB); desktop valuation, no internal inspection |
+| Address | Musterstraße 12, 04109 Leipzig (fictional). The map pin sits at a plausible central-Leipzig coordinate, labelled "approximate · sample". |
+| Property | Multi-family house (Mehrfamilienhaus), not split into condominiums |
+| Built / modernised | Built 1912; modernised 2014–2019 |
+| Units and area | 8 units, 565 m² living area |
+| Plot | 480 m² (Gemarkung Leipzig, Flur 12, Flurstück 123/4) |
 
 #### 5.3.2 Sample documents
 
-All five are German, marked "MUSTER / SAMPLE", and generated by us.
+We generate these documents ourselves. They are German, carry a "MUSTER / SAMPLE" watermark, and have a real text layer, so extraction and highlighting work.
 
-1. **Grundbuch** (land register extract), 4 pp.
-   - p. 1, inventory (Bestandsverzeichnis): lfd. Nr. 1, Flurstück 123/4, Gebäude- und Freifläche, Musterstraße 12, 480 m².
-   - Section II no. 1: Beschränkte persönliche Dienstbarkeit (Leitungsrecht) für die städtischen Versorgungsbetriebe; eingetragen am 14.03.1998.
-   - Section III: one Grundschuld (land charge). The AI notes "financing, not value-relevant for market value".
-2. **Mieterliste** (tenant list), 2 pp. — the 8 units of §5.3.3, with a total row: "Summe Nettokaltmiete / Monat 5.040,30 €", 565,0 m².
-3. **Energieausweis** (energy certificate) — gas condensing boiler installed 2019, final energy demand 128 kWh/(m²·a), class D.
-4. **Sanierungsübersicht** (refurbishment sheet) — the measures and points are in the table below.
-5. **B-Plan** (zoning plan excerpt) — general residential area (WA). The AI notes "residential use permitted, no value effect".
+1. **Grundbuch (land register extract), 4 pp.**
+   - p. 1, Bestandsverzeichnis (inventory): lfd. Nr. 1, Flurstück 123/4, Gebäude- und Freifläche, Musterstraße 12, 480 m².
+   - Abteilung II no. 1: "Beschränkte persönliche Dienstbarkeit (Leitungsrecht) für die städtischen Versorgungsbetriebe; eingetragen am 14.03.1998."
+   - Abteilung III: one Grundschuld (land charge), which is financing and not value-relevant.
+2. **Mieterliste (tenant list), 2 pp.** The 8 units of §5.3.3, with a total row: "Summe Nettokaltmiete / Monat 5.040,30 €", 565,0 m².
+3. **Energieausweis (energy certificate).** Address Musterstraße 12; gas condensing boiler from 2019; final energy demand 128 kWh/(m²·a); class D; living area 565 m².
+4. **Sanierungsübersicht (refurbishment sheet).** The measures below, which add up to 13 modernisation points.
+5. **B-Plan (zoning plan excerpt).** General residential area (WA); residential use permitted.
 
 | Measure | Year | Points |
 |---|---|---|
@@ -208,11 +212,11 @@ All five are German, marked "MUSTER / SAMPLE", and generated by us.
 | Interior, partial | 2014 | 1 |
 | **Total** | | **13** |
 
-**Photos (3):** a façade photo and two attic photos (terrace, living room). Until the founders supply real photos, use placeholder illustrations.
+**Photos (3):** the façade, plus two attic photos (terrace, living room). Placeholder illustrations are used until the founders supply real photos.
 
 #### 5.3.3 Units
 
-| # | Unit | Floor | m² | Rooms | In-place €/m² | In-place €/mo | AI market €/m² | Market €/mo | Gap | Lease since | Value share v1 | Value share v2 |
+| # | Unit | Floor | m² | Rooms | In-place €/m² | In-place €/mo | Market €/m² | Market €/mo | Gap | Lease since | Value share v1 | Value share v2 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | GF left | Ground | 62 | 2 | 8.40 | 520.80 | 9.20 | 570.40 | −8.7 % | 2009 | €136,700 | €127,200 |
 | 2 | GF right | Ground | 68 | 2.5 | 8.70 | 591.60 | 9.25 | 629.00 | −5.9 % | 2012 | €150,800 | €140,300 |
@@ -224,153 +228,169 @@ All five are German, marked "MUSTER / SAMPLE", and generated by us.
 | 8 | Attic | Attic | 88 | 3.5 | 9.00 | 792.00 | 9.95 | 875.60 | −9.5 % | 2019 | €209,800 | €195,400 |
 | | **Total** | | **565** | | **8.92** | **5,040.30** | **9.60** | **5,424.00** | **−7.1 %** | | **€1,300,000** | **€1,210,000** |
 
-**Unit features:**
-- Units 4 and 6 have a balcony.
-- Units 3 and 7 had their bathroom renovated in 2014.
-- Unit 8 has a roof terrace, and the roof was insulated in 2016. It is the only unit with photos (2).
-- Units 1 and 5 face the courtyard; unit 2 faces the street.
+**Features in the tenant list**
+- Units 4 and 6: balcony.
+- Units 3 and 7: bathroom renovated in 2014.
+- Unit 8: roof terrace, roof insulated in 2016. It is the only unit with photos (2).
+- Units 1 and 5: courtyard side. Unit 2: street side.
 
-**The AI's market rent comes from 38 comparable listings within 1 km:** 23 listed within the last 12 months and 15 older, index-adjusted. The comparables used per unit:
+**Market rent.** The rent estimator (§6.3) on the bundled comparables (§5.3.7) produces the market rents above.
 
-| Unit | Comparables | Confidence |
-|---|---|---|
-| 1 | 9 | medium |
-| 2 | 8 | medium |
-| 3 | 11 | medium |
-| 4 | 12 | high |
-| 5 | 9 | medium |
-| 6 | 8 | medium |
-| 7 | 10 | medium |
-| 8 | 6 | medium |
+| | Unit 1 | Unit 2 | Unit 3 | Unit 4 | Unit 5 | Unit 6 | Unit 7 | Unit 8 |
+|---|---|---|---|---|---|---|---|---|
+| Comparables used | 9 | 8 | 11 | 12 | 9 | 8 | 10 | 6 |
+| Confidence | medium | medium | medium | high | medium | medium | medium | medium |
 
-Unit 4's 2025 re-letting at 9.40 €/m² supports the model. For the building average of 9.60 €/m², the plausible range is 9.10–10.20.
+Building average: 9.60 €/m², plausible range 9.10–10.20.
 
-**Value per unit** is the building value split by each unit's share of market rent, rounded to €100, with any rounding difference assigned to the largest unit. The UI must say so: *"The building is valued as one asset (one plot, one cap rate); the unit values are a split, not separate valuations."*
+**Value per unit** is the building value split by each unit's share of market rent, rounded to €100. Any rounding difference goes to the largest unit. The UI says: *"The building is valued as one asset (one plot, one cap rate); the unit values are a split, not separate valuations."*
 
-#### 5.3.4 AI run log (C4, and the history in V2)
+#### 5.3.4 AI run log (C3.2 and C4, plus history in V2)
 
-| # | Step | Result | Shown duration |
+| # | Step | Kind | Result |
 |---|---|---|---|
-| 1 | Read tenant list | 8 units, 565 m², €60,484/yr | 0:21 |
-| 2 | Read land register | plot 480 m², 1 easement; land charge ignored (financing) | 0:18 |
-| 3 | Read energy certificate and refurbishment sheet | 6 measures, 2014–2019 | 0:13 |
-| 4 | Read zoning plan | residential, no value effect | 0:09 |
-| 5 | Look up land value (BORIS) | 520 €/m², zone 0412, as of 01 Jan 2026 | 0:04 |
-| 6 | Look up cap rate (market report 2026, p. 47, table 12) | 2.5–3.5 % for pre-war multi-family houses, median 3.0 %, n = 64 | 0:05 |
-| 7 | Estimate market rent | 38 listings, 9.60 €/m² average | 0:41 |
-| 8 | Score modernisation | 13 points → 42 years remaining life | 0:06 |
-| 9 | Compute value and run cross-checks | 6 cross-checks passed | 0:02 |
-| 10 | Draft memo and report | 4 calls flagged for review | 1:41 |
-| | **Total** | | **3:40** |
+| 1 | Read tenant list | live AI | 8 units, 565 m², €60,484/yr |
+| 2 | Read land register | live AI | Plot 480 m², 1 easement; land charge ignored |
+| 3 | Read energy certificate | live AI | Gas, 2019, class D, 565 m² |
+| 4 | Read refurbishment sheet | live AI | 6 measures 2014–2019, 13 points |
+| 5 | Read zoning plan | live AI | Residential, no value effect |
+| 6 | Look up land value | sample BORIS table | 520 €/m², zone 0412, as of 01 Jan 2026 |
+| 7 | Look up cap rate | sample market report 2026, p. 47, table 12 | 2.5–3.5 % for pre-war MFH, median 3.0 %, n = 64 |
+| 8 | Estimate market rent | rent estimator | 9.60 €/m² average |
+| 9 | Score modernisation | rules | 13 points → 42 years remaining life |
+| 10 | Compute value, run cross-checks, flag judgement calls | engine | |
+| 11 | Draft the report | | |
 
-**The 6 cross-checks:**
-1. The rent total equals the sum of the 8 rows.
-2. Heating year 2019 agrees between the refurbishment sheet and the energy certificate.
-3. Living area in the tenant list matches the energy certificate.
-4. The plot area matches between the land register and the cadastral reference.
-5. The zoning plan allows residential use.
-6. The façade photo matches the building age.
+Durations are measured, not fixed.
 
-#### 5.3.5 Valuation (engine definition and canonical results)
+**The 6 cross-checks, all computed from the extracted data:**
+1. The rent total row equals the sum of the 8 rows.
+2. Living area in the tenant list equals living area in the energy certificate.
+3. The heating year agrees between the refurbishment sheet and the energy certificate.
+4. The address in the energy certificate matches the land register.
+5. The zoning plan permits residential use.
+6. No unit's in-place rent exceeds market rent by more than 30 %, i.e. no implausible over-rent.
 
-The engine implements the general method of § 28 ImmoWertV. Inputs and results:
+#### 5.3.5 Valuation: engine definition and canonical results
+
+The engine implements the general method of § 28 ImmoWertV.
 
 | Item | Definition | v1 | v2 (cap rate 3.4 %) |
 |---|---|---|---|
 | Gross market income (RoE) | Σ unit market rent × 12 | 65,088.00 | same |
-| Management | 8 units × €367 (ImmoWertV Annex 3 model value, indexed) | 2,936.00 | same |
-| Maintenance | 565 m² × €14.40 (Annex 3, indexed) | 8,136.00 | same |
-| Rent-loss risk | 2 % × RoE (Annex 3) | 1,301.76 | same |
-| Operating costs (BWK) | sum of the three above, 19.0 % of RoE | 12,373.76 | same |
+| Management | units × €367 (ImmoWertV Annex 3 model value, indexed; sample) | 2,936.00 | same |
+| Maintenance | m² × €14.40 (Annex 3, indexed; sample) | 8,136.00 | same |
+| Rent-loss risk | 2 % × RoE | 1,301.76 | same |
+| Operating costs (BWK) | sum of the three above (19.0 %) | 12,373.76 | same |
 | Net income (RE) | RoE − BWK | 52,714.24 | same |
-| Land value (BW) | 480 m² × 520 €/m² (BORIS) | 249,600.00 | same |
+| Land value (BW) | plot m² × land value per m² | 249,600.00 | same |
 | Cap rate (LZ) | AI pick: median of the committee range | 3.0 % | 3.4 % (valuer) |
 | Land-value interest | BW × LZ | 7,488.00 | 8,486.40 |
 | Building net income | RE − land-value interest | 45,226.24 | 44,227.84 |
-| Remaining economic life (RND) | Total life 80 yrs, adjusted by 13 modernisation points (Annex 2 model, simplified for the prototype) | 42 yrs | same |
+| Remaining economic life (RND) | Total life 80 yrs; modernisation points per the Annex 2 model, simplified (monotonic in points; 13 points on a 1912 building → 42 yrs) | 42 yrs | same |
 | Present-value factor (BWF) | (1 − (1+LZ)^−RND) / LZ | 23.7014 | 22.1897 |
 | Building income value | building net income × BWF | 1,071,923.36 | 981,404.65 |
 | Preliminary income value | building income value + BW | 1,321,523.36 | 1,231,004.65 |
-| Under-rent deduction (special property feature, "boG") | (RoE − in-place 60,483.60) × annuity factor(LZ, 5 yrs) = 4,604.40 × 4.5797 / 4.5279 | −21,086.80 | −20,848.12 |
+| Under-rent deduction (boG) | (RoE − in-place 60,483.60) × annuity factor (LZ, 5 yrs) | −21,086.80 | −20,848.12 |
 | Easement deduction (boG) | AI assumption | 0 | 0 |
+| Vacancy deduction (boG) | §6.3; none in the sample | 0 | 0 |
 | **Market value** | rounded to €10,000 | **€1,300,000** | **€1,210,000 (−6.9 %)** |
 | €/m² · gross multiplier | | 2,301 · 20.0× | 2,142 · 18.6× |
 
-**Plausibility checks (sample reference ranges)**
+**Sensitivities**, each computed by the engine with only that one input changed:
 
-| Check | Reference range | v1 | v2 |
-|---|---|---|---|
-| €/m² vs. 7 recent Censio valuations of pre-war MFH in Leipzig | 2,050–2,520 | inside | inside |
-| Gross multiplier vs. market report 2026 | 17.5–23.0× | inside | inside |
-
-**Sensitivities.** The engine computes each one by varying one input and holding the others at v1:
-
-| Input | Range | Value range | Swing |
+| Input | Varied over | Value at the ends of the range | Effect on value |
 |---|---|---|---|
 | Cap rate | 2.5 / 3.5 % | €1.43 M / €1.19 M | +€128k / −€111k |
 | Market rent | 9.10 / 10.20 €/m² average | €1.24 M / €1.38 M | −€63k / +€76k |
 | Under-rent closing | 3 / 8 years | | +€8k / −€11k |
-| Easement | 0 to −€12k | | AI assumption, no computation |
-| Remaining life | 38 / 46 yrs | | −€55k / +€49k |
+| Easement | | | 0 to −€12k (an assumption, not computed) |
 
-Remaining life is not flagged in the UI. It is listed here only for completeness.
+#### 5.3.6 The AI judgement calls (flags)
 
-#### 5.3.6 The 4 AI judgement calls (flags), ranked by € impact
+Flags are **generated by rules from the data**, and every flag text is a template filled from the data. For the sample deal the rules produce exactly the 4 flags below, ranked by € impact.
 
-| # | Call | Confidence | Why flagged | What would change the AI's mind | Support / reasoning |
-|---|---|---|---|---|---|
-| 1 | **Cap rate 3.0 %** | medium | The market report has no district figure for 04109, so the AI used the city-wide median of 2.5–3.5 % for pre-war MFH. | A district cap rate, or recent sales of pre-war houses in 04109. | |
-| 2 | **Market rent 9.60 €/m² average** | medium | Asking rents, not leases; 15 of the 38 listings are older than 12 months. | | Unit 4 was re-let in 2025 at 9.40 vs. 9.55 estimated. |
-| 3 | **Under-rent closes within 5 years** | medium | Rent increases in sitting tenancies are capped (§ 558 BGB, local rent index). | Dates of the last rent increases per unit. | |
-| 4 | **Easement value-neutral** | low | The route of the line is not documented; the AI assumes it runs along the boundary. | A cadastral map showing the line crossing the buildable area. | |
+| # | Call | Confidence | Why flagged | What would change the AI's mind |
+|---|---|---|---|---|
+| 1 | **Cap rate 3.0 %** | medium | The market report gives no district figure for 04109, so the AI used the city-wide median of the 2.5–3.5 % range for pre-war MFH. | A district cap rate, or recent sales of pre-war houses in 04109. |
+| 2 | **Market rent 9.60 €/m² average** | medium | These are asking rents, not leases, and 15 of the 38 listings are older than 12 months. | — Support: unit 4 was re-let in 2025 at 9.40 €/m² against an estimate of 9.55 €/m². |
+| 3 | **Under-rent closes within 5 years** | medium | Rent increases in sitting tenancies are capped (§ 558 BGB, local rent index). | The dates of the last rent increase per unit. |
+| 4 | **Easement value-neutral** | low | The route of the utility line is not documented; the AI assumes it runs along the boundary. | A cadastral map showing the line crossing the buildable area. |
 
-**Spot-check.** One random verified figure (plot area 480 m², land register p. 1) is shown for confirmation. This guards against confidently wrong extractions.
+**Generating rules (my call):**
+
+| Rule | Raises a flag when |
+|---|---|
+| Cap rate | there is no district-level value |
+| Market rent | estimator confidence is below high, i.e. fewer than 10 comparables or more than 30 % older listings across the building |
+| Under-rent duration | the total gap exceeds 3 % |
+| Easement | each section II entry |
+| Missing document | each required document that is missing |
+| Extraction | each field the extraction marked uncertain |
+| Manual unit | each unit added by hand, with its estimated rent |
+| Vacancy | each vacant unit |
+
+**Spot-check.** In addition, the screen picks one random verified figure for the valuer to confirm, e.g. plot area 480 m² on land register p. 1.
+
+#### 5.3.7 Bundled lookup data (sample)
+
+**BORIS sample table**
+- Zone 0412 covers the 04109 sample area: 520 €/m², as of 01 Jan 2026.
+- Any other address gets 400 €/m² as "no sample data for this address", plus a low-confidence flag. *My call.*
+
+**Market report 2026, p. 47, table 12 (sample)**
+
+| Property type | Range | Median | n |
+|---|---|---|---|
+| One- and two-family houses | 1.5–2.5 % | 2.0 % | 112 |
+| MFH built up to 1948 | 2.5–3.5 % | 3.0 % | 64 |
+| MFH built 1949 or later | 3.0–4.0 % | 3.5 % | 41 |
+| Mixed residential/commercial | 3.5–5.0 % | 4.2 % | 27 |
+
+**Comparables.** 38 listings within 1 km of the sample address: 23 listed within the last 12 months, 15 older and index-adjusted. Each has location, m², floor, features, €/m² and listing date. The set is constructed so that the estimator reproduces §5.3.3.
+
+**Plausibility references**
+
+| Check | Range |
+|---|---|
+| €/m² vs. 7 recent Censio valuations of pre-war MFH in Leipzig | 2,050–2,520 |
+| Gross multiplier vs. market report | 17.5–23.0× |
 
 ### 5.4 Valuer review screen (A v2)
 
-The mockup [`mockups/valuer-review-A2.dc.html`](mockups/valuer-review-A2.dc.html) is the reference for layout, copy and visual language. The sections, from top to bottom:
+The reference is [`mockups/valuer-review-A2.dc.html`](mockups/valuer-review-A2.dc.html). From top to bottom:
 
-1. **App bar.** Censio wordmark, nav (Review queue (14), Deals, Clients, Reports), a "Sample data" pill, and the valuer avatar.
+1. **App bar:** wordmark; nav (Review queue (14), Deals, Clients, Reports); a "Sample data" pill; the valuer avatar.
 2. **Queue rail** on the left; it stacks above the content on narrow screens.
-   - **Deal rows:** each shows ID, city · type, number of checks and estimated review time. The current deal is highlighted.
-   - **Footer:** "Today: 9 signed off · 1 sent back to AI · median review time 1:41".
-3. **Deal header.**
-   - **Property photo:** client-uploaded, a placeholder illustration for now.
-   - **Mini map:** plot outline and BORIS zone label "zone 0412 · 520 €/m²".
-   - **Text:** ID, address, facts, basis and scope.
-   - **Status:** "Awaiting your review", plus an "AI-prepared in 3 min 40 s" summary.
-4. **Revision banner.** Visible only after a revalue. It shows:
-   - the note;
-   - a table of changes against the previous version;
-   - the AI note;
-   - **Undo last revision**.
+   - Deal rows: ID, city · type, number of checks, estimated review time.
+   - Footer: "Today: 9 signed off · 1 sent back to AI · median review time 1:41".
+3. **Deal header:**
+   - the property photo uploaded by the client;
+   - a mini map with the plot outline and the BORIS zone;
+   - ID, address, facts, basis and scope;
+   - status "Awaiting your review", with a summary of what the AI did and how long it took.
+4. **Revision banner** (only after a revalue): the note, the table of changes against the previous version, the AI note, and **Undo last revision**. *My call:* the mockup's "Attach source" button is dropped, because a dead button would be the first thing clicked in class.
+5. **Verdict band:**
+   - the value with its version label, and the previous value struck through once revised;
+   - plausibility as two dot strips;
+   - the provenance bar, with counts per source type computed from the figure registry;
+   - Approve & send report, Revalue…, "x of n reviewed", Preview report draft.
+6. **"How the value is built" strip:** tiles from market rent to market value. Each tile carries its source marker and its link to a flag.
+7. **Units:** a table with expandable rows (m², in-place €/m², market €/m², gap, lease since, value share).
+   - An open row shows: floor, rooms, features, rent per month with its sources, the AI note, and photos.
+   - **Expand all units**; a total row; the explanatory sentence from §5.3.3.
+8. **Needs your eye:**
+   - the flags ranked by € impact, each with a swing bar on one shared scale;
+   - clicking a flag focuses it: why flagged, what would change the AI's mind, **Accept** and **Revalue…** with a note box;
+   - a spot-check row;
+   - "Verified automatically: n numbers · 6 cross-checks passed", which expands into the ledger.
+9. **Evidence pane** on the right; it stacks on narrow screens. It shows the source of the focused item:
+   - **For document sources:** the **real PDF page in the PDF viewer, with the extracted passage highlighted**.
+   - **For lookups:** the sample table, with the row highlighted.
+   - **For the rent estimate:** a map of the comparables, solid for recent and hollow for older listings.
+   - **For the easement:** the land register passage plus a plot sketch showing the assumed route of the line.
 
-   *My call:* the mockup's "Attach source" button is **dropped**, because a dead button would be the first thing clicked in class. The AI note says instead that a valuer-provided range "is recorded as valuer judgement".
-5. **Verdict band.**
-   - **Value:** with its version label, and a struck-through v1 value once revised.
-   - **Plausibility:** two dot strips.
-   - **Provenance bar:** counts per source type, computed from the figure registry rather than hard-coded.
-   - **Decision buttons:** Approve & send report; Revalue…; "x of 4 reviewed"; Preview report draft.
-6. **"How the value is built."** A strip of tiles: market rent → gross income → operating costs → net income → cap rate · life · factor → building + land → adjustments → market value. Each tile carries its source marker and its link to a flag.
-7. **Units.**
-   - **Table:** 8 rows with m², in-place €/m², AI market €/m², gap, lease since and value share.
-   - **Expanding a row** shows floor, rooms, features, rent per month with sources (tenant-list row, number of comparables), an AI note and photos.
-   - **"Expand all units"** opens every row.
-   - **Total row** and the explanatory sentence from §5.3.3.
-8. **Needs your eye.**
-   - **Check rows:** the 4 checks ranked by € impact, each with a swing bar on one shared scale (±€130k). Clicking a row focuses it.
-   - **Focused row:** expands to show why flagged, what would change the AI's mind, and actions: **Accept** · **Revalue…**.
-   - **Check 1** contains the note box and **Send note & revalue**.
-   - **Spot-check row** (dashed).
-   - **"Verified automatically: 29 numbers · 6 cross-checks passed"**, which expands into the ledger.
-9. **Evidence pane** on the right; it stacks below on narrow screens. It shows the source of the focused check:
-   - **Check 1:** market-report table crop, with the highlighted row and the AI reasoning.
-   - **Check 2:** map of the 38 comparables inside a 1 km circle, solid vs. hollow, with the estimate and in-place rent.
-   - **Check 3:** tenant-list crop with the total row highlighted, plus the AI reasoning.
-   - **Check 4:** land-register crop with the AI translation, and a plot sketch with the assumed line route.
-   - **Spot-check:** the inventory line with "480 m²" highlighted.
-
-**Source markers.** Every figure carries one of six source types, always as glyph + colour + words and never colour alone:
+**Source markers** always combine a glyph, a colour and words; colour alone is never used.
 
 | Source type | Colour |
 |---|---|
@@ -378,137 +398,208 @@ The mockup [`mockups/valuer-review-A2.dc.html`](mockups/valuer-review-A2.dc.html
 | Public data | teal |
 | § ImmoWertV rule | slate |
 | = Calculated | grey |
-| ≈ AI estimate | amber; flagged calls hatched |
+| ≈ AI estimate | amber; flagged ones hatched |
+| Changed by client | blue outline |
 | Changed by valuer | violet, with initials |
 
-An accepted AI figure keeps its AI marker and gains "Accepted · KV". It never turns into a valuer-changed marker.
+An accepted AI figure keeps its AI marker and gains "Accepted · KV".
 
-**Accountability copy.** The valuer is the signatory of record and the AI is the preparer. The PDF review log lists which calls were accepted or changed, and by whom.
+**Accountability copy.** The valuer is the signatory of record and the AI is the preparer. The PDF review log records what was accepted or changed, and by whom.
 
 ### 5.5 Provenance model
 
 Every displayed figure is an entry in a **figure registry** with these fields:
-- `id`, `label`, `value`, `unit`;
-- `sourceType` ∈ {client_document, public_data, regulation, calculated, ai_estimate, valuer};
-- `sourceDetail`: the document plus page and row or snippet, the register plus date, or the annex;
-- `confidence`, for AI figures;
-- `dependsOn[]`, for calculated figures;
-- `flagId?`.
 
-The provenance bar, the ledger and the "dependent figures outlined during revision" all come from this registry. The UI counts must equal the registry. The mockup's "33 numbers / 29 verified" is illustrative.
+| Field | Content |
+|---|---|
+| `id`, `label`, `value`, `unit` | Identity and value of the figure |
+| `sourceType` | One of client_document, public_data, regulation, calculated, ai_estimate, client_input, valuer |
+| `sourceDetail` | For extracted figures: document id, **page** and **verbatim quote**. For lookups: table and row. For rules: annex reference. |
+| `confidence` | For AI-extracted and AI-estimated figures |
+| `dependsOn[]` | For calculated figures |
+| `flagId?` | Link to a flag, if any |
+
+The provenance bar, the ledger, the PDF highlights and the outlining of dependent figures during a revision all come from this registry.
 
 ### 5.6 PDF report
 
-The PDF is generated in the app and downloaded from C5 (and previewed from V2). Content:
+The report is generated in the app. It is downloaded from C5 and previewed from V2.
+
 1. **Cover:** address, client, valuation date, market value, version.
 2. **Summary** in plain English.
-3. **Property and documents:** the documents list, including ones that changed nothing, such as the B-Plan.
+3. **Property and documents:** includes the documents that changed nothing, such as the B-Plan.
 4. **Units table.**
-5. **Calculation:** the steps of §5.3.5.
-6. **Assumptions and AI judgement calls:** each with its status — accepted, changed by valuer (with the note), or accepted at sign-off without opening.
-7. **Sources.**
+5. **Calculation** (the steps of §5.3.5).
+6. **Assumptions and AI judgement calls**, each with its status: accepted, changed by valuer (with the note), or accepted at sign-off without opening.
+7. **Sources:** document, page and quote.
 8. **Review log:** valuer, timestamps, all versions including undone ones.
 9. **Disclaimer:** "Prototype with sample data — not a valuation report."
 
 ---
 
-## 6. AI: what is real, what is scripted
+## 6. AI: what is live, what is deterministic
 
-**Scripted (deterministic, for the sample deal):**
-- document "reading" and extraction results;
-- unit creation;
-- per-unit rent estimates and the comparables;
-- run-log timings;
-- flag texts and reasoning;
-- the evidence content.
+### 6.1 Document extraction (live)
 
-**Real:**
-- **The valuation engine.** A pure function that recomputes everything whenever a parameter changes.
-- **The Revalue note, interpreted by Claude** when `ANTHROPIC_API_KEY` is set:
-  - **Input:** the note, the current parameters, the allowed parameters with their ranges, and the flag context (reasoning, sources).
-  - **Structured output:** `intent` ∈ {change_parameters, question, unclear}. Then `changes[] {parameter, unitId?, from, to, reason, sourceKind: "valuer_judgement" | "document", documentId?}`, a 1–3 sentence plain-English `explanation`, and an `answer` when the intent is a question.
-  - *My call:* `sourceKind: "document"` is allowed only when the note cites one of the five loaded sample documents. The server validates `documentId` against that list and otherwise downgrades the change to valuer judgement.
-  - **Current state:** "Current parameters" means those of the latest version, so revisions are cumulative (§5.2 V3).
-  - **Changeable parameters (my call):**
+**One Claude call per uploaded PDF.** The PDF is sent as a base64 document block. The model:
+1. classifies the document: tenant list, land register, Wohnungsgrundbuch, energy certificate, refurbishment sheet, zoning plan, or unknown;
+2. extracts the fields of that type's schema.
 
-    | Parameter | Allowed range |
-    |---|---|
-    | Cap rate | 2.0–6.0 % |
-    | Average market rent | 6–15 €/m², applied proportionally to the units |
-    | Market rent of one unit | 6–15 €/m² |
-    | Under-rent closing years | 1–10 |
-    | Easement deduction | €0–50,000 |
-    | Remaining economic life | 20–60 yrs |
+**Output format.**
+- Structured outputs (`output_config.format`, JSON schema).
+- Each field returns `{value, page, quote, confidence}`, where `quote` is the verbatim text the value was read from.
+- The Citations API is not used: it is incompatible with structured outputs, so page and quote are part of the schema instead.
 
-  - **Guardrails:**
-    - **Sourced facts stay fixed:** areas, in-place rents and the land value cannot be changed by a note.
-    - **Valuer-provided ranges** are recorded as valuer judgement, never as sources.
-    - **The AI never invents sources.**
-    - **Out-of-range or ambiguous notes** make the AI ask a clarifying question instead of revising.
-    - **A question gets an answer** without creating a new version.
-  - **Model:** Claude Sonnet 5.5 (`claude-sonnet-5-5`), called from a Next.js server route.
-- **Fallback (Demo mode).** It applies when there is no key, an error, or a timeout over 12 s. A small rule-based parser handles the rehearsed patterns (e.g. "use 3.4 %" → cap rate). Anything else gets a canned clarifying reply. The demo bar shows whether Live AI or Demo mode is active.
-- **The video path** uses the rehearsed note (§5.3.6, check 1), which yields exactly v2 in both modes. *My call:*
-  - **No scripted reply under a "Live AI" label.** In Live mode the call is real. The numbers are guaranteed because the engine computes them, and the server checks that the rehearsed note maps to cap rate 3.4 %.
-  - **Wording varies.** Claude's explanation can differ between takes.
-  - **Timing is measured.** "Revised in x s" shows the real duration.
-- **Abuse limits** (my call), because the route is public and unauthenticated:
-  - note length ≤ 1,000 characters;
-  - capped output tokens;
-  - a simple per-IP throttle of about 10 calls per minute.
+**Parallel calls.** The 5 documents are read in parallel. C3.2 shows progress per file.
 
-  The founders should also set a monthly spend limit in the Anthropic console.
+**Validation on the server:**
+- schema and value ranges;
+- the quote must actually occur on the stated page of the PDF's text layer, otherwise the field is marked uncertain;
+- the cross-checks of §5.3.4.
+
+Uncertain or failed fields raise extraction flags.
+
+**Photos** are stored and displayed, but not sent to the AI.
+
+### 6.2 Revalue note (live)
+
+**Input:**
+- the note;
+- the parameters of the latest version, so revisions are cumulative;
+- the allowed parameters and their ranges;
+- the flag context: reasoning and sources.
+
+**Structured output:**
+- `intent` ∈ {change_parameters, question, unclear};
+- `changes[] {parameter, unitId?, from, to, reason, sourceKind: "valuer_judgement" | "document", documentId?}`;
+- `explanation`: 1–3 sentences in plain English;
+- `answer`, if the intent is a question.
+
+**Changeable parameters:**
+
+| Parameter | Allowed range |
+|---|---|
+| Cap rate | 2.0–6.0 % |
+| Average market rent (applied proportionally) | 6–15 €/m² |
+| Market rent of one unit | 6–15 €/m² |
+| Under-rent closing years | 1–10 |
+| Easement deduction | €0–50,000 |
+| Remaining economic life | 20–60 yrs |
+
+**Guardrails:**
+- Sourced facts cannot be changed by a note: areas, in-place rents, land value.
+- Valuer-provided ranges are recorded as valuer judgement.
+- `"document"` is allowed only when the note cites one of the deal's uploaded documents. The server validates `documentId`; otherwise the change is downgraded to valuer judgement.
+- The AI never invents sources.
+- A note that is out of range or ambiguous gets a clarifying question back.
+- A question is answered without creating a new version.
+
+**In the video:** the rehearsed note for check 1 (§5.3.6) must map to cap rate 3.4 %, giving exactly v2. The server checks this. The numbers come from the engine; the wording of the explanation may vary between takes.
+
+### 6.3 Deterministic parts (no AI call)
+
+- **Valuation engine:** a pure function (§5.3.5).
+- **Rent estimator (my call):**
+  1. For each unit, take the comparables in a similar size band (±20 m²) and floor class.
+  2. Weight them by distance and recency, and take the weighted median €/m².
+  3. Add transparent feature adjustments: balcony, roof terrace, ground floor, courtyard or street side.
+
+  The output is a rent, the number of comparables used, and a confidence. It works for **any** unit, including one added by hand.
+- **Vacant units (my call):** market rent is used as income, minus a re-letting deduction of 6 months' market rent (boG). A flag is raised.
+- **Remaining economic life:** from modernisation points, as defined in §5.3.5.
+- **Lookups:** the BORIS and market-report sample tables.
+- **Flags and texts:** generated by rules and templates (§5.3.6). No figure in any text is hard-coded.
+
+### 6.4 Usage limits, cost and fallback
+
+**Model.**
+- Claude Opus 5.5 (`claude-opus-5-5`, $4 per million input tokens and $20 per million output tokens) for both calls.
+- Effort `low` for extraction and `medium` for notes.
+- Refusal handling: check `stop_reason`, with server-side fallbacks enabled.
+- Switching to a cheaper model to save cost is the founders' decision: Claude Sonnet 5.5 costs about half, Claude Haiku 5.5 a fraction.
+
+**Cost estimate, Opus 5.5.**
+
+| Item | Estimate |
+|---|---|
+| Full extraction of the sample deal (5 PDFs, about 17 pages) | about $0.30–0.45 |
+| One Revalue note | about $0.03–0.06 |
+| One complete demo run | about $0.50 |
+
+**Hard cap.** A dedicated Anthropic workspace and API key for the prototype, with a **monthly spend limit set in the Anthropic Console** (suggested $20). This is the guarantee; everything below is a courtesy layer.
+
+**Access code.** Live AI runs only for links that carry `?code=…`, matching the environment variable `DEMO_ACCESS_CODE`. The founders give this link to the professor. Without the code, the app runs in Demo mode.
+
+**Limits in the app:**
+- per IP, at most 3 deal extractions and 15 notes per hour (best effort on serverless);
+- at most 8 files per deal, 10 pages and 5 MB per PDF;
+- notes up to 1,000 characters;
+- capped `max_tokens`.
+
+**Cache.** Extraction results are keyed by the file's SHA-256.
+- The bundled sample PDFs ship with a committed extraction result, recorded once from a real run.
+- It is used in Demo mode, and in Live mode only when a limit is hit. It is then labelled "cached AI result".
+
+**Demo mode** (no key, no access code, or limit reached):
+- The bundled samples are "read" from the cache.
+- Unknown files show "Live AI is needed to read this document".
+- The Revalue note uses a rule-based parser that covers all six parameters (e.g. "use 3.4 %", "attic rent 9.50"), with clickable example notes.
+- The badge shows "Demo mode".
 
 ---
 
 ## 7. Architecture and stack (my calls)
 
-**Stack**
-- Next.js (App Router), TypeScript, Tailwind CSS.
-- Fonts: Inter, plus Space Grotesk for headings and figures.
-- State: a client-side store persisted in `localStorage`. **Reset demo** clears it. No database and no server state.
-
-**Valuation engine and AI route**
-- `lib/valuation` is pure TypeScript. Its unit tests must reproduce §5.3.5 (v1 and v2) to within €1, and the unit shares of §5.3.3.
-- `app/api/revalue` uses the Anthropic SDK with structured output (§6).
-
-**Documents, PDF and media**
-- PDF: generated client-side, e.g. with `@react-pdf/renderer`; the builder may choose.
-- Map: Leaflet with OpenStreetMap tiles. The plot outline, the zone and the comparables are drawn as sample overlays.
-- Sample documents: German PDFs in `public/sample/`, generated once and committed, with a "MUSTER / SAMPLE" watermark.
+- **Framework:** Next.js (App Router), TypeScript, Tailwind CSS. Fonts: Inter, plus Space Grotesk for headings and figures.
+- **Server routes** (Anthropic TypeScript SDK `@anthropic-ai/sdk`, streaming for long requests):
+  - `app/api/extract` takes one PDF and returns the classified, extracted fields, validated as in §6.1;
+  - `app/api/revalue` takes a note and context and returns structured changes (§6.2).
+- **Client state:**
+  - uploaded files and photos in IndexedDB;
+  - the deal and version state in `localStorage`;
+  - **Reset demo** clears both;
+  - no database.
+- **Pure modules with unit tests:**
+  - `lib/valuation`: the engine; tests reproduce §5.3.5 v1/v2 within €1 and the unit shares of §5.3.3;
+  - `lib/rent`: the estimator; tests reproduce the market rents of §5.3.3;
+  - `lib/flags`: the flags.
+- **PDF viewer:** `pdfjs-dist`, highlighting the quote in the text layer.
+- **PDF report:** generated client-side (e.g. `@react-pdf/renderer`).
+- **Map:** Leaflet with OpenStreetMap tiles. The plot, zone and comparables are drawn as sample overlays.
+- **Sample assets:** sample PDFs are generated once by a script and committed under `public/sample/`. The extraction cache fixture is committed too.
 
 **Deployment**
-- The founders import the repo into Vercel.
-- `ANTHROPIC_API_KEY` is optional. Without it the app runs in Demo mode.
-- *My call:* plan for the Vercel Hobby plan. Hobby is meant for non-commercial use, which suits the class prototype; once the app is used commercially, move to Pro.
-- *My call:* this build session has no access to Vercel. The builder therefore verifies against a local production build (`next build && next start`) plus an end-to-end smoke test of the demo path, and hands over a short deploy checklist. The founders do the final click-through on the hosted link.
+- The founders import the repo into Vercel and set `ANTHROPIC_API_KEY` and `DEMO_ACCESS_CODE`.
+- Vercel Hobby is meant for non-commercial use. That suits the class prototype; move to Pro once the app is used commercially.
+- This build session has no Vercel access, so the builder verifies locally:
+  - a production build (`next build && next start`);
+  - one live-AI run against the sample PDFs;
+  - an end-to-end smoke test of the demo path.
+
+  The builder hands over a deploy checklist; the founders do the final click-through on the hosted link.
 
 ---
 
-## 8. Left to the builder
+## 8. Left to the builder, and the cut order
 
-- Component and folder structure.
-- Exact styling, within the mockup's visual language.
-- Animation timings within the stated totals.
-- PDF layout details.
-- The choice of PDF and map libraries.
-- How the sample PDFs are generated.
-- Test strategy beyond the engine tests and one end-to-end smoke test of the demo path.
+**Left to the builder:**
+- component and folder structure;
+- exact styling within the mockup's visual language;
+- animation timings;
+- PDF report layout;
+- library choices within §7;
+- prompt wording, within §6;
+- the test strategy beyond the tests named above.
 
----
-
-**Cut order if time runs short** (my call, pending the dates):
-1. drop P1 "How Censio works";
-2. replace the Leaflet maps with the mockup's static SVG maps;
-3. simplify the sample PDFs to 1 page each;
-4. merge wizard steps C3.1 and C3.2.
-
-The demo path itself is never cut.
+**Cut order if time runs short.** The demo path itself is never cut. Cut in this order:
+1. P1 "How Censio works".
+2. Leaflet → the mockup's static SVG maps.
+3. PDF highlighting → page display without highlight.
+4. Merge wizard steps C3.1 and C3.2.
 
 ---
 
 ## 9. Open questions for the founders
 
-1. Do client edits in the wizard (unit area, rent, manually added units) flow into the valuation, or does the valuer side always show the sample deal?
-2. Will an Anthropic API key be set for the video and for the professor's link, so that Live AI is on?
-3. When are the video recording and the class session, and which comes first?
+1. **Dates of the video recording and the class** (not answered yet). Until then the assumption is: build the full demo path first, then polish.
+2. **Model choice.** Claude Opus 5.5 is the default. A cheaper model (Sonnet 5.5 or Haiku 5.5) would lower cost per run; that is the founders' call.
