@@ -713,7 +713,7 @@ function calculatedFigures(ctx: RegistryContext): Draft[] {
       eur(v.grossIncome),
       average === null
         ? "No units, so no rent"
-        : `Market rent ${rentM2(average)} × ${m2(v.livingAreaM2)} m² × 12 months${anyVacant ? "; vacant units count at market rent" : ""}`,
+        : `${grossIncomeFormula(v.grossIncome, average, v.livingAreaM2)}${anyVacant ? "; vacant units count at market rent" : ""}`,
     ),
     calc(
       "operatingCosts",
@@ -899,6 +899,18 @@ function count(n: number, noun: string): string {
 
 function years(n: number): string {
   return count(n, "year");
+}
+
+/**
+ * How the gross income follows: the average market rent × area × 12 where that product gives the stated amount, else
+ * the monthly sum, so the line can be recomputed once one unit's rent differs ("9.53 €/m² × 565 m² × 12" would miss).
+ */
+function grossIncomeFormula(grossIncome: number, average: number, area: number): string {
+  const monthly = grossIncome / 12;
+  if (Math.abs(round2(average) * area * 12 - grossIncome) < 0.005) {
+    return `Market rent ${rentM2(average)} × ${m2(area)} m² × 12 months`;
+  }
+  return `Market rent ${eur(monthly, { decimals: 2 })} a month (avg. ${rentM2(average)} over ${m2(area)} m²) × 12 months`;
 }
 
 /** `565` or `565.5`: areas to one decimal, without a trailing `.0`. */

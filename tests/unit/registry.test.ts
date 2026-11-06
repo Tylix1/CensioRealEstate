@@ -506,6 +506,15 @@ describe("figures changed by the valuer", () => {
     ]);
   });
 
+  it("states the gross income so it can be recomputed after one unit's rent changes", () => {
+    // 5,424.00 − (9.92 − 9.50) × 88 = 5,387.04 a month; the 9.53 €/m² average alone would give €64,614.60 a year.
+    const figs = registryFor(sampleDeal(), { marketRentOverrides: { u8: 9.5 } }, ["marketRentUnit"]);
+    expect(fig(figs, "grossIncome")).toMatchObject({
+      display: "€64,644",
+      sourceDetail: "Market rent €5,387.04 a month (avg. 9.53 €/m² over 565 m²) × 12 months",
+    });
+  });
+
   it("never marks a calculated figure as changed by the valuer: it follows from its inputs", () => {
     const figs = registryFor(sampleDeal(), { capRate: 0.034 }, ["marketValue", "landInterest", "capRate", "unknown"]);
     expect(figs.filter((f) => f.sourceType === "valuer").map((f) => f.id)).toEqual(["capRate"]);
@@ -575,9 +584,9 @@ describe("units edited or added by the client", () => {
     });
     // A vacant unit adds no in-place rent.
     expect(fig(figs, "inPlaceIncome")).toMatchObject({ sourceType: "client_document", display: "€60,484/yr", flagId: null });
-    // (5,424.00 + 9.79 × 55) / 620 = 9.6169 €/m²
+    // 5,424.00 + 9.79 × 55 = 5,962.45 a month, 9.6169 €/m² on average: 9.62 × 620 × 12 would not give the amount.
     expect(fig(figs, "grossIncome").sourceDetail).toBe(
-      "Market rent 9.62 €/m² × 620 m² × 12 months; vacant units count at market rent",
+      "Market rent €5,962.45 a month (avg. 9.62 €/m² over 620 m²) × 12 months; vacant units count at market rent",
     );
     expect(fig(figs, "marketValue").sourceDetail).toMatch(/ − vacancy deduction €3,231 = €[\d,]+, rounded to the nearest €10,000$/);
   });
