@@ -143,12 +143,12 @@ function ReviewScreen({ dealId, stored }: { dealId: string; stored: StoredDeal }
       }
     : null;
 
-  /** Under a note box: the AI's answer, and the example notes in Demo mode. */
+  /** Under a note box: the AI's answer, and the example notes. */
   const noteFooter = (box: string) => (
     <RevalueNoteFooter
       answerId={answerDomId(dealId, box)}
       answer={revalue.answers[box]}
-      examples={mode === "demo"}
+      examples={mode}
       onPickExample={(note) => revalue.setDraft(box, note)}
       busy={pending !== null}
     />

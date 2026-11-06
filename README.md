@@ -92,7 +92,7 @@ only the server routes `/api/extract` and `/api/revalue` use it.
 | Badge in the demo bar | `Demo mode` | `Live AI` |
 | The five sample PDFs | Read from the committed results in `fixtures/extraction`, labelled "Demo mode" ("Cached result" once recorded live) | Read by Claude, each quote checked against the PDF text |
 | Any other PDF | "Live AI is needed to read this document." The wizard continues; the missing document types become flags. | Read by Claude |
-| Revalue note | A rule-based parser for the six parameters (e.g. "use 3.4 %", "attic rent 9.50"), with three clickable example notes | Claude; if the call fails or is declined, the rule-based parser |
+| Revalue note | A rule-based parser for the six parameters (e.g. "use 3.4 %", "attic rent 9.50"), with three clickable example notes | Claude, with the same example notes to click; if the call fails or is declined, the rule-based parser |
 
 **The access code link.** Share `https://<your-app>/?code=<DEMO_ACCESS_CODE>`. The app stores the code in that
 browser (it survives Reset demo) and removes it from the address bar, so it does not show in recordings or copied

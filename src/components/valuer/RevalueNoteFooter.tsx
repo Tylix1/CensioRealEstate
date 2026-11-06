@@ -2,11 +2,13 @@
 
 /**
  * What shows under a Revalue note box (plan Task 17): the AI's answer to a question or its clarifying question for a
- * note it could not map to a change (neither creates a version), and in Demo mode the example notes to click.
+ * note it could not map to a change (neither creates a version), and the example notes to click. In Demo mode they
+ * show what the rule-based parser understands; with Live AI they save typing in a demo take (the rehearsed note).
  */
 import { useId } from "react";
 import type { RevalueFallback } from "@/app/api/revalue/route";
 import { cx } from "@/components/ui/cx";
+import type { AiMode } from "./useAiMode";
 import { DEMO_EXAMPLE_NOTES } from "./revision";
 import type { NoteAnswer } from "./useRevalue";
 
@@ -39,12 +41,15 @@ function AnswerBox({ id, answer }: { id: string; answer: NoteAnswer }) {
   );
 }
 
-function ExampleNotes({ onPick, disabled }: { onPick: (note: string) => void; disabled: boolean }) {
+function ExampleNotes({ mode, onPick, disabled }: { mode: AiMode; onPick: (note: string) => void; disabled: boolean }) {
   const labelId = useId();
   return (
     <div className="mt-3">
       <p id={labelId} className="text-xs font-semibold leading-[18px] text-muted">
-        Example notes <span className="font-normal">· demo mode, click one to fill in the note</span>
+        Example notes{" "}
+        <span className="font-normal">
+          {mode === "demo" ? "· demo mode, click one to fill in the note" : "· click one to fill in the note, or write your own"}
+        </span>
       </p>
       <ul aria-labelledby={labelId} className="mt-1.5 flex flex-wrap gap-2">
         {DEMO_EXAMPLE_NOTES.map((note) => (
@@ -68,8 +73,8 @@ export type RevalueNoteFooterProps = {
   /** DOM id of the answer, scrolled into view when it arrives. */
   answerId: string;
   answer: NoteAnswer | undefined;
-  /** Demo mode: offer the example notes. */
-  examples: boolean;
+  /** The AI mode once known: the example notes are offered in both, with words that fit the mode. */
+  examples: AiMode | null;
   onPickExample: (note: string) => void;
   /** While a note is being revised, examples cannot be picked. */
   busy: boolean;
@@ -80,7 +85,7 @@ export function RevalueNoteFooter({ answerId, answer, examples, onPickExample, b
   return (
     <>
       {answer && <AnswerBox id={answerId} answer={answer} />}
-      {examples && <ExampleNotes onPick={onPickExample} disabled={busy} />}
+      {examples && <ExampleNotes mode={examples} onPick={onPickExample} disabled={busy} />}
     </>
   );
 }
