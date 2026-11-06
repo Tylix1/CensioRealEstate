@@ -78,7 +78,7 @@ This document specifies a **clickable prototype** of that process. It does not s
 | UI language | English. German legal terms keep their German name plus a short English gloss, e.g. "Grundbuch (land register)". |
 | Valuation method | Income approach only: Ertragswertverfahren, general method (§ 28 ImmoWertV). Basis: market value under § 194 BauGB. |
 | Usage types | Living, Commercial and Hotel can all be selected. Only Living is computed. |
-| Scope | The client chooses "whole building" or "single unit". |
+| Scope | The client chooses "whole building" or "single unit". *My call:* "single unit" can be selected, but the prototype then continues with the whole-building sample and shows a note, the same way as for Commercial and Hotel. A real single-unit (condominium) case would need a Wohnungsgrundbuch, a Teilungserklärung and condominium-specific costs. |
 | Units | The AI creates the units from the uploaded tenant list, and the client only reviews and edits them. A manual per-unit form exists as a fallback, e.g. for a vacant unit with no lease. Photos per unit are optional. |
 | Valuer review screen | Direction **A v2, "exceptions first"**, with units expandable and a map and property photo added (§5.4). |
 | Revalue result | Shown as a revision with tracked changes (v1 → v2 diff, plus "Back to v1"). |
@@ -133,7 +133,7 @@ First-time viewers get a short orientation overlay of 3 steps, which can be dism
 |---|---|---|
 | C1 | Sign in / Create account | Visual only. "Continue as Demo Capital GmbH" or "Continue as Senior Valuer". No validation. |
 | C2 | Client dashboard | Lists valuation requests with their status: one earlier report already "Delivered", plus the new one once submitted. Button: **New valuation**. |
-| C3.1 | New valuation · Property | Choose usage type (Living / Commercial / Hotel) and scope (whole building / single unit). Enter the address with a map preview; the sample address is prefilled. Basis (market value § 194 BauGB) and valuation date are shown read-only. Choosing Commercial or Hotel shows a note: "Prototype computes Living only — continue with sample". |
+| C3.1 | New valuation · Property | Choose usage type (Living / Commercial / Hotel) and scope (whole building / single unit). Enter the address with a map preview; the sample address is prefilled. Basis (market value § 194 BauGB) and valuation date are shown read-only. Choosing Commercial, Hotel or "single unit" shows a note: "Prototype computes the Living whole-building sample only — continue with sample". |
 | C3.2 | New valuation · Documents | A drop zone, plus **"Use sample documents"**, which loads 5 PDFs and 3 photos (§5.3.2). The AI "reads" each file with a per-file status line, e.g. "Land register: plot 480 m², 1 easement in section II". It also detects the document type. A Wohnungsgrundbuch would mean a condominium, so it would ask for the Teilungserklärung; this is a scripted branch, shown in copy only. A missing required document is listed as "missing", but it does not block submission. |
 | C3.3 | New valuation · Units | "The AI created 8 units from your tenant list." An editable table with an optional photo slot per unit and "Add unit manually" as the fallback. |
 | C3.4 | Review and submit | Summary, then **Submit**. |
@@ -145,8 +145,8 @@ First-time viewers get a short orientation overlay of 3 steps, which can be dism
 |---|---|---|
 | V1 | Review queue | Rail and list of deals. Each row shows the number of checks and an estimated review time (§5.4). |
 | V2 | Deal review | Direction A v2 (§5.4). |
-| V3 | Revision | Happens inside V2. After **Send note & revalue**, a working state appears: "AI is revising…", with the dependent figures outlined. Then the Revision 2 banner shows a table of changes, plus "Attach source" and "Back to v1". |
-| V4 | Approve | A soft gate, never a hard block. A sheet states what is signed: value, version, and which AI judgement calls the valuer accepted or changed, with "x of 4 reviewed". Then: **Sign & send** → "Report sent to Demo Capital GmbH". |
+| V3 | Revision | Happens inside V2. *My call:* versions form a **linear history** (v1, v2, v3 …).<br>**Starting a revision:** each check has its own note box, which sends that check's context. The "Revalue…" button in the verdict band opens a general note.<br>**While it runs:** after **Send note & revalue**, a working state appears ("AI is revising…"), with the figures that depend on the changed inputs outlined.<br>**The banner:** "Revision n" shows the note and a table of changes **against the previous version**, plus **Undo last revision**.<br>**The history:** every version, including undone ones (marked "undone"), stays in the review log. |
+| V4 | Approve | A soft gate, never a hard block. *My call:* the sheet lists the value, the version being signed, and every AI judgement call with one of three statuses:<br>• *accepted*<br>• *changed by valuer* (with the note)<br>• *not opened*<br>An **Accept remaining** button turns all "not opened" calls into accepted with one click. If the valuer signs with calls still unopened, they are logged as *"accepted at sign-off without opening"*.<br>Then: **Sign & send** → "Report sent to Demo Capital GmbH". |
 
 **Back to the client, and the explainer**
 
@@ -163,7 +163,10 @@ First-time viewers get a short orientation overlay of 3 steps, which can be dism
    2. open check 1 and look at the evidence;
    3. type the note;
    4. Revision 2 appears.
-4. Approve, then the client view shows the email and opens the PDF.
+4. Accept checks 2–4, about 5 s. This is my call: it puts "4 of 4 reviewed" on the sign-off sheet, so the video never shows the valuer signing unchecked AI calls.
+5. Approve, then the client view shows the email and opens the PDF.
+
+*My call:* the URL flag `?recording=1` hides the demo bar for clean takes. Everything else behaves the same.
 
 ### 5.3 Data: the sample deal (canonical)
 
@@ -336,7 +339,13 @@ The mockup [`mockups/valuer-review-A2.dc.html`](mockups/valuer-review-A2.dc.html
    - **Mini map:** plot outline and BORIS zone label "zone 0412 · 520 €/m²".
    - **Text:** ID, address, facts, basis and scope.
    - **Status:** "Awaiting your review", plus an "AI-prepared in 3 min 40 s" summary.
-4. **Revision banner.** Visible only after a revalue: the note, a table of changes v1 → v2, the AI note, and "Attach source" / "Back to v1".
+4. **Revision banner.** Visible only after a revalue. It shows:
+   - the note;
+   - a table of changes against the previous version;
+   - the AI note;
+   - **Undo last revision**.
+
+   *My call:* the mockup's "Attach source" button is **dropped**, because a dead button would be the first thing clicked in class. The AI note says instead that a valuer-provided range "is recorded as valuer judgement".
 5. **Verdict band.**
    - **Value:** with its version label, and a struck-through v1 value once revised.
    - **Plausibility:** two dot strips.
@@ -396,9 +405,9 @@ The PDF is generated in the app and downloaded from C5 (and previewed from V2). 
 3. **Property and documents:** the documents list, including ones that changed nothing, such as the B-Plan.
 4. **Units table.**
 5. **Calculation:** the steps of §5.3.5.
-6. **Assumptions and AI judgement calls:** each with its status (accepted, or changed by valuer, with the note).
+6. **Assumptions and AI judgement calls:** each with its status — accepted, changed by valuer (with the note), or accepted at sign-off without opening.
 7. **Sources.**
-8. **Review log:** valuer, timestamps, versions.
+8. **Review log:** valuer, timestamps, all versions including undone ones.
 9. **Disclaimer:** "Prototype with sample data — not a valuation report."
 
 ---
@@ -417,7 +426,9 @@ The PDF is generated in the app and downloaded from C5 (and previewed from V2). 
 - **The valuation engine.** A pure function that recomputes everything whenever a parameter changes.
 - **The Revalue note, interpreted by Claude** when `ANTHROPIC_API_KEY` is set:
   - **Input:** the note, the current parameters, the allowed parameters with their ranges, and the flag context (reasoning, sources).
-  - **Structured output:** `intent` ∈ {change_parameters, question, unclear}. Then `changes[] {parameter, from, to, reason, sourceKind: "valuer_judgement" | "document"}`, a 1–3 sentence plain-English `explanation`, and an `answer` when the intent is a question.
+  - **Structured output:** `intent` ∈ {change_parameters, question, unclear}. Then `changes[] {parameter, unitId?, from, to, reason, sourceKind: "valuer_judgement" | "document", documentId?}`, a 1–3 sentence plain-English `explanation`, and an `answer` when the intent is a question.
+  - *My call:* `sourceKind: "document"` is allowed only when the note cites one of the five loaded sample documents. The server validates `documentId` against that list and otherwise downgrades the change to valuer judgement.
+  - **Current state:** "Current parameters" means those of the latest version, so revisions are cumulative (§5.2 V3).
   - **Changeable parameters (my call):**
 
     | Parameter | Allowed range |
@@ -437,7 +448,16 @@ The PDF is generated in the app and downloaded from C5 (and previewed from V2). 
     - **A question gets an answer** without creating a new version.
   - **Model:** Claude Sonnet 5.5 (`claude-sonnet-5-5`), called from a Next.js server route.
 - **Fallback (Demo mode).** It applies when there is no key, an error, or a timeout over 12 s. A small rule-based parser handles the rehearsed patterns (e.g. "use 3.4 %" → cap rate). Anything else gets a canned clarifying reply. The demo bar shows whether Live AI or Demo mode is active.
-- **The video path** uses the rehearsed note (§5.3.6, check 1), which yields exactly v2 in both modes.
+- **The video path** uses the rehearsed note (§5.3.6, check 1), which yields exactly v2 in both modes. *My call:*
+  - **No scripted reply under a "Live AI" label.** In Live mode the call is real. The numbers are guaranteed because the engine computes them, and the server checks that the rehearsed note maps to cap rate 3.4 %.
+  - **Wording varies.** Claude's explanation can differ between takes.
+  - **Timing is measured.** "Revised in x s" shows the real duration.
+- **Abuse limits** (my call), because the route is public and unauthenticated:
+  - note length ≤ 1,000 characters;
+  - capped output tokens;
+  - a simple per-IP throttle of about 10 calls per minute.
+
+  The founders should also set a monthly spend limit in the Anthropic console.
 
 ---
 
@@ -460,6 +480,8 @@ The PDF is generated in the app and downloaded from C5 (and previewed from V2). 
 **Deployment**
 - The founders import the repo into Vercel.
 - `ANTHROPIC_API_KEY` is optional. Without it the app runs in Demo mode.
+- *My call:* plan for the Vercel Hobby plan. Hobby is meant for non-commercial use, which suits the class prototype; once the app is used commercially, move to Pro.
+- *My call:* this build session has no access to Vercel. The builder therefore verifies against a local production build (`next build && next start`) plus an end-to-end smoke test of the demo path, and hands over a short deploy checklist. The founders do the final click-through on the hosted link.
 
 ---
 
@@ -475,6 +497,18 @@ The PDF is generated in the app and downloaded from C5 (and previewed from V2). 
 
 ---
 
+**Cut order if time runs short** (my call, pending the dates):
+1. drop P1 "How Censio works";
+2. replace the Leaflet maps with the mockup's static SVG maps;
+3. simplify the sample PDFs to 1 page each;
+4. merge wizard steps C3.1 and C3.2.
+
+The demo path itself is never cut.
+
+---
+
 ## 9. Open questions for the founders
 
-None at the moment. Filled in after the builder review.
+1. Do client edits in the wizard (unit area, rent, manually added units) flow into the valuation, or does the valuer side always show the sample deal?
+2. Will an Anthropic API key be set for the video and for the professor's link, so that Live AI is on?
+3. When are the video recording and the class session, and which comes first?
