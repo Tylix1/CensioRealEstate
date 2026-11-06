@@ -2,8 +2,9 @@
 
 /**
  * C1 · Sign in / Create account (spec §5.2). Visual only: two buttons sign in as the client or as the senior valuer,
- * with no form and no validation.
+ * with no form and no validation. The footer links to the class explainer, How Censio works (P1).
  */
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { OrientationSteps } from "@/components/demo/OrientationOverlay";
 import { AppBar } from "@/components/ui/AppBar";
@@ -77,6 +78,14 @@ export default function SignInPage() {
           </dl>
         </Card>
       </main>
+      <footer className="border-t border-line bg-surface">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-6 px-4 text-xs leading-[18px] text-muted sm:px-6">
+          <span>Sample data — prototype</span>
+          <Link href="/how-it-works" className="inline-flex min-h-11 items-center font-semibold text-brand hover:underline">
+            How Censio works<span aria-hidden="true">&nbsp;→</span>
+          </Link>
+        </div>
+      </footer>
     </>
   );
 }

@@ -5,6 +5,7 @@
  * - the role switch ("View as: Client / Senior Valuer"), which navigates to /client or /valuer;
  * - the Live AI / Demo mode badge, read from GET /api/mode?code=<stored access code> (spec §6.4);
  * - "Orientation", which reopens the orientation overlay;
+ * - "How it works", a link to the class explainer (/how-it-works), marked as the current page there;
  * - Reset demo, which restores the seeded state, clears IndexedDB and goes to the sign-in page.
  *
  * URL flags, on any page: `?code=XYZ` stores the access code (then drops it from the address bar), and
@@ -15,6 +16,7 @@
  * role follows it. `usePathname` and `useSearchParams` sit inside Suspense boundaries: with Cache Components they
  * suspend while prerendering routes with unknown params (the deal pages) and any search params.
  */
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import type { ModeResponse } from "@/app/api/mode/route";
@@ -124,7 +126,7 @@ function ModeBadge() {
 // ---------------------------------------------------------------------------------------------------------------------
 // The bar
 
-function DemoBarView({ area }: { area: Role | null }) {
+function DemoBarView({ area, onExplainer = false }: { area: Role | null; onExplainer?: boolean }) {
   const router = useRouter();
   const hydrated = useDemoHydrated();
   const storedRole = useDemoStore((s) => s.role);
@@ -201,6 +203,14 @@ function DemoBarView({ area }: { area: Role | null }) {
           Orientation
         </button>
 
+        <Link
+          href="/how-it-works"
+          aria-current={onExplainer ? "page" : undefined}
+          className="flex min-h-11 items-center px-0.5 font-semibold text-white/80 underline-offset-4 hover:text-white aria-[current=page]:text-white aria-[current=page]:underline"
+        >
+          How it works
+        </Link>
+
         <div className="grow" />
 
         <button
@@ -220,7 +230,8 @@ function DemoBarView({ area }: { area: Role | null }) {
 }
 
 function DemoBarAtPath() {
-  const area = areaOf(usePathname());
+  const pathname = usePathname();
+  const area = areaOf(pathname);
   const hydrated = useDemoHydrated();
 
   // Keep the saved role in step with the screens in view, e.g. after opening a /valuer link directly.
@@ -230,7 +241,7 @@ function DemoBarAtPath() {
     if (role !== area) setRole(area);
   }, [hydrated, area]);
 
-  return <DemoBarView area={area} />;
+  return <DemoBarView area={area} onExplainer={pathname === "/how-it-works"} />;
 }
 
 export function DemoBar() {
