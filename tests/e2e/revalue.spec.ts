@@ -180,7 +180,7 @@ test("a note on check 1 revises the valuation, undo restores it, and the valuer 
   await expect(verdict.getByRole("button", { name: "Revalue…" })).toHaveCount(0);
   await expect(verdict.getByRole("link", { name: /^Preview/ })).toHaveAttribute(
     "href",
-    `/client/deals/${DEAL_ID}/report?preview=1`,
+    `/valuer/deals/${DEAL_ID}/report`,
   );
   await expect(revision.getByRole("heading", { name: /^Revision 3/ })).toBeVisible();
   await expect(revision.getByRole("button", { name: "Undo last revision" })).toHaveCount(0);
@@ -209,7 +209,7 @@ test("Revalue… sends a general note: a question gets an answer, a change a new
   // The preview link points at the report draft.
   await expect(verdict.getByRole("link", { name: "Preview report draft" })).toHaveAttribute(
     "href",
-    `/client/deals/${DEAL_ID}/report?preview=1`,
+    `/valuer/deals/${DEAL_ID}/report`,
   );
 
   await verdict.getByRole("button", { name: "Revalue…" }).click();

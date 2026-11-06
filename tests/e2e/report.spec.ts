@@ -109,8 +109,13 @@ test("after approval the client opens the delivered report and downloads the PDF
 });
 
 test("the valuer's preview shows the unsigned draft, and its PDF carries a draft watermark", async ({ page }) => {
-  await page.goto(`${REPORT_URL}?preview=1`);
+  await page.goto(`/valuer/deals/${DEAL_ID}/report`);
 
+  // The preview stays in the valuer's role: previewing does not switch the demo to the client.
+  await expect(page.getByRole("banner").getByRole("link", { name: /^Review queue/ })).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Demo controls" }).getByRole("button", { name: "Senior Valuer" }),
+  ).toHaveAttribute("aria-pressed", "true");
   const banner = page.getByRole("region", { name: "Draft — not signed" });
   await expect(banner).toBeVisible();
   await expect(banner.getByRole("link", { name: "Back to the review" })).toHaveAttribute(
@@ -131,6 +136,21 @@ test("the valuer's preview shows the unsigned draft, and its PDF carries a draft
   expect(text).toContain("Draft — not signed");
   expect(text).toContain("€1,300,000");
   expect(text).toContain(DISCLAIMER);
+});
+
+test("after sign-off the valuer's preview shows the report as sent, without the client's inbox", async ({ page }) => {
+  await seedState(page, await approvedV2State());
+  await page.goto(`/valuer/deals/${DEAL_ID}/report`);
+
+  const banner = page.getByRole("region", { name: "Report sent to Demo Capital GmbH" });
+  await expect(banner).toBeVisible();
+  await expect(banner.getByRole("link", { name: "Back to the review" })).toHaveAttribute(
+    "href",
+    `/valuer/deals/${DEAL_ID}`,
+  );
+  await expect(page.getByRole("article", { name: /Your valuation report is ready/ })).toHaveCount(0);
+  await expect(page.getByRole("article", { name: "Valuation report", exact: true })).toContainText("€1,210,000");
+  await expect(page.getByText("Draft — not signed")).toHaveCount(0);
 });
 
 test("a request still with the valuer has no report yet", async ({ page }) => {

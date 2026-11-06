@@ -219,7 +219,8 @@ src/
   app/                      routes (App Router)
     page.tsx                C1 sign in
     client/                 C2 dashboard; new/ C3 wizard; deals/[id]/processing C4; deals/[id]/report C5
-    valuer/                 V1 review queue; deals/[id] V2 review with V3 revisions and V4 approval
+    valuer/                 V1 review queue; deals/[id] V2 review with V3 revisions and V4 approval;
+                            deals/[id]/report the valuer's report preview
     how-it-works/           P1 explainer for the class
     api/extract/            POST: reads one PDF with Claude, or answers with its committed result
     api/revalue/            POST: a valuer's note → structured changes (Claude or the rule-based parser)

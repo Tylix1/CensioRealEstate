@@ -195,7 +195,7 @@ function ReviewScreen({ dealId, stored }: { dealId: string; stored: StoredDeal }
           onGeneralNoteChange={(note) => revalue.setDraft(GENERAL_NOTE_BOX, note)}
           generalNoteSending={pending?.box === GENERAL_NOTE_BOX}
           generalNoteFooter={noteFooter(GENERAL_NOTE_BOX)}
-          previewHref={`/client/deals/${encodeURIComponent(dealId)}/report?preview=1`}
+          previewHref={`/valuer/deals/${encodeURIComponent(dealId)}/report`}
           outlined={revalue.outlined}
           signed={signOff}
         />
