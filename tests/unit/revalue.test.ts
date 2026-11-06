@@ -413,6 +413,28 @@ describe("parseNote: arbitrary notes in Demo mode (review focus 1)", () => {
     expect(expectUnclear(parseNote("change the cap rate by 40 bp", ctx))).toContain("up or down");
   });
 
+  it("asks for an input when a note asks for a different market value", () => {
+    const notes = [
+      "lower the value by 10%",
+      "the value should be 10 % lower",
+      "Ertragswert um 10 % senken",
+      "lower the value by 10",
+      "reduce the market value by €50,000",
+    ];
+    for (const flag of ["cap_rate", "market_rent", null]) {
+      for (const note of notes) {
+        expect(expectUnclear(parseNote(note, sampleContext(flag))), `${note} (${flag})`).toContain("result of the calculation");
+      }
+    }
+    // A named input still changes when the value is only the reason; on the easement flag the drop is the deduction.
+    const capRate = only(parseNote("lower the cap rate by 0.2 % to bring the value down", sampleContext("cap_rate")));
+    expect(capRate.to).toBeCloseTo(0.028, 12);
+    expect(only(parseNote("it lowers the value by €10,000", sampleContext("easement-1")))).toMatchObject({
+      parameter: "easementDeduction",
+      to: 10000,
+    });
+  });
+
   it("does not create a version that changes nothing", () => {
     expect(expectUnclear(parseNote("use 3.0 %", sampleContext("cap_rate")))).toContain("already");
   });

@@ -48,6 +48,9 @@ const SOURCED_FACTS =
   'Areas, in-place rents and the land value come from the documents and public data, so a note cannot change them. Which value should I change, and to what? For example: "use 3.4 %" or "attic rent 9.50".';
 const NO_RENT_ESTIMATE = "This deal has no market rent estimate to scale. Which unit's market rent should I change?";
 const EASEMENT_IN_EURO = 'Please give the easement deduction in euro, for example "easement 12k".';
+/** A note that asks for another market value ("lower the value by 10 %") names no input the AI may change. */
+export const VALUE_IS_RESULT =
+  'The market value is the result of the calculation, so I cannot set it directly. Which input should I change, and to what? For example: "use 3.4 %" or "attic rent 9.50".';
 
 /** A change as a note or a model asks for it, before `checkChanges` checks it and fills in `from`. */
 export interface ChangeDraft {
@@ -822,6 +825,8 @@ interface NumToken {
   delta: "up" | "down" | "unknown" | "other" | null;
   /** The change was given as "by x" ("um x") in a clause about the value ("reduces the value by €10,000"). */
   byValue: boolean;
+  /** The words before the number in its clause name the market value ("lower the value by 10 %", "Ertragswert um"). */
+  ofValue: boolean;
   used: boolean;
 }
 
@@ -964,6 +969,8 @@ const DOWN_VERB = words(
   "lower(?:s|ed)?|lowering|reduce[sd]?|reducing|decrease[sd]?|decreasing|cuts?|drops?|down|senken|senke|senkt|gesenkt|reduzieren|reduziere|reduziert|kürzen|kürze|kürzt|verringern|verringere|verringert|mindern|mindert|herabsetzen|runter",
 );
 const VALUE_WORD = /value|wert/iu;
+/** The value as a word of its own, or a German compound ending in -wert ("Ertragswert"); not "valuer". */
+const VALUE_SUBJECT = /(?<!\p{L})values?(?!\p{L})|wert(?!\p{L})/iu;
 const FOLLOWED_BY_NEW_VALUE = /^\s*(?:→|->|to|auf|nach)\s*[+−-]?\d/iu;
 const IMPLIABLE = new Set<NumKind>(["percent", "bp", "rent", "amount", "years", "months", "plain"]);
 
@@ -1000,6 +1007,7 @@ function findNumbers(scan: NoteScan, text: string): NumToken[] {
       role: roleOf(text, masked, m.index, end),
       delta,
       byValue: by && VALUE_WORD.test(`${lastWords(text, m.index, 8).join(" ")} ${sentenceAfter(text, end)}`),
+      ofValue: VALUE_SUBJECT.test(lastWords(text, m.index, 8).join(" ")),
       used: false,
     };
   });
@@ -1234,6 +1242,12 @@ const isYears = (p: ParamKey) => p === "underRentYears" || p === "remainingLifeY
 /** The parameter a number without a named parameter belongs to: the focused flag's, or the only one its unit fits. */
 function impliedTarget(n: NumToken, flag: FlagTarget | null): FlagTarget | { question: string } | null {
   const v = decimalValue(n.raw);
+  // "Lower the value by 10 %": a change of the result, not of an input. On the easement flag, by how much the value
+  // drops is the deduction itself.
+  const resultChange = n.delta !== null && n.delta !== "other" && n.ofValue;
+  if (resultChange && ["percent", "bp", "plain", "amount"].includes(n.kind) && flag?.parameter !== "easementDeduction") {
+    return { question: VALUE_IS_RESULT };
+  }
   switch (n.kind) {
     case "percent":
       if (n.delta !== null) {
