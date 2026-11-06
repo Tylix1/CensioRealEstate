@@ -1,8 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { blockMapTiles, skipOrientation } from "./helpers";
 
-// The sandbox cannot reach the OSM tile servers, so tiles are aborted here and the tests assert on vector layers only.
+// The sandbox cannot reach the OSM tile servers, so tiles are aborted and the tests assert on vector layers only.
 test.beforeEach(async ({ page }) => {
-  await page.route(/tile\.openstreetmap\.org/, (route) => route.abort());
+  await skipOrientation(page);
+  await blockMapTiles(page);
 });
 
 test("the PDF viewer highlights the quoted text on the cited page", async ({ page }) => {
