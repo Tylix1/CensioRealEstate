@@ -80,8 +80,10 @@ function PrepSummary({ out }: { out: PipelineOutput }) {
   const pages = read.reduce((sum, d) => sum + d.pages, 0);
   const listings = out.rent.recentCount + out.rent.olderCount;
   const photos = deal.photos.length;
+  // Demo mode answers from stored results; say so, so the time is not taken for a live AI read.
+  const stored = read.some((d) => d.extractionSource !== "live") ? ", stored results in Demo mode" : "";
   const what = [
-    `read ${countLabel(read.length, "document")} (${countLabel(pages, "page")})${photos > 0 ? ` and ${countLabel(photos, "photo")}` : ""}`,
+    `read ${countLabel(read.length, "document")} (${countLabel(pages, "page")}${stored})${photos > 0 ? ` and ${countLabel(photos, "photo")}` : ""}`,
     `queried ${PUBLIC_REGISTERS} public registers`,
     `compared ${countLabel(listings, "rental listing")}`,
   ].join(", ");
