@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Censio review · A v2 · units, map, revalue</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid #0B5D4B;outline-offset:2px}
+a{color:#1849A9}a:hover{color:#0B3A86}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F2F4F7; color: #101828; font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 20px;">
+
+<header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC;">
+<div style="max-width: 1440px; margin: 0 auto; padding: 10px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="0" y="0" width="28" height="28" rx="7" fill="#0B5D4B"></rect><path d="M19.4 9.4a6.6 6.6 0 1 0 0 9.2" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"></path><circle cx="19.6" cy="14" r="1.9" fill="#7FD1B9"></circle></svg>
+<span style="font-family: 'Space Grotesk', Inter, sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.01em;">Censio</span>
+<span style="font-size: 11px; font-weight: 600; color: #0B5D4B; background: #E6F2EE; border-radius: 4px; padding: 1px 6px;">RE</span>
+</div>
+<nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 4px 20px; font-weight: 500;">
+<a href="#" style="color: #101828; text-decoration: none; border-bottom: 2px solid #0B5D4B; padding: 6px 0;">Review queue <span style="font-size: 11px; font-weight: 600; color: #FFFFFF; background: #0B5D4B; border-radius: 999px; padding: 1px 7px; margin-left: 4px;">14</span></a>
+<a href="#" style="color: #475467; text-decoration: none; padding: 6px 0;">Deals</a>
+<a href="#" style="color: #475467; text-decoration: none; padding: 6px 0;">Clients</a>
+<a href="#" style="color: #475467; text-decoration: none; padding: 6px 0;">Reports</a>
+</nav>
+<div style="flex-grow: 1;"></div>
+<span style="font-size: 11px; font-weight: 600; color: #475467; border: 1px dashed #98A2B3; border-radius: 999px; padding: 2px 10px;">Sample data</span>
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 16px; background: #F1EDFF; color: #5B3CC4; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center;">KV</span>
+<div style="line-height: 16px;"><div style="font-weight: 600;">K. Vogel</div><div style="font-size: 12px; color: #5B6576;">Senior Valuer</div></div>
+</div>
+</div>
+</header>
+
+<div style="max-width: 1440px; margin: 0 auto; padding: 20px 24px 48px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+
+<aside aria-label="Review queue" style="flex: 1 1 236px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow: hidden;">
+<div style="padding: 14px 16px; border-bottom: 1px solid #E4E7EC;">
+<div style="font-weight: 600;">Your queue</div>
+<div style="font-size: 12px; color: #5B6576;">14 deals · about 31 min of review</div>
+</div>
+<div style="padding: 10px 16px; background: #E6F2EE; border-bottom: 1px solid #E4E7EC; display: flex; justify-content: space-between; gap: 8px;">
+<div style="min-width: 0;"><div style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #475467;">CEN-2026-0147</div><div style="font-weight: 600;">Leipzig · Multi-family</div></div>
+<div style="text-align: right; font-size: 12px; line-height: 16px; white-space: nowrap;"><div style="color: #A3410A; font-weight: 600;">4 checks</div><div style="color: #475467;">~1:30</div></div>
+</div>
+<div style="padding: 10px 16px; border-bottom: 1px solid #F2F4F7; display: flex; justify-content: space-between; gap: 8px;">
+<div style="min-width: 0;"><div style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #475467;">CEN-2026-0148</div><div style="font-weight: 500;">Dresden · Hotel</div></div>
+<div style="text-align: right; font-size: 12px; line-height: 16px; white-space: nowrap;"><div style="color: #A3410A; font-weight: 600;">7 checks</div><div style="color: #475467;">~4:10</div></div>
+</div>
+<div style="padding: 10px 16px; border-bottom: 1px solid #F2F4F7; display: flex; justify-content: space-between; gap: 8px;">
+<div style="min-width: 0;"><div style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #475467;">CEN-2026-0149</div><div style="font-weight: 500;">Halle · Multi-family</div></div>
+<div style="text-align: right; font-size: 12px; line-height: 16px; white-space: nowrap;"><div style="color: #A3410A; font-weight: 600;">1 check</div><div style="color: #475467;">~0:40</div></div>
+</div>
+<div style="padding: 10px 16px; border-bottom: 1px solid #F2F4F7; display: flex; justify-content: space-between; gap: 8px;">
+<div style="min-width: 0;"><div style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #475467;">CEN-2026-0151</div><div style="font-weight: 500;">Leipzig · Apartment</div></div>
+<div style="text-align: right; font-size: 12px; line-height: 16px; white-space: nowrap;"><div style="color: #0E6F67; font-weight: 600;">0 checks</div><div style="color: #475467;">~0:20</div></div>
+</div>
+<div style="padding: 10px 16px; border-bottom: 1px solid #F2F4F7; display: flex; justify-content: space-between; gap: 8px;">
+<div style="min-width: 0;"><div style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #475467;">CEN-2026-0152</div><div style="font-weight: 500;">Chemnitz · Commercial</div></div>
+<div style="text-align: right; font-size: 12px; line-height: 16px; white-space: nowrap;"><div style="color: #A3410A; font-weight: 600;">3 checks</div><div style="color: #475467;">~2:00</div></div>
+</div>
+<div style="padding: 10px 16px; font-size: 12px; color: #5B6576;">+ 9 more deals</div>
+<div style="padding: 12px 16px; border-top: 1px solid #E4E7EC; background: #F9FAFB; font-size: 12px; line-height: 18px; color: #475467;">
+<div style="font-weight: 600; color: #101828;">Today</div>
+<div>9 signed off · 1 sent back to AI</div>
+<div>Median review time 1:41</div>
+</div>
+</aside>
+
+<main style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 16px;">
+
+<section aria-label="Deal" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 16px; display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: flex-start;">
+<div style="display: flex; flex-wrap: wrap; gap: 10px; flex: 0 0 auto;">
+<figure style="margin: 0;">
+<svg width="168" height="120" viewBox="0 0 168 120" role="img" aria-label="Placeholder for the facade photo uploaded by the client" style="display: block; border-radius: 8px; background: #DCE6F0;">
+<rect x="0" y="98" width="168" height="22" fill="#B8C2CC"></rect>
+<rect x="2" y="30" width="36" height="68" fill="#C5CBD3"></rect>
+<rect x="130" y="24" width="36" height="74" fill="#C5CBD3"></rect>
+<rect x="40" y="20" width="88" height="78" fill="#E8D7B2"></rect>
+<path d="M37 20h94l-7-9H44z" fill="#7F6347"></path>
+<rect x="74" y="4" width="20" height="10" fill="#7F6347"></rect>
+<rect x="40" y="38" width="88" height="2" fill="#D6C196"></rect>
+<rect x="40" y="56" width="88" height="2" fill="#D6C196"></rect>
+<rect x="40" y="74" width="88" height="2" fill="#D6C196"></rect>
+<g fill="#5A6B7D"><rect x="47" y="24" width="12" height="12"></rect><rect x="67" y="24" width="12" height="12"></rect><rect x="89" y="24" width="12" height="12"></rect><rect x="109" y="24" width="12" height="12"></rect><rect x="47" y="42" width="12" height="12"></rect><rect x="67" y="42" width="12" height="12"></rect><rect x="89" y="42" width="12" height="12"></rect><rect x="109" y="42" width="12" height="12"></rect><rect x="47" y="60" width="12" height="12"></rect><rect x="67" y="60" width="12" height="12"></rect><rect x="89" y="60" width="12" height="12"></rect><rect x="109" y="60" width="12" height="12"></rect><rect x="47" y="79" width="12" height="12"></rect><rect x="109" y="79" width="12" height="12"></rect></g>
+<rect x="76" y="80" width="16" height="18" fill="#5B3F2B"></rect>
+</svg>
+<figcaption style="font-size: 11px; color: #5B6576; margin-top: 4px;">Client photo · facade (placeholder)</figcaption>
+</figure>
+<figure style="margin: 0;">
+<svg width="168" height="120" viewBox="0 0 168 120" role="img" aria-label="Map: plot 123/4 inside land-value zone 0412" style="display: block; border-radius: 8px; background: #EEF2F6;">
+<rect x="134" y="46" width="34" height="34" fill="#DDEFE3"></rect>
+<path d="M0 40 L168 30" stroke="#FFFFFF" stroke-width="7"></path>
+<path d="M0 94 L168 86" stroke="#FFFFFF" stroke-width="7"></path>
+<path d="M56 0 L64 120" stroke="#FFFFFF" stroke-width="7"></path>
+<path d="M124 0 L129 120" stroke="#FFFFFF" stroke-width="6"></path>
+<polygon points="18,47 118,40 120,82 22,88" fill="#0E6F67" fill-opacity="0.08" stroke="#0E6F67" stroke-width="1.2" stroke-dasharray="4 3"></polygon>
+<polygon points="76,52 94,51 95,68 77,69" fill="#0B5D4B"></polygon>
+<circle cx="85.5" cy="60" r="13" fill="none" stroke="#0B5D4B" stroke-width="1.5"></circle>
+<text x="24" y="80" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#0E6F67">zone 0412 · 520 €/m²</text>
+</svg>
+<figcaption style="font-size: 11px; color: #5B6576; margin-top: 4px;">Plot 123/4 · BORIS zone (sample map)</figcaption>
+</figure>
+</div>
+<div style="flex: 999 1 360px; min-width: 0;">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; color: #5B6576;">
+<span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">CEN-2026-0147</span>
+<span aria-hidden="true">·</span>
+<span>Requested 2 days ago by Demo Capital GmbH (buy-side)</span>
+</div>
+<h1 style="margin: 4px 0 6px; font-family: 'Space Grotesk', Inter, sans-serif; font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em;">Musterstraße 12, 04109 Leipzig</h1>
+<div style="color: #475467;">Multi-family house · whole building · 8 units · 565 m² living area · plot 480 m² · built 1912, modernised 2014–2019</div>
+<div style="color: #475467; margin-top: 2px;">Market value (§ 194 BauGB) · valuation date 06 Nov 2026 · desktop valuation, no internal inspection</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px;">
+<span style="font-size: 12px; font-weight: 600; color: #A3410A; background: #FFF4E5; border-radius: 999px; padding: 3px 10px;">Awaiting your review</span>
+<span style="font-size: 12px; line-height: 18px; color: #475467;">AI-prepared in <strong style="color: #101828;">3 min 40 s</strong>: read 5 documents (17 pages) and 3 photos, queried 2 public registers, compared 38 rental listings.</span>
+</div>
+</div>
+</section>
+
+<sc-if value="{{ revised }}" hint-placeholder-val="{{ false }}">
+<section aria-label="Revision" style="background: #F6F3FF; border: 1px solid #BDB4FE; border-radius: 12px; padding: 16px 18px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; align-items: baseline;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600; color: #5B3CC4;">Revision 2 · the AI revised the valuation in 7 s after your note</h2>
+<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+<button style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 6px 12px; font-weight: 600; min-height: 36px;">Attach source</button>
+<button onClick="{{ undo }}" style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 6px 12px; font-weight: 600; min-height: 36px;">Back to v1</button>
+</div>
+</div>
+<div style="margin-top: 8px; font-style: italic; color: #5B3CC4;">Your note: “{{ note }}”</div>
+<div style="overflow-x: auto; margin-top: 10px;">
+<table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; background: #FFFFFF; border-radius: 8px;">
+<thead><tr><th style="text-align: left; padding: 6px 12px; border-bottom: 1px solid #E4E7EC; color: #5B6576; font-weight: 600;">What changed</th><th style="text-align: right; padding: 6px 12px; border-bottom: 1px solid #E4E7EC; color: #5B6576; font-weight: 600;">v1</th><th style="text-align: right; padding: 6px 12px; border-bottom: 1px solid #E4E7EC; color: #5B6576; font-weight: 600;">v2</th></tr></thead>
+<tbody>
+<tr><td style="padding: 5px 12px;">Cap rate <span style="font-size: 11px; font-weight: 600; color: #5B3CC4;">· changed by KV</span></td><td style="padding: 5px 12px; text-align: right; color: #5B6576;"><del>3.0 %</del></td><td style="padding: 5px 12px; text-align: right; font-weight: 600; color: #5B3CC4;">3.4 %</td></tr>
+<tr><td style="padding: 5px 12px;">Land-value interest</td><td style="padding: 5px 12px; text-align: right; color: #5B6576;"><del>€7,488</del></td><td style="padding: 5px 12px; text-align: right; font-weight: 600;">€8,486</td></tr>
+<tr><td style="padding: 5px 12px;">Present-value factor</td><td style="padding: 5px 12px; text-align: right; color: #5B6576;"><del>23.70</del></td><td style="padding: 5px 12px; text-align: right; font-weight: 600;">22.19</td></tr>
+<tr><td style="padding: 5px 12px;">Building value</td><td style="padding: 5px 12px; text-align: right; color: #5B6576;"><del>€1,071,923</del></td><td style="padding: 5px 12px; text-align: right; font-weight: 600;">€981,405</td></tr>
+<tr><td style="padding: 5px 12px;">Under-rent deduction</td><td style="padding: 5px 12px; text-align: right; color: #5B6576;"><del>−€21,087</del></td><td style="padding: 5px 12px; text-align: right; font-weight: 600;">−€20,848</td></tr>
+<tr><td style="padding: 6px 12px; border-top: 1px solid #E4E7EC; font-weight: 700;">Market value</td><td style="padding: 6px 12px; border-top: 1px solid #E4E7EC; text-align: right; color: #5B6576;"><del>€1,300,000</del></td><td style="padding: 6px 12px; border-top: 1px solid #E4E7EC; text-align: right; font-weight: 700;">€1,210,000 (−6.9 %)</td></tr>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 10px; background: #FFF4E5; border-radius: 8px; padding: 10px 12px;">
+<div style="font-size: 12px; font-weight: 600; color: #A3410A;">≈ AI note</div>
+<div>Rent, costs and land value are unchanged. Your district range (3.25–3.75 %) is not in the loaded market report, so the report cites it as valuer judgement. Higher cap rate means buyers expect more return, so the same rent is worth less today.</div>
+</div>
+</section>
+</sc-if>
+
+<section aria-label="Verdict" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 20px 32px;">
+<div style="flex: 1 1 220px;">
+<div style="font-size: 12px; font-weight: 600; color: #5B6576; text-transform: uppercase; letter-spacing: 0.04em;">Proposed market value · {{ versionLabel }}</div>
+<sc-if value="{{ revised }}" hint-placeholder-val="{{ false }}"><div style="font-size: 16px; color: #5B6576; font-variant-numeric: tabular-nums;"><del>€1,300,000</del></div></sc-if>
+<div style="font-family: 'Space Grotesk', Inter, sans-serif; font-size: 40px; line-height: 48px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;">{{ valueText }}</div>
+<div style="color: #475467;">{{ valueSub }}</div>
+</div>
+
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px;">
+<div style="font-size: 12px; font-weight: 600; color: #5B6576; text-transform: uppercase; letter-spacing: 0.04em;">Plausibility</div>
+<div>
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: #475467;"><span>€/m² vs. 7 recent Censio valuations (pre-war MFH, Leipzig)</span><span style="color: #0E6F67; font-weight: 600;">inside</span></div>
+<div role="img" aria-label="Euro per square metre inside the range 2,050 to 2,520" style="position: relative; height: 14px; margin-top: 4px;">
+<div style="position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: #E4E7EC;"></div>
+<div style="position: absolute; left: 25%; width: 47%; top: 3px; height: 8px; background: #D0D5DD; border-radius: 4px;"></div>
+<div style="{{ sqmDot }}"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6576; font-variant-numeric: tabular-nums;"><span>2,050</span><span>this deal {{ sqmText }}</span><span>2,520</span></div>
+</div>
+<div>
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: #475467;"><span>Gross multiplier vs. market report 2026</span><span style="color: #0E6F67; font-weight: 600;">inside</span></div>
+<div role="img" aria-label="Gross multiplier inside the range 17.5 to 23.0" style="position: relative; height: 14px; margin-top: 4px;">
+<div style="position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: #E4E7EC;"></div>
+<div style="position: absolute; left: 25%; width: 55%; top: 3px; height: 8px; background: #D0D5DD; border-radius: 4px;"></div>
+<div style="{{ multDot }}"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6576; font-variant-numeric: tabular-nums;"><span>17.5×</span><span>this deal {{ multText }}</span><span>23.0×</span></div>
+</div>
+</div>
+
+<div style="flex: 1 1 260px;">
+<div style="font-size: 12px; font-weight: 600; color: #5B6576; text-transform: uppercase; letter-spacing: 0.04em;">Where the 33 numbers come from</div>
+<div role="img" aria-label="11 from client documents, 3 from public data, 5 from ImmoWertV rules, 9 calculated, 5 AI estimates of which 4 need review" style="display: flex; gap: 2px; height: 14px; border-radius: 4px; overflow: hidden; margin-top: 10px;">
+<div style="flex: 11 1 0; background: #1849A9;"></div>
+<div style="flex: 3 1 0; background: #0E6F67;"></div>
+<div style="flex: 5 1 0; background: #667085;"></div>
+<div style="flex: 9 1 0; background: #D0D5DD;"></div>
+<div style="flex: 1 1 0; background: #F79009;"></div>
+<div style="flex: 4 1 0; background: repeating-linear-gradient(135deg, #F79009 0 3px, #FEDF89 3px 6px);"></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; color: #475467;">
+<span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #1849A9;"></span>Client documents 11</span>
+<span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #0E6F67;"></span>Public data 3</span>
+<span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #667085;"></span>ImmoWertV rules 5</span>
+<span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #D0D5DD;"></span>Calculated 9</span>
+<span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #F79009;"></span>AI estimates 5</span>
+</div>
+<div style="margin-top: 8px; font-size: 12px; line-height: 18px;"><strong>29</strong> traced to a source and cross-checked · <strong style="color: #A3410A;">4 AI judgement calls</strong> need your eye</div>
+</div>
+
+<div style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 8px;">
+<button style="background: #0B5D4B; color: #FFFFFF; border: 0; border-radius: 8px; padding: 11px 14px; font-weight: 600; min-height: 44px;">Approve &amp; send report</button>
+<button onClick="{{ f1Pick }}" style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Revalue…</button>
+<div style="font-size: 12px; line-height: 18px; color: #475467;">You sign 4 AI judgement calls · <strong style="color: #101828;">{{ reviewed }} of 4</strong> reviewed</div>
+<a href="#" style="font-size: 12px;">Preview report draft (18 pages)</a>
+</div>
+</section>
+
+<section aria-label="How the value is built" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 14px 16px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<h2 style="margin: 0; font-size: 14px; font-weight: 600;">How the value is built</h2>
+<span style="font-size: 12px; color: #5B6576;">Income approach (Ertragswertverfahren, ImmoWertV §§ 27–34)</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin-top: 10px;">
+<div style="flex: 1 1 120px; border: 2px solid #F79009; border-radius: 8px; padding: 7px 9px;"><div style="font-size: 11px; color: #5B6576;">Market rent (8 units)</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">9.60 €/m² avg.</div><div style="font-size: 11px; color: #A3410A; font-weight: 600;">≈ AI · check 2</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">→</div>
+<div style="flex: 1 1 120px; border: 1px solid #E4E7EC; border-radius: 8px; padding: 8px 10px;"><div style="font-size: 11px; color: #5B6576;">Gross income</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">€65,088</div><div style="font-size: 11px; color: #475467;">= calculated</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">−</div>
+<div style="flex: 1 1 120px; border: 1px solid #E4E7EC; border-radius: 8px; padding: 8px 10px;"><div style="font-size: 11px; color: #5B6576;">Operating costs</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">€12,374</div><div style="font-size: 11px; color: #475467;">§ ImmoWertV rule</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">=</div>
+<div style="flex: 1 1 120px; border: 1px solid #E4E7EC; border-radius: 8px; padding: 8px 10px;"><div style="font-size: 11px; color: #5B6576;">Net income</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">€52,714</div><div style="font-size: 11px; color: #475467;">= calculated</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">→</div>
+<div style="{{ capTileStyle }}"><div style="font-size: 11px; color: #5B6576;">Cap rate · remaining life</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">{{ capTile }}</div><div style="{{ capTileSrcStyle }}">{{ capTileSrc }}</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">→</div>
+<div style="flex: 1 1 120px; border: 1px solid #E4E7EC; border-radius: 8px; padding: 8px 10px;"><div style="font-size: 11px; color: #5B6576;">Building + land</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">{{ bldgTile }}</div><div style="font-size: 11px; color: #0E6F67; font-weight: 600;">land: public data</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">−</div>
+<div style="flex: 1 1 120px; border: 2px solid #F79009; border-radius: 8px; padding: 7px 9px;"><div style="font-size: 11px; color: #5B6576;">Adjustments</div><div style="font-weight: 600; font-variant-numeric: tabular-nums;">{{ adjTile }}</div><div style="font-size: 11px; color: #A3410A; font-weight: 600;">≈ AI · checks 3, 4</div></div>
+<div aria-hidden="true" style="align-self: center; color: #98A2B3;">=</div>
+<div style="flex: 1 1 130px; background: #101828; color: #FFFFFF; border-radius: 8px; padding: 8px 10px;"><div style="font-size: 11px; color: #D0D5DD;">Market value</div><div style="font-weight: 700; font-variant-numeric: tabular-nums;">{{ valueText }}</div><div style="font-size: 11px; color: #D0D5DD;">rounded</div></div>
+</div>
+</section>
+
+<section aria-label="Units" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow: hidden;">
+<div style="padding: 14px 16px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; align-items: flex-start;">
+<div style="flex: 999 1 420px; min-width: 0;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600;">Units · 8 apartments</h2>
+<div style="font-size: 12px; line-height: 18px; color: #5B6576; margin-top: 2px;">Read by the AI from the tenant list; click a unit to open it. The building is valued as one asset (one plot, one cap rate). The value per unit is the building value split by each unit's share of market rent, useful if flats are later sold one by one.</div>
+</div>
+<button onClick="{{ toggleAllUnits }}" style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 8px 12px; font-weight: 600; min-height: 40px;">{{ allUnitsLabel }}</button>
+</div>
+<div style="overflow-x: auto;">
+<div style="min-width: 780px;">
+<div style="display: grid; grid-template-columns: 2.4fr 0.8fr 1fr 1.3fr 0.9fr 1fr 1.3fr; gap: 8px; padding: 8px 16px; border-top: 1px solid #E4E7EC; border-bottom: 1px solid #E4E7EC; background: #F9FAFB; font-size: 12px; font-weight: 600; color: #5B6576;">
+<span>Unit</span><span style="text-align: right;">m²</span><span style="text-align: right;">In-place €/m²</span><span style="text-align: right;">AI market €/m²</span><span style="text-align: right;">Gap</span><span style="text-align: right;">Lease since</span><span style="text-align: right;">Value share</span>
+</div>
+<sc-for list="{{ units }}" as="u" hint-placeholder-count="8">
+<button onClick="{{ u.toggle }}" aria-expanded="{{ u.expanded }}" style="{{ u.rowStyle }}">
+<span style="display: flex; align-items: center; gap: 8px; font-weight: 600;"><span aria-hidden="true" style="color: #475467; width: 12px;">{{ u.chev }}</span>{{ u.no }} · {{ u.name }}</span>
+<span style="text-align: right;">{{ u.m2 }}</span>
+<span style="text-align: right; color: #1849A9;">{{ u.ip }}</span>
+<span style="text-align: right; color: #A3410A;">≈ {{ u.mk }}</span>
+<span style="text-align: right;">{{ u.gap }}</span>
+<span style="text-align: right;">{{ u.since }}</span>
+<span style="text-align: right; font-weight: 600;">{{ u.share }}</span>
+</button>
+<sc-if value="{{ u.open }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 12px 16px 16px 36px; background: #F9FAFB; border-bottom: 1px solid #E4E7EC; display: flex; flex-wrap: wrap; gap: 12px 28px; font-size: 13px; line-height: 19px;">
+<div style="flex: 1 1 180px;">
+<div style="font-size: 11px; font-weight: 600; color: #5B6576; text-transform: uppercase; letter-spacing: 0.04em;">Unit</div>
+<div>{{ u.floor }} · {{ u.rooms }} rooms</div>
+<div style="color: #475467;">{{ u.feature }}</div>
+<div style="color: #475467;">Lease since {{ u.since }}</div>
+</div>
+<div style="flex: 1 1 220px;">
+<div style="font-size: 11px; font-weight: 600; color: #5B6576; text-transform: uppercase; letter-spacing: 0.04em;">Rent</div>
+<div><span style="color: #1849A9; font-weight: 600;">In-place {{ u.ipMonth }}/month</span> · tenant list p. 2, row {{ u.no }}</div>
+<div><span style="color: #A3410A; font-weight: 600;">≈ Market {{ u.mkMonth }}/month</span> · {{ u.comps }}</div>
+<div style="color: #475467;">Gap {{ u.gap }} · value share {{ u.shareFull }}</div>
+</div>
+<div style="flex: 2 1 260px;">
+<div style="font-size: 11px; font-weight: 600; color: #5B6576; text-transform: uppercase; letter-spacing: 0.04em;">≈ AI note</div>
+<div>{{ u.note }}</div>
+<div style="color: #475467; margin-top: 4px;">Photos: {{ u.photos }}</div>
+</div>
+</div>
+</sc-if>
+</sc-for>
+<div style="display: grid; grid-template-columns: 2.4fr 0.8fr 1fr 1.3fr 0.9fr 1fr 1.3fr; gap: 8px; padding: 10px 16px; background: #F2F4F7; font-weight: 700; font-variant-numeric: tabular-nums;">
+<span style="padding-left: 20px;">Total building</span><span style="text-align: right;">565</span><span style="text-align: right; color: #1849A9;">8.92</span><span style="text-align: right; color: #A3410A;">≈ 9.60</span><span style="text-align: right;">−7.1 %</span><span style="text-align: right;"></span><span style="text-align: right;">{{ valueText }}</span>
+</div>
+</div>
+</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;">
+
+<section aria-label="Needs your eye" style="flex: 11 1 480px; min-width: 0; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow: hidden;">
+<div style="padding: 14px 16px;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600;">Needs your eye</h2>
+<div style="font-size: 12px; color: #5B6576; margin-top: 2px;">The AI's 4 judgement calls, biggest € impact first. All bars share one scale (±€130k). Everything else was traced and cross-checked automatically.</div>
+</div>
+
+<sc-if value="{{ f1Closed }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ f1Pick }}" style="display: block; width: 100%; text-align: left; background: #FFFFFF; border: 0; border-top: 1px solid #E4E7EC; padding: 12px 16px; color: #101828;">
+<span style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600;">1 · {{ f1Title }}</span>
+<span style="{{ f1StatusStyle }}">{{ f1Status }}</span>
+</span>
+<span role="img" aria-label="Value swing minus 111 thousand to plus 128 thousand euro" style="display: flex; align-items: center; margin-top: 8px;">
+<span style="flex: 1 1 0; display: flex; justify-content: flex-end;"><span style="display: block; width: 85%; height: 8px; background: #FEC84B; border-radius: 4px 0 0 4px;"></span></span>
+<span style="display: block; width: 2px; height: 16px; background: #101828;"></span>
+<span style="flex: 1 1 0;"><span style="display: block; width: 98%; height: 8px; background: #F79009; border-radius: 0 4px 4px 0;"></span></span>
+</span>
+<span style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6576; font-variant-numeric: tabular-nums;"><span>−€111k at 3.5 %</span><span>+€128k at 2.5 %</span></span>
+</button>
+</sc-if>
+<sc-if value="{{ f1Open }}" hint-placeholder-val="{{ true }}">
+<div style="border-top: 1px solid #E4E7EC; padding: 14px 16px; background: #FFFAF2;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600; font-size: 15px;">1 · {{ f1Title }}</span>
+<span style="{{ f1StatusStyle }}">{{ f1Status }}</span>
+</div>
+<div style="color: #475467; margin-top: 2px;">Midpoint of the committee's city-wide range for pre-war multi-family houses (2.5–3.5 %).</div>
+<div role="img" aria-label="Value swing minus 111 thousand to plus 128 thousand euro" style="display: flex; align-items: center; margin-top: 10px;">
+<div style="flex: 1 1 0; display: flex; justify-content: flex-end;"><div style="width: 85%; height: 10px; background: #FEC84B; border-radius: 5px 0 0 5px;"></div></div>
+<div style="width: 2px; height: 18px; background: #101828;"></div>
+<div style="flex: 1 1 0;"><div style="width: 98%; height: 10px; background: #F79009; border-radius: 0 5px 5px 0;"></div></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #475467; font-variant-numeric: tabular-nums;"><span>3.5 % → €1.19 M (−€111k)</span><span>2.5 % → €1.43 M (+€128k)</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">Why flagged</div><div>The market report has no district-level figure for 04109, so the AI fell back to the city-wide range.</div></div>
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">What would change the AI's mind</div><div>A district cap rate, or recent sales of pre-war houses in 04109.</div></div>
+</div>
+<sc-if value="{{ notRevised }}" hint-placeholder-val="{{ true }}">
+<label for="note1" style="display: block; font-size: 12px; font-weight: 600; color: #5B6576; margin-top: 14px;">Note to the AI (Revalue)</label>
+<textarea id="note1" rows="3" value="{{ note }}" onChange="{{ onNote }}" placeholder="Tell the AI what to change and why, like a note to a junior." style="display: block; width: 100%; margin-top: 4px; border: 1px solid #BDB4FE; border-radius: 8px; padding: 8px 10px; resize: vertical; background: #FFFFFF; color: #5B3CC4;"></textarea>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+<button onClick="{{ f1Accept }}" style="background: #0B5D4B; color: #FFFFFF; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Accept 3.0 %</button>
+<button onClick="{{ revise }}" style="background: #5B3CC4; color: #FFFFFF; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Send note &amp; revalue</button>
+</div>
+</sc-if>
+<sc-if value="{{ revised }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 14px; background: #F6F3FF; border-radius: 8px; padding: 10px 12px; color: #5B3CC4;">You set 3.4 %. The AI revised the valuation (see Revision 2 above); the report records it as valuer judgement.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ f2Closed }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ f2Pick }}" style="display: block; width: 100%; text-align: left; background: #FFFFFF; border: 0; border-top: 1px solid #E4E7EC; padding: 12px 16px; color: #101828;">
+<span style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600;">2 · Market rent 9.60 €/m² (avg. of 8 units)</span>
+<span style="{{ f2StatusStyle }}">{{ f2Status }}</span>
+</span>
+<span role="img" aria-label="Value swing minus 63 thousand to plus 76 thousand euro" style="display: flex; align-items: center; margin-top: 8px;">
+<span style="flex: 1 1 0; display: flex; justify-content: flex-end;"><span style="display: block; width: 49%; height: 8px; background: #FEC84B; border-radius: 4px 0 0 4px;"></span></span>
+<span style="display: block; width: 2px; height: 16px; background: #101828;"></span>
+<span style="flex: 1 1 0;"><span style="display: block; width: 58%; height: 8px; background: #F79009; border-radius: 0 4px 4px 0;"></span></span>
+</span>
+<span style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6576; font-variant-numeric: tabular-nums;"><span>−€63k at 9.10 €/m²</span><span>+€76k at 10.20 €/m²</span></span>
+</button>
+</sc-if>
+<sc-if value="{{ f2Open }}" hint-placeholder-val="{{ false }}">
+<div style="border-top: 1px solid #E4E7EC; padding: 14px 16px; background: #FFFAF2;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600; font-size: 15px;">2 · Market rent 9.60 €/m² (avg. of 8 units)</span>
+<span style="{{ f2StatusStyle }}">{{ f2Status }}</span>
+</div>
+<div style="color: #475467; margin-top: 2px;">Rent model per unit on 38 comparable listings within 1 km (map on the right); units range from 9.20 to 9.95 €/m².</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">Why flagged</div><div>Listings are asking rents, not signed leases, and 15 of them are more than a year old.</div></div>
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">Support</div><div>Unit 4 was re-let in 2025 at 9.40 €/m², close to its estimate of 9.55 €/m².</div></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+<button onClick="{{ f2Accept }}" style="background: #0B5D4B; color: #FFFFFF; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Accept 9.60 €/m²</button>
+<button style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Revalue…</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ f3Closed }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ f3Pick }}" style="display: block; width: 100%; text-align: left; background: #FFFFFF; border: 0; border-top: 1px solid #E4E7EC; padding: 12px 16px; color: #101828;">
+<span style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600;">3 · Under-rent closes within 5 years</span>
+<span style="{{ f3StatusStyle }}">{{ f3Status }}</span>
+</span>
+<span role="img" aria-label="Value swing minus 11 thousand to plus 8 thousand euro" style="display: flex; align-items: center; margin-top: 8px;">
+<span style="flex: 1 1 0; display: flex; justify-content: flex-end;"><span style="display: block; width: 9%; height: 8px; background: #FEC84B; border-radius: 4px 0 0 4px;"></span></span>
+<span style="display: block; width: 2px; height: 16px; background: #101828;"></span>
+<span style="flex: 1 1 0;"><span style="display: block; width: 6%; height: 8px; background: #F79009; border-radius: 0 4px 4px 0;"></span></span>
+</span>
+<span style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6576; font-variant-numeric: tabular-nums;"><span>−€11k at 8 years</span><span>+€8k at 3 years</span></span>
+</button>
+</sc-if>
+<sc-if value="{{ f3Open }}" hint-placeholder-val="{{ false }}">
+<div style="border-top: 1px solid #E4E7EC; padding: 14px 16px; background: #FFFAF2;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600; font-size: 15px;">3 · Under-rent closes within 5 years</span>
+<span style="{{ f3StatusStyle }}">{{ f3Status }}</span>
+</div>
+<div style="color: #475467; margin-top: 2px;">All 8 units pay below market (8.92 vs. 9.60 €/m²; unit gaps from −1.6 % to −11.3 %). The gap of €4,604 a year is deducted until it closes.</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">Why flagged</div><div>Rent increases in sitting tenancies are capped by law (§ 558 BGB, local rent index), so 5 years is an estimate.</div></div>
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">What would change the AI's mind</div><div>The dates of the last rent increases per unit.</div></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+<button onClick="{{ f3Accept }}" style="background: #0B5D4B; color: #FFFFFF; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Accept 5 years</button>
+<button style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Revalue…</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ f4Closed }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ f4Pick }}" style="display: block; width: 100%; text-align: left; background: #FFFFFF; border: 0; border-top: 1px solid #E4E7EC; padding: 12px 16px; color: #101828;">
+<span style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600;">4 · Utility easement assumed value-neutral</span>
+<span style="{{ f4StatusStyle }}">{{ f4Status }}</span>
+</span>
+<span role="img" aria-label="Value swing minus 12 thousand to 0 euro" style="display: flex; align-items: center; margin-top: 8px;">
+<span style="flex: 1 1 0; display: flex; justify-content: flex-end;"><span style="display: block; width: 9%; height: 8px; background: #FEC84B; border-radius: 4px 0 0 4px;"></span></span>
+<span style="display: block; width: 2px; height: 16px; background: #101828;"></span>
+<span style="flex: 1 1 0;"></span>
+</span>
+<span style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6576; font-variant-numeric: tabular-nums;"><span>up to −€12k if it limits use</span><span>±€0 as assumed</span></span>
+</button>
+</sc-if>
+<sc-if value="{{ f4Open }}" hint-placeholder-val="{{ false }}">
+<div style="border-top: 1px solid #E4E7EC; padding: 14px 16px; background: #FFFAF2;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline;">
+<span style="font-weight: 600; font-size: 15px;">4 · Utility easement assumed value-neutral</span>
+<span style="{{ f4StatusStyle }}">{{ f4Status }}</span>
+</div>
+<div style="color: #475467; margin-top: 2px;">Land register section II lists a utility line right for the municipal utility. The AI assumes it runs along the boundary (dashed on the map) and does not restrict use.</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">Why flagged</div><div>The route of the line is not in the uploaded documents.</div></div>
+<div style="flex: 1 1 200px;"><div style="font-size: 12px; font-weight: 600; color: #5B6576;">What would change the AI's mind</div><div>A cadastral map showing the line crossing the buildable area.</div></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+<button onClick="{{ f4Accept }}" style="background: #0B5D4B; color: #FFFFFF; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Accept ±€0</button>
+<button style="background: #FFFFFF; color: #101828; border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 14px; font-weight: 600; min-height: 44px;">Revalue…</button>
+</div>
+</div>
+</sc-if>
+
+<button onClick="{{ toggleLedger }}" style="display: flex; width: 100%; justify-content: space-between; gap: 12px; text-align: left; background: #F9FAFB; border: 0; border-top: 1px solid #E4E7EC; padding: 12px 16px; color: #101828;">
+<span><strong>Verified automatically: 29 numbers</strong> · 6 cross-checks passed</span>
+<span style="color: #475467;">{{ ledgerLabel }}</span>
+</button>
+<sc-if value="{{ ledgerOpen }}" hint-placeholder-val="{{ false }}">
+<div style="overflow-x: auto; border-top: 1px solid #E4E7EC;">
+<table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 13px;">
+<tbody>
+<tr><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7;">In-place rent</td><td style="padding: 8px; border-bottom: 1px solid #F2F4F7; text-align: right; font-variant-numeric: tabular-nums;">€60,484 /yr</td><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7; color: #1849A9;">Client document · tenant list p. 2, total row</td></tr>
+<tr><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7;">Plot area</td><td style="padding: 8px; border-bottom: 1px solid #F2F4F7; text-align: right; font-variant-numeric: tabular-nums;">480 m²</td><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7; color: #1849A9;">Client document · land register p. 1</td></tr>
+<tr><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7;">Standard land value</td><td style="padding: 8px; border-bottom: 1px solid #F2F4F7; text-align: right; font-variant-numeric: tabular-nums;">520 €/m²</td><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7; color: #0E6F67;">Public data · BORIS Sachsen, zone 0412, 01 Jan 2026</td></tr>
+<tr><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7;">Operating costs</td><td style="padding: 8px; border-bottom: 1px solid #F2F4F7; text-align: right; font-variant-numeric: tabular-nums;">€12,374</td><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7; color: #475467;">§ ImmoWertV Annex 3 · management, maintenance, rent-loss risk</td></tr>
+<tr><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7;">Modernisation points</td><td style="padding: 8px; border-bottom: 1px solid #F2F4F7; text-align: right; font-variant-numeric: tabular-nums;">13</td><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7; color: #A3410A;">≈ AI · high confidence · roof 4, windows 2, pipes 2, heating 2, baths 2, interior 1</td></tr>
+<tr><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7;">Cross-check</td><td style="padding: 8px; border-bottom: 1px solid #F2F4F7; text-align: right; color: #0E6F67; font-weight: 600;">passed</td><td style="padding: 8px 16px; border-bottom: 1px solid #F2F4F7; color: #475467;">Rent total equals the sum of the 8 tenant rows</td></tr>
+<tr><td style="padding: 8px 16px;">Cross-check</td><td style="padding: 8px; text-align: right; color: #0E6F67; font-weight: 600;">passed</td><td style="padding: 8px 16px; color: #475467;">Facade photo matches the building age and the energy certificate</td></tr>
+</tbody>
+</table>
+</div>
+</sc-if>
+</section>
+
+<section aria-label="Evidence" style="flex: 9 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 16px;">
+<div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600;">Evidence</h2>
+<span style="font-size: 11px; color: #5B6576;">Sample documents</span>
+</div>
+
+<sc-if value="{{ f1Open }}" hint-placeholder-val="{{ true }}">
+<div style="margin-top: 10px;">
+<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #0E6F67; background: #E3F5F2; border-radius: 999px; padding: 2px 9px;"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 4.5 6 2l4.5 2.5M2.6 5v4.4M4.9 5v4.4M7.1 5v4.4M9.4 5v4.4M1.5 10.4h9" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path></svg>Public data</span>
+<h3 style="margin: 8px 0 2px; font-size: 15px;">Market report 2026 · p. 47 · table 12</h3>
+<div style="font-size: 12px; color: #475467;">Valuation committee Leipzig (Gutachterausschuss) · retrieved 06 Nov 2026, 09:14</div>
+<div style="margin-top: 12px; border: 1px solid #D0D5DD; border-radius: 6px; padding: 12px; background: #FCFCFD; overflow-x: auto;">
+<div style="font-size: 11px; color: #5B6576;">Tabelle 12 · Liegenschaftszinssätze 2026</div>
+<table style="width: 100%; min-width: 340px; border-collapse: collapse; font-family: Georgia, 'Times New Roman', serif; font-size: 13px; margin-top: 6px;">
+<thead><tr><th style="text-align: left; padding: 4px 6px; border-bottom: 1px solid #D0D5DD;">Objektart</th><th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid #D0D5DD;">Spanne</th><th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid #D0D5DD;">Median</th><th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid #D0D5DD;">n</th></tr></thead>
+<tbody>
+<tr><td style="padding: 4px 6px;">Ein- und Zweifamilienhäuser</td><td style="padding: 4px 6px; text-align: right;">1,5–2,5 %</td><td style="padding: 4px 6px; text-align: right;">2,0 %</td><td style="padding: 4px 6px; text-align: right;">112</td></tr>
+<tr style="background: #FEF7C3;"><td style="padding: 4px 6px; font-weight: 700;">Mehrfamilienhäuser bis Baujahr 1948</td><td style="padding: 4px 6px; text-align: right; font-weight: 700;">2,5–3,5 %</td><td style="padding: 4px 6px; text-align: right; font-weight: 700;">3,0 %</td><td style="padding: 4px 6px; text-align: right; font-weight: 700;">64</td></tr>
+<tr><td style="padding: 4px 6px;">Mehrfamilienhäuser ab Baujahr 1949</td><td style="padding: 4px 6px; text-align: right;">3,0–4,0 %</td><td style="padding: 4px 6px; text-align: right;">3,5 %</td><td style="padding: 4px 6px; text-align: right;">41</td></tr>
+<tr><td style="padding: 4px 6px;">Wohn- und Geschäftshäuser</td><td style="padding: 4px 6px; text-align: right;">3,5–5,0 %</td><td style="padding: 4px 6px; text-align: right;">4,2 %</td><td style="padding: 4px 6px; text-align: right;">27</td></tr>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 12px; background: #FFF4E5; border-radius: 8px; padding: 10px 12px;">
+<div style="font-size: 12px; font-weight: 600; color: #A3410A;">≈ AI reasoning</div>
+<p style="margin: 4px 0 0;">There is no district figure for 04109, so I used the city-wide median for pre-war multi-family houses. Condition and location are average for this class, so I saw no reason to move off the median.</p>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ f2Open }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 10px;">
+<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #A3410A; background: #FFF4E5; border-radius: 999px; padding: 2px 9px;">≈ AI estimate · rent model</span>
+<h3 style="margin: 8px 0 2px; font-size: 15px;">38 comparable listings within 1 km</h3>
+<div style="font-size: 12px; color: #475467;">Solid: listed in the last 12 months (23) · hollow: older, index-adjusted (15)</div>
+<svg viewBox="0 0 400 240" role="img" aria-label="Map of 38 comparable rental listings within one kilometre around the property" style="display: block; width: 100%; height: auto; margin-top: 12px; border-radius: 8px; background: #EEF2F6;">
+<path d="M0 205 C 90 190, 150 230, 260 214 S 360 196, 400 204" fill="none" stroke="#CFE0F2" stroke-width="16"></path>
+<rect x="300" y="26" width="70" height="56" rx="6" fill="#DDEFE3"></rect>
+<rect x="36" y="150" width="58" height="40" rx="6" fill="#DDEFE3"></rect>
+<path d="M0 70 L400 50" stroke="#FFFFFF" stroke-width="9"></path>
+<path d="M0 160 L400 146" stroke="#FFFFFF" stroke-width="9"></path>
+<path d="M120 0 L140 240" stroke="#FFFFFF" stroke-width="9"></path>
+<path d="M262 0 L276 240" stroke="#FFFFFF" stroke-width="9"></path>
+<path d="M30 0 L360 240" stroke="#FFFFFF" stroke-width="6"></path>
+<circle cx="200" cy="120" r="104" fill="none" stroke="#0B5D4B" stroke-width="1.4" stroke-dasharray="5 4"></circle>
+<circle cx="236" cy="74" r="4" fill="#344054"></circle><circle cx="249" cy="208" r="4" fill="#344054"></circle><circle cx="148" cy="90" r="4" fill="#344054"></circle><circle cx="295" cy="119" r="4" fill="#344054"></circle><circle cx="171" cy="121" r="4" fill="#344054"></circle><circle cx="258" cy="151" r="4" fill="#344054"></circle><circle cx="223" cy="38" r="4" fill="#344054"></circle><circle cx="282" cy="63" r="4" fill="#344054"></circle><circle cx="280" cy="98" r="4" fill="#344054"></circle><circle cx="251" cy="208" r="4" fill="#344054"></circle><circle cx="132" cy="52" r="4" fill="#344054"></circle><circle cx="243" cy="160" r="4" fill="#344054"></circle><circle cx="244" cy="43" r="4" fill="#344054"></circle><circle cx="141" cy="64" r="4" fill="#344054"></circle><circle cx="240" cy="72" r="4" fill="#344054"></circle><circle cx="235" cy="203" r="4" fill="#344054"></circle><circle cx="265" cy="68" r="4" fill="#344054"></circle><circle cx="115" cy="91" r="4" fill="#344054"></circle><circle cx="188" cy="194" r="4" fill="#344054"></circle><circle cx="119" cy="86" r="4" fill="#344054"></circle><circle cx="286" cy="170" r="4" fill="#344054"></circle><circle cx="163" cy="80" r="4" fill="#344054"></circle><circle cx="172" cy="44" r="4" fill="#344054"></circle><circle cx="284" cy="109" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="116" cy="147" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="141" cy="137" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="131" cy="120" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="259" cy="54" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="254" cy="199" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="197" cy="213" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="253" cy="202" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="101" cy="142" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="186" cy="163" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="278" cy="71" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="206" cy="146" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="131" cy="140" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="187" cy="64" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle><circle cx="190" cy="144" r="3.6" fill="#FFFFFF" stroke="#344054" stroke-width="1.5"></circle>
+<rect x="192" y="112" width="16" height="16" rx="3" fill="#0B5D4B" stroke="#FFFFFF" stroke-width="2"></rect>
+<text x="212" y="108" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0B5D4B">Musterstraße 12</text>
+<text x="290" y="232" font-family="Inter, sans-serif" font-size="10" fill="#475467">1 km · sample map</text>
+</svg>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 12px;">
+<span style="color: #A3410A; font-weight: 600;">Estimate 9.60 €/m² avg. (range 9.10–10.20)</span>
+<span style="color: #1849A9; font-weight: 600;">In-place 8.92 €/m² · tenant list p. 2</span>
+</div>
+<div style="margin-top: 12px; background: #FFF4E5; border-radius: 8px; padding: 10px 12px;">
+<div style="font-size: 12px; font-weight: 600; color: #A3410A;">≈ AI reasoning</div>
+<p style="margin: 4px 0 0;">Each unit is matched to listings of similar size, floor and condition, weighted by distance and recency. Censio rent model v0.3 (sample); typical error in Leipzig ±6 %.</p>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ f3Open }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 10px;">
+<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1849A9; background: #EAF1FF; border-radius: 999px; padding: 2px 9px;"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.2h4l2.4 2.4v7.2H3z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path></svg>Client document</span>
+<h3 style="margin: 8px 0 2px; font-size: 15px;">Tenant list (Mieterliste) · p. 2</h3>
+<div style="font-size: 12px; color: #475467;">Uploaded by Demo Capital GmbH · 8 units read · details per unit in the Units table</div>
+<div style="margin-top: 12px; border: 1px solid #D0D5DD; border-radius: 6px; padding: 10px 12px; background: #FCFCFD; font-family: Georgia, 'Times New Roman', serif; font-size: 13px; line-height: 20px;">
+<div style="display: flex; justify-content: space-between; gap: 8px;"><span>WE 1–8, Wohnfläche gesamt</span><span>565,0 m²</span></div>
+<div style="display: flex; justify-content: space-between; gap: 8px; background: #FEF7C3; font-weight: 700; padding: 0 4px;"><span>Summe Nettokaltmiete / Monat</span><span>5.040,30 €</span></div>
+</div>
+<div style="margin-top: 12px; background: #FFF4E5; border-radius: 8px; padding: 10px 12px;">
+<div style="font-size: 12px; font-weight: 600; color: #A3410A;">≈ AI reasoning</div>
+<p style="margin: 4px 0 0;">The oldest leases (2009–2012) have the largest gaps. With the legal cap on increases, I expect the gap to close over about 5 years and deducted its present value.</p>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ f4Open }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 10px;">
+<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1849A9; background: #EAF1FF; border-radius: 999px; padding: 2px 9px;"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.2h4l2.4 2.4v7.2H3z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path></svg>Client document</span>
+<h3 style="margin: 8px 0 2px; font-size: 15px;">Land register (Grundbuch) · p. 4 · section II</h3>
+<div style="margin-top: 10px; border: 1px solid #D0D5DD; border-radius: 6px; padding: 12px; background: #FCFCFD; font-family: Georgia, 'Times New Roman', serif; font-size: 13px; line-height: 20px;">
+<div style="font-size: 11px; color: #5B6576; font-family: Inter, sans-serif;">Abteilung II · lfd. Nr. 1</div>
+<div style="background: #FEF7C3; margin-top: 4px; padding: 4px 6px;">Beschränkte persönliche Dienstbarkeit (Leitungsrecht) für die städtischen Versorgungsbetriebe; eingetragen am 14.03.1998.</div>
+</div>
+<div style="margin-top: 8px; font-size: 12px; color: #475467;">AI translation: Limited personal easement (utility line right) for the municipal utility; registered 14 Mar 1998.</div>
+<svg viewBox="0 0 300 150" role="img" aria-label="Plot outline with the building footprint and the assumed route of the utility line along the eastern boundary" style="display: block; width: 100%; height: auto; margin-top: 10px; border-radius: 8px; background: #EEF2F6;">
+<path d="M0 22 L300 14" stroke="#FFFFFF" stroke-width="10"></path>
+<polygon points="70,34 230,30 234,136 74,140" fill="#FFFFFF" stroke="#0B5D4B" stroke-width="2"></polygon>
+<rect x="84" y="38" width="128" height="48" fill="#D0D5DD"></rect>
+<text x="122" y="66" font-family="Inter, sans-serif" font-size="11" fill="#344054">building</text>
+<path d="M224 34 L228 134" stroke="#F79009" stroke-width="2.5" stroke-dasharray="6 4"></path>
+<text x="160" y="124" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#A3410A">assumed line route</text>
+<text x="80" y="132" font-family="Inter, sans-serif" font-size="10" fill="#475467">plot 123/4 · 480 m²</text>
+</svg>
+<div style="margin-top: 12px; background: #FFF4E5; border-radius: 8px; padding: 10px 12px;">
+<div style="font-size: 12px; font-weight: 600; color: #A3410A;">≈ AI reasoning</div>
+<p style="margin: 4px 0 0;">Utility lines of this kind usually run along the plot boundary and do not restrict use. The route is not documented, so I rate this low confidence.</p>
+</div>
+</div>
+</sc-if>
+</section>
+
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      focus: 'f1',
+      acc: {},
+      revised: false,
+      ledgerOpen: false,
+      openUnits: {},
+      note: 'Cap rate too low for this micro-location: the committee range for pre-war multi-family houses in this district is 3.25–3.75 %. Use 3.4 %.'
+    };
+  }
+  renderVals() {
+    const s = this.state || {};
+    const focus = s.focus || 'f1';
+    const acc = s.acc || {};
+    const revised = !!s.revised;
+    const openUnits = s.openUnits || {};
+    const ids = ['f1', 'f2', 'f3', 'f4'];
+    const v = {};
+    const stAcc = 'font-size: 12px; font-weight: 600; color: #0E6F67;';
+    const stOpen = 'font-size: 12px; color: #A3410A;';
+    const stChg = 'font-size: 12px; font-weight: 600; color: #5B3CC4;';
+    const conf = { f1: 'medium', f2: 'medium', f3: 'medium', f4: 'low' };
+    ids.forEach((k) => {
+      v[k + 'Open'] = focus === k;
+      v[k + 'Closed'] = focus !== k;
+      v[k + 'Pick'] = () => this.setState({ focus: k });
+      v[k + 'Accept'] = () => {
+        const next = Object.assign({}, this.state.acc || {});
+        next[k] = true;
+        const following = ids.find((x) => !next[x] && !(x === 'f1' && this.state.revised)) || k;
+        this.setState({ acc: next, focus: following });
+      };
+      const changed = k === 'f1' && revised;
+      v[k + 'Status'] = changed ? 'Changed by KV · 3.4 %' : (acc[k] ? 'Accepted · KV' : '≈ AI · ' + conf[k] + ' confidence');
+      v[k + 'StatusStyle'] = changed ? stChg : (acc[k] ? stAcc : stOpen);
+    });
+    v.f1Title = revised ? 'Cap rate 3.4 % (was 3.0 %)' : 'Cap rate 3.0 %';
+    v.reviewed = ids.filter((k) => acc[k] || (k === 'f1' && revised)).length;
+    v.revised = revised;
+    v.notRevised = !revised;
+    v.note = s.note || '';
+    v.onNote = (e) => this.setState({ note: e && e.target ? e.target.value : '' });
+    v.revise = () => this.setState({ revised: true });
+    v.undo = () => this.setState({ revised: false });
+    v.versionLabel = revised ? 'v2 · revised after your note' : 'AI draft v1';
+    v.valueText = revised ? '€1,210,000' : '€1,300,000';
+    v.valueSub = revised ? '2,142 €/m² · 18.6× gross market income · −6.9 % vs. v1' : '2,301 €/m² · 20.0× gross market income';
+    v.sqmText = revised ? '2,142' : '2,301';
+    v.multText = revised ? '18.6×' : '20.0×';
+    const dot = (left) => 'position: absolute; left: ' + left + '%; top: 0; width: 14px; height: 14px; margin-left: -7px; border-radius: 7px; background: #101828; border: 2px solid #FFFFFF;';
+    v.sqmDot = dot(revised ? 34.2 : 50.1);
+    v.multDot = dot(revised ? 36 : 50);
+    v.capTile = revised ? '3.4 % · 42 yrs · ×22.19' : '3.0 % · 42 yrs · ×23.70';
+    v.capTileSrc = revised ? 'Changed by KV · check 1' : '≈ AI · check 1';
+    v.capTileStyle = 'flex: 1 1 140px; border-radius: 8px; padding: 7px 9px; border: 2px solid ' + (revised ? '#7A5AF8;' : '#F79009;');
+    v.capTileSrcStyle = 'font-size: 11px; font-weight: 600; color: ' + (revised ? '#5B3CC4;' : '#A3410A;');
+    v.bldgTile = revised ? '€981,405 + €249,600' : '€1,071,923 + €249,600';
+    v.adjTile = revised ? '€20,848' : '€21,087';
+    v.ledgerOpen = !!s.ledgerOpen;
+    v.ledgerLabel = s.ledgerOpen ? 'Hide' : 'Show';
+    v.toggleLedger = () => this.setState({ ledgerOpen: !this.state.ledgerOpen });
+    const data = [
+      ['1', 'GF left', 'Ground floor', '62', '2', '8.40', '9.20', '−8.7 %', '2009', 'Courtyard side', '€520.80', '€570.40', '9 comparables, medium confidence', '€136,700', '€127,200', '10.5 %', 'Oldest lease in the building; increases are capped, so this gap closes slowest. Ground floor, courtyard side: 0.40 €/m² below the building average.', 'none uploaded'],
+      ['2', 'GF right', 'Ground floor', '68', '2.5', '8.70', '9.25', '−5.9 %', '2012', 'Street side', '€591.60', '€629.00', '8 comparables, medium confidence', '€150,800', '€140,300', '11.6 %', 'Street-side ground floor; the model discounts traffic noise slightly.', 'none uploaded'],
+      ['3', '1F left', '1st floor', '71', '3', '9.20', '9.60', '−4.2 %', '2022', 'Bath renovated 2014', '€653.20', '€681.60', '11 comparables, medium confidence', '€163,400', '€152,100', '12.6 %', 'Recent lease, small gap. Matches the building average.', 'none uploaded'],
+      ['4', '1F right', '1st floor', '75', '3', '9.40', '9.55', '−1.6 %', '2025', 'Balcony', '€705.00', '€716.25', '12 comparables, high confidence', '€171,700', '€159,800', '13.2 %', 'Re-let in 2025 at 9.40 €/m², close to the estimate. This supports the rent model for the whole building.', 'none uploaded'],
+      ['5', '2F left', '2nd floor', '62', '2', '8.60', '9.70', '−11.3 %', '2011', 'Courtyard side', '€533.20', '€601.40', '9 comparables, medium confidence', '€144,100', '€134,200', '11.1 %', 'Largest gap in the building. Main driver of the under-rent deduction.', 'none uploaded'],
+      ['6', '2F right', '2nd floor', '68', '2.5', '8.80', '9.67', '−9.0 %', '2016', 'Balcony', '€598.40', '€657.56', '8 comparables, medium confidence', '€157,600', '€146,700', '12.1 %', 'Balcony adds about 0.10 €/m² in this area.', 'none uploaded'],
+      ['7', '3F left', '3rd floor', '71', '3', '9.10', '9.75', '−6.7 %', '2021', 'Bath renovated 2014', '€646.10', '€692.25', '10 comparables, medium confidence', '€165,900', '€154,400', '12.8 %', 'Upper floor, more light; in line with comparables.', 'none uploaded'],
+      ['8', 'Attic', 'Attic', '88', '3.5', '9.00', '9.95', '−9.5 %', '2019', 'Roof terrace, roof insulated 2016', '€792.00', '€875.60', '6 comparables, medium confidence', '€209,800', '€195,300', '16.1 %', 'Highest estimate: roof terrace and insulated roof. Fewer comparables for attic flats, so a wider range.', '2 photos (terrace, living room)']
+    ];
+    v.units = data.map((d) => {
+      const id = 'u' + d[0];
+      const open = !!openUnits[id];
+      return {
+        no: d[0], name: d[1], floor: d[2], m2: d[3], rooms: d[4], ip: d[5], mk: d[6], gap: d[7], since: d[8], feature: d[9],
+        ipMonth: d[10], mkMonth: d[11], comps: d[12], share: revised ? d[14] : d[13], shareFull: (revised ? d[14] : d[13]) + ' (' + d[15] + ')', note: d[16], photos: d[17],
+        open: open,
+        expanded: open ? 'true' : 'false',
+        chev: open ? '▾' : '▸',
+        rowStyle: 'display: grid; grid-template-columns: 2.4fr 0.8fr 1fr 1.3fr 0.9fr 1fr 1.3fr; gap: 8px; width: 100%; text-align: left; align-items: center; padding: 10px 16px; border: 0; border-bottom: 1px solid #F2F4F7; color: #101828; font-variant-numeric: tabular-nums; min-height: 44px; background: ' + (open ? '#F2F4F7;' : '#FFFFFF;'),
+        toggle: () => {
+          const next = Object.assign({}, this.state.openUnits || {});
+          next[id] = !next[id];
+          this.setState({ openUnits: next });
+        }
+      };
+    });
+    const anyClosed = data.some((d) => !openUnits['u' + d[0]]);
+    v.allUnitsLabel = anyClosed ? 'Expand all units' : 'Collapse all units';
+    v.toggleAllUnits = () => {
+      const next = {};
+      if (anyClosed) { data.forEach((d) => { next['u' + d[0]] = true; }); }
+      this.setState({ openUnits: next });
+    };
+    return v;
+  }
+}
+</script>
+</body>
+</html>
