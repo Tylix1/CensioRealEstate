@@ -149,7 +149,7 @@ export default function ProcessingPage() {
     <>
       <AppBar persona="client" nav={[{ label: "Valuations", href: "/client", active: true }]} />
       <main className="mx-auto max-w-[1440px] px-4 pb-12 pt-5 sm:px-6">
-        <div className="max-w-[1100px]">
+        <div className="mx-auto max-w-[1100px]">
           <Suspense fallback={<Placeholder />}>
             <Processing />
           </Suspense>
