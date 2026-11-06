@@ -132,7 +132,7 @@ function Plausibility({ out }: { out: PipelineOutput }) {
   );
 }
 
-function Provenance({ out }: { out: PipelineOutput }) {
+function Provenance({ out, signedOff = false }: { out: PipelineOutput; signedOff?: boolean }) {
   const counts = countBySource(out.registry);
   const total = out.registry.length;
   const flaggedAi = out.registry.filter((f) => f.sourceType === "ai_estimate" && f.flagId !== null).length;
@@ -175,7 +175,7 @@ function Provenance({ out }: { out: PipelineOutput }) {
           <>
             {" · "}
             <strong className="text-ai">{countLabel(calls, "AI judgement call")}</strong>{" "}
-            {calls === 1 ? "needs" : "need"} your eye
+            {signedOff ? "signed off by the valuer" : calls === 1 ? "needs your eye" : "need your eye"}
           </>
         )}
       </div>
@@ -273,7 +273,7 @@ export function VerdictBand({
       </div>
 
       <Plausibility out={out} />
-      <Provenance out={out} />
+      <Provenance out={out} signedOff={!!signed} />
 
       {signed ? (
         <SignOff signed={signed} calls={calls} previewHref={previewHref} />
