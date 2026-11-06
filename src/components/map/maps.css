@@ -1,0 +1,56 @@
+/* Leaflet maps (DealMap, ComparablesMap). Loaded after leaflet/dist/leaflet.css. */
+
+/* The mockup's sample-map backdrop, shown while OSM tiles load or when they cannot be reached. */
+.censio-map.leaflet-container {
+  background: #eef2f6;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.censio-map .leaflet-control-attribution {
+  font-size: 10px;
+  line-height: 14px;
+  color: #475467;
+}
+
+.censio-map--mini .leaflet-control-attribution {
+  font-size: 8px;
+  line-height: 11px;
+  padding: 0 3px;
+}
+
+/* Subject property: the mockup's brand square with a white border. */
+.censio-pin {
+  background: #0b5d4b;
+  border: 2px solid #ffffff;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.3);
+}
+
+.censio-map .leaflet-tooltip.censio-tip {
+  width: 210px;
+  white-space: normal;
+  font-size: 12px;
+  line-height: 16px;
+  color: #101828;
+  border-color: #d0d5dd;
+  border-radius: 6px;
+  padding: 6px 8px;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.12);
+}
+
+.censio-map .leaflet-tooltip.censio-pin-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0b5d4b;
+  background: rgba(255, 255, 255, 0.85);
+  border: 0;
+  border-radius: 4px;
+  padding: 0 4px;
+  box-shadow: none;
+}
+
+.censio-map .leaflet-tooltip.censio-pin-label::before {
+  display: none;
+}
