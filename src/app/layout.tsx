@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import { DemoBar } from "@/components/demo/DemoBar";
+import { OrientationOverlay } from "@/components/demo/OrientationOverlay";
+import { RECORDING_SCRIPT } from "@/components/demo/recording";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,8 +23,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}>
-      <body className="min-h-full bg-page text-ink">{children}</body>
+    // suppressHydrationWarning: the inline script may mark <html> for recording mode before React hydrates.
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        {/* Hides the demo bar before the first paint when the tab is in recording mode (?recording=1). */}
+        <script dangerouslySetInnerHTML={{ __html: RECORDING_SCRIPT }} />
+      </head>
+      <body className="min-h-full bg-page text-ink">
+        <DemoBar />
+        {children}
+        <OrientationOverlay />
+      </body>
     </html>
   );
 }
