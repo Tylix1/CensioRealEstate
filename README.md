@@ -5,6 +5,9 @@ Everything in it is sample data; it is not a valuation report.
 
 ## Kurzüberblick
 
+**Anleitung fürs Team (Schritt für Schritt, ohne Vorwissen):** [ANLEITUNG.md](ANLEITUNG.md): online stellen, testen,
+Video aufnehmen, gemeinsam ändern.
+
 **Was ist das?** Ein klickbarer Prototyp von Censio RE für die Ertragswert-Bewertung eines Mehrfamilienhauses
 (Musterstraße 12, 04109 Leipzig, Beispieldaten). Der Auftraggeber (Demo Capital GmbH) lädt seine Unterlagen hoch, die
 KI liest sie und legt die Einheiten an, eine feste Rechenlogik ohne KI ermittelt den Ertragswert, und der Senior Valuer
