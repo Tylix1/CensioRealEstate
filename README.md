@@ -135,9 +135,14 @@ Notes on the steps:
   prototype; move to Pro once the app is used commercially.
 - **2.** Project → Settings → Environment Variables (Production, and Preview if wanted), then redeploy: variables
   apply to new deployments only. Choose a code that is hard to guess.
-- **3.** Use a dedicated workspace and API key for the prototype; suggested limit $20 a month.
-- **4.** Without the code the badge shows `Demo mode`, which is what everyone else sees. On the hosted link, also check
-  that "Use sample documents" reads all five documents: `/api/extract` must find the committed results
+- **3.** Use a dedicated workspace for the prototype (the Default Workspace takes no spend limit; suggested limit $20
+  a month). Create the key in the Claude Console scoped to that workspace: a key without a workspace needs an
+  `anthropic-workspace-id` header on every request, which the app does not send. Give the key an expiry that outlasts
+  the project.
+- **4.** Without the code the badge shows `Demo mode`, which is what everyone else sees. The badge only checks that
+  both variables are set, not that Anthropic accepts the key: with the code, "Use sample documents" must label every
+  document `Live AI`; a rejected key falls back to the committed results, labelled `Demo mode`. Without the code, also
+  check that "Use sample documents" reads all five documents: `/api/extract` must find the committed results
   (`next.config.ts` traces `fixtures/extraction` into that function).
 - **5.** With the key and code in `.env.local`: `npm run record:extraction -- --env-file=.env.local`. Then run
   `npm test` and `npm run e2e`, commit `fixtures/extraction` and push; Vercel redeploys and the samples show as

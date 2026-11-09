@@ -29,7 +29,8 @@ Danach habt ihr einen Link, den jeder im Browser öffnen kann.
    Repo gehört (**Tylix1**).
 2. **Add New… → Project**, in der Liste **CensioRealEstate** wählen → **Import**. Fehlt das Repo in der Liste: dem Link
    zu den GitHub-Berechtigungen folgen und Vercel Zugriff auf dieses Repo geben.
-3. Auf der nächsten Seite **nichts ändern** (Vercel erkennt Next.js selbst) → **Deploy**.
+3. Auf der nächsten Seite an den Einstellungen **nichts ändern** (Vercel erkennt Next.js selbst). Den Bereich
+   **Environment Variables** könnt ihr leer lassen oder gleich die Live-KI eintragen (Abschnitt 2.3). Dann **Deploy**.
 4. Nach 2–4 Minuten zeigt Vercel den Link, etwa `https://<projektname>.vercel.app`. Öffnen: Die App läuft im
    **Demo-Modus**.
 5. Kurz prüfen: den Ablauf aus Abschnitt 3 bis **Use sample documents** klicken. Alle fünf Dokumente müssen gelesen
@@ -57,11 +58,24 @@ die PDFs wirklich, auch eigene, und versteht frei formulierte Notizen.
 
 ### 2.1 Anthropic-Konto mit Kostenbremse
 
-1. In der [Anthropic Console](https://console.anthropic.com) ein Konto anlegen und unter **Billing** Guthaben kaufen;
-   10–20 $ reichen für viele Durchläufe.
-2. Einen eigenen **Workspace** für den Prototyp anlegen (z. B. „Censio Prototyp“) und dort ein **monatliches
-   Ausgabenlimit** setzen, Vorschlag **20 $**. Das ist die harte Grenze: Mehr kann die App nicht kosten.
-3. In diesem Workspace unter **API Keys** einen Key erstellen und kopieren. Er wird nur einmal angezeigt.
+Ein Claude-Abo (Pro oder Max, also das, womit ihr claude.ai und Claude Code nutzt) reicht dafür nicht: Die App braucht
+einen **API-Key** aus der **Claude Console** (früher „Anthropic Console“), und die API wird dort separat über Guthaben
+abgerechnet.
+
+1. In der [Claude Console](https://platform.claude.com) anmelden oder ein Konto anlegen und unter **Billing** Guthaben
+   kaufen; 10–20 $ reichen für viele Durchläufe.
+2. Einen eigenen **Workspace** anlegen: [Workspaces](https://platform.claude.com/settings/workspaces) → **Create
+   workspace**, z. B. „Censio Prototyp“. Dann den Workspace anklicken → **Spend limits** → monatliches Limit, Vorschlag
+   **20 $**. Das ist die harte Grenze: Mehr kann die App nicht kosten. Im „Default“-Workspace lässt sich kein Limit
+   setzen, deshalb der eigene.
+3. [API keys](https://platform.claude.com/settings/keys) → **Create key**:
+   - **Name:** z. B. „censio-vercel“.
+   - **Expiration:** lang genug für das ganze Projekt, also ein eigenes Datum nach der Präsentation (oder „Never“ und
+     den Key nach dem Projekt löschen). Ein abgelaufener Key schaltet die Live-KI ab.
+   - **Linked account:** du selbst.
+   - **Workspace:** unbedingt den Workspace aus Schritt 2 wählen. Ein Key ohne Workspace funktioniert mit der App
+     nicht, denn Anthropic verlangt dann bei jeder Anfrage eine Workspace-ID, die die App nicht mitschickt.
+4. Den Key kopieren; er beginnt mit `sk-ant-api` und wird nur einmal angezeigt.
 
 ### 2.2 Zugangscode ausdenken
 
@@ -71,21 +85,39 @@ Nehmt einen **langen** Code, der sich nicht erraten lässt, z. B. vier zufällig
 
 ### 2.3 In Vercel eintragen
 
-1. Vercel-Projekt → **Settings → Environment Variables**.
-2. Zwei Einträge für die Umgebung **Production** anlegen:
-   - `ANTHROPIC_API_KEY` = der Key aus 2.1
-   - `DEMO_ACCESS_CODE` = der Code aus 2.2
-3. **Neu veröffentlichen**, denn Variablen gelten erst für neue Deployments: **Deployments** → oberster Eintrag →
-   **⋯** → **Redeploy**.
+Zwei Einträge, jeweils mit **Key** (dem Namen) und **Value** (dem Wert):
+
+| Key | Value |
+|---|---|
+| `ANTHROPIC_API_KEY` | der Key aus 2.1 (beginnt mit `sk-ant-api`) |
+| `DEMO_ACCESS_CODE` | der Code aus 2.2 |
+
+Den Namen genau so schreiben (Großbuchstaben, Unterstriche), den Wert ohne Anführungszeichen und Leerzeichen. Bei
+**Environment** reicht **Production**; sind dort schon alle Umgebungen ausgewählt, ist das auch in Ordnung. Falls
+Vercel für den Key den Schalter **Sensitive** anbietet: einschalten.
+
+- **Beim ersten Import:** Die Import-Seite hat einen Bereich **Environment Variables**; dort eintragen, dann
+  **Deploy**. Wer noch keinen Key hat, deployt erst einmal ohne: Die App läuft dann im Demo-Modus.
+- **Später:** Vercel-Projekt → **Settings → Environment Variables** → eintragen und speichern. Danach **neu
+  veröffentlichen**, denn Variablen gelten erst für neue Deployments: **Deployments** → oberster Eintrag → **⋯** →
+  **Redeploy**.
 
 ### 2.4 Prüfen
 
-`https://<projektname>.vercel.app/?code=<euer-Code>` öffnen. In der dunklen Leiste oben steht jetzt **Live AI** statt
-**Demo mode**. Der Browser merkt sich den Code und nimmt ihn aus der Adresszeile; im Video ist er also nicht zu sehen.
+1. `https://<projektname>.vercel.app/?code=<euer-Code>` öffnen. In der dunklen Leiste oben steht jetzt **Live AI**
+   statt **Demo mode**. Der Browser merkt sich den Code und nimmt ihn aus der Adresszeile; im Video ist er also nicht
+   zu sehen.
+2. Das Abzeichen prüft nur, ob Key und Code eingetragen sind, nicht ob Anthropic den Key annimmt. Deshalb einmal
+   **Continue as Demo Capital GmbH → New valuation → Next → Use sample documents** klicken: Jedes Dokument braucht
+   jetzt einige Sekunden und trägt das Label **Live AI**.
+3. Steht bei den Dokumenten **Demo mode**, obwohl oben **Live AI** steht, ist die Live-KI gescheitert und die App hat
+   die gespeicherten Ergebnisse genommen. Häufigste Gründe: Key keinem Workspace zugeordnet, kein Guthaben, Key
+   abgelaufen oder ein Tippfehler beim Einfügen. Dann in der Console einen neuen Key nach 2.1 erstellen, ihn in Vercel
+   ersetzen und neu veröffentlichen. Selten ist es das Stundenlimit der App (Abschnitt „Kosten“ unten); das setzt sich
+   nach einer Stunde von selbst zurück.
 
-Zum Ausprobieren reicht **Use sample documents**: Mit Live-KI liest Claude die fünf PDFs jetzt wirklich, jedes in
-einigen Sekunden. Eigene PDFs lassen sich per Drag & Drop hochladen. In der Prüfansicht könnt ihr eine eigene Notiz
-frei formulieren, z. B. „Use a cap rate of 3.5 %“.
+Eigene PDFs lassen sich per Drag & Drop hochladen. In der Prüfansicht könnt ihr eine eigene Notiz frei formulieren,
+z. B. „Use a cap rate of 3.5 %“.
 
 Wichtig:
 
@@ -233,8 +265,8 @@ Hilft, um Claude gezielt zu sagen, was sich ändern soll:
 ## 6. Wo ihr unterstützen könnt
 
 - [ ] Vercel einrichten (Abschnitt 1) und Claude den Link schicken.
-- [ ] Anthropic-Konto, Guthaben, Monatslimit, Key und Code in Vercel (Abschnitt 2), dann prüfen, ob „Live AI“
-      erscheint.
+- [ ] Anthropic-Konto, Guthaben, Monatslimit, Key und Code in Vercel (Abschnitt 2), dann prüfen, ob bei den
+      Dokumenten „Live AI“ steht (Abschnitt 2.4).
 - [ ] Optional: echte KI-Ergebnisse für die Musterdokumente aufnehmen (`npm run record:extraction`, siehe README).
       Danach steht im Demo-Modus „Cached result“ statt „Demo mode“, und die gespeicherten Ergebnisse stammen
       nachweislich von Claude. Das macht entweder ein Entwickler lokal mit dem Key oder Claude in einer
@@ -272,7 +304,7 @@ Grenzen (bewusst, für einen Prototyp in Ordnung):
 - Eigene PDFs liest nur die Live-KI. Im Demo-Modus erscheint „Live AI is needed to read this document.“, und der
   Ablauf geht trotzdem weiter.
 - Die Stundenlimits zählt jede Server-Instanz für sich; sie sind nur eine Höflichkeitsbremse. Die echte Kostengrenze
-  ist das Monatslimit in der Anthropic Console.
+  ist das Monatslimit in der Claude Console.
 - Bei sehr vielen Anpassungen bricht die Wert-Herleitung in der Prüfansicht in mehrere Zeilen um. Fürs Video
   unkritisch.
 
