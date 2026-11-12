@@ -178,6 +178,8 @@ lokal mit `npm test` und `npm run e2e` (Details in der README).
 2. Für eine Aufnahme mit Live-KI vorher einmal den Code-Link öffnen; der Code wird gemerkt.
 3. `https://<projektname>.vercel.app/?recording=1` öffnen. Damit verschwinden Demo-Leiste und Orientierungsfenster
    für diesen Tab. `?recording=0` holt die Leiste zurück, etwa für das nächste **Reset demo**.
+   Für Aufnahmen ohne echte Browserleiste (automatische Aufnahme-Tools): `/?recording=1&frame=1` öffnen. `?frame=1`
+   zeichnet oben eine Browserleiste mit der Adresse der Seite; `?frame=0` blendet sie wieder aus.
 4. Den Ablauf aus Abschnitt 3 klicken, Schritte 2–12 (etwa 60–90 Sekunden).
 
 Tipps:

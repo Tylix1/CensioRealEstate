@@ -192,3 +192,28 @@ test("sign-in and dashboard fit a 390 px screen without sideways scrolling", asy
   await expect(page.getByRole("button", { name: "Continue as Senior Valuer" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
+
+test("?frame=1 draws a browser toolbar with the page address for the whole session", async ({ page }) => {
+  await page.goto("/");
+  const frame = page.locator("[data-browser-frame]");
+  await expect(frame).toBeHidden();
+
+  await page.goto("/?recording=1&frame=1");
+  await expect(frame).toBeVisible();
+  // Host only on the start page: the take's flags stay out of the address.
+  const host = new URL(page.url()).host;
+  await expect(frame).toHaveText(host);
+  await expect(page.getByText("Reset demo")).toBeHidden();
+
+  // The address follows the page, and the flag is remembered in sessionStorage across navigations and reloads.
+  await page.getByRole("button", { name: "Continue as Demo Capital GmbH" }).click();
+  await expect(page).toHaveURL(/\/client$/);
+  await expect(frame).toHaveText(`${host}/client`);
+  await page.reload();
+  await expect(frame).toBeVisible();
+  await expect(frame).toHaveText(`${host}/client`);
+
+  await page.goto("/client?frame=0");
+  await expect(frame).toBeHidden();
+});
+

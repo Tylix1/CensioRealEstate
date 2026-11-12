@@ -9,7 +9,8 @@
  * - Reset demo, which restores the seeded state, clears IndexedDB and goes to the sign-in page.
  *
  * URL flags, on any page: `?code=XYZ` stores the access code (then drops it from the address bar), and
- * `?recording=1` / `?recording=0` hide or show the demo chrome for the tab session (see ./recording.ts).
+ * `?recording=1` / `?recording=0` hide or show the demo chrome for the tab session (see ./recording.ts), and
+ * `?frame=1` / `?frame=0` show or hide the browser frame of a video take (see ./frame.ts).
  *
  * Hydration: the role and the access code are saved data, so they are read only once `useDemoHydrated()` is true.
  * Where the URL already says the role (/client…, /valuer…), the switch shows it from the first render and the saved
@@ -22,6 +23,7 @@ import { Suspense, useEffect, useState } from "react";
 import type { ModeResponse } from "@/app/api/mode/route";
 import { cx } from "@/components/ui/cx";
 import { useDemoHydrated, useDemoStore } from "@/lib/store/demoStore";
+import { setFrameMode } from "./frame";
 import { openOrientation } from "./OrientationOverlay";
 import { setRecordingMode, useRecordingMode } from "./recordingMode";
 
@@ -47,6 +49,7 @@ function UrlFlags() {
   const params = useSearchParams();
   const code = params.get("code");
   const recording = params.get("recording");
+  const frame = params.get("frame");
 
   useEffect(() => {
     if (code === null) return;
@@ -62,6 +65,12 @@ function UrlFlags() {
     if (recording === "1") setRecordingMode(true);
     else if (recording === "0") setRecordingMode(false);
   }, [recording]);
+
+  useEffect(() => {
+    // As above: the inline <head> script covers full page loads, this covers client-side navigations.
+    if (frame === "1") setFrameMode(true);
+    else if (frame === "0") setFrameMode(false);
+  }, [frame]);
 
   return null;
 }

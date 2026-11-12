@@ -179,6 +179,9 @@ so a green `npm run e2e` before a recording session means the path works.
 - Then open `/?recording=1` (for a Live AI take, open the `/?code=<code>` link once first: the code is remembered).
   The demo bar and the orientation overlay stay hidden for the whole browser tab; `?recording=0` brings them back,
   for example for the next Reset demo.
+- For a take filmed without the browser's own toolbar (a cloud or headless capture), open `/?recording=1&frame=1`
+  instead. `?frame=1` draws a browser toolbar with the page's address above the app, as part of the page, so the
+  address is in the footage and zooms with it; `?frame=0` removes it.
 
 **The take**
 

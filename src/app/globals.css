@@ -80,3 +80,14 @@ mark.censio-hl {
 button {
   cursor: pointer;
 }
+
+/* Browser frame of a video take (?frame=1, src/components/demo/frame.ts): modal dialogs open in the top layer, above
+   the frame's toolbar, so keep their backdrop and box below it, as under a real browser toolbar (44px = h-11). */
+html[data-frame] dialog:modal {
+  top: 44px;
+  max-height: calc(100dvh - 44px - 32px);
+}
+
+html[data-frame] dialog::backdrop {
+  top: 44px;
+}
