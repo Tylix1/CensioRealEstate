@@ -68,3 +68,25 @@ cd pitch/build && python3 -m pytest -q
 ```
 
 Die Tests prüfen unter anderem: Zahlen auf den Folien gleich Modell, Sprechtext passt in die Zeit, nur Farben aus dem Prototyp, nur die zwei Schriften, Text passt auch mit 10 % breiterer Ersatzschrift, Video und Vorschaubild auf Folie 5.
+
+## One-Pager (Group work 1)
+
+Nach der Kursvorlage (Session 2, S. 37), als PDF und als editierbare PPTX. Die Texte stehen in `onepager/build_onepager.py` (`ONE_PAGER`), die Zahlen kommen aus `build/numbers.json`.
+
+```bash
+python3 pitch/onepager/build_onepager.py
+```
+
+```bash
+node pitch/onepager/render.mjs pitch/out/onepager/onepager.html pitch/out/onepager/Censio-OnePager.pdf pitch/out/onepager/preview.png
+```
+
+```bash
+node pitch/onepager/measure.mjs pitch/out/onepager/onepager.html pitch/out/onepager/layout.json
+```
+
+```bash
+python3 pitch/onepager/build_onepager_pptx.py
+```
+
+Der Render-Schritt bricht mit einem Fehler ab, sobald Text über eine Karte hinausläuft. Die PPTX übernimmt die Positionen aus der gerenderten Seite.
