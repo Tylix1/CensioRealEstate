@@ -3,3 +3,5 @@ build/team.local.json
 build/__pycache__/
 .pytest_cache/
 build/.pytest_cache/
+onepager/__pycache__/
+__pycache__/
