@@ -148,24 +148,32 @@ def build(layout_path: Path = OUT / "layout.json", out: Path = OUT / "Censio-One
                        [("signed/yr (plan)", small)], [(f"{n / first:.0f}×", small)]],
            9, line_height=1.15, grow=6, align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
 
-    # North Star
+    # North Star: one metric per phase
     ns = L["northstar"]
     card(slide, ns["box"], line="ai_strong", name="North Star card")
-    label(slide, ns["label"], "North Star · one metric", "ai")
-    tb(slide, ns["statement"], [[(O["north_star"], {"bold": True, "font": D.HEAD})]], 12.4, line_height=1.3)
-    for rect, (k, val) in zip(ns["parts"], O["north_star_parts"]):
-        s = tb(slide, rect, [[(k.upper(), {"bold": True, "color": "muted", "size": 8.4 * PT})], [(val, {})]],
-               9.4, line_height=1.38, grow=2)
-        s.text_frame.paragraphs[0].runs[0]._r.get_or_add_rPr().set("spc", "40")
-    tb(slide, ns["proxy"], O["north_star_proxy"], 9.5, color="ink2")
+    label(slide, ns["label"], "North Star · one metric per phase", "ai")
+    for i, (blk, data) in enumerate(zip(ns["blocks"], O["north_stars"])):
+        if i:
+            bx, by, bw, _ = inch(blk["box"])
+            sep = slide.shapes.add_connector(1, D.Inches(bx), D.Inches(by), D.Inches(bx + bw), D.Inches(by))
+            sep.line.color.rgb = D.rgb("line")
+        tb(slide, blk["phase"], [[(data["phase"], {"bold": True})]], 9, line_height=1.2, grow=20, color="ai")
+        tb(slide, blk["statement"], [[(data["statement"], {"bold": True, "font": D.HEAD})]], 11.2, line_height=1.25)
+        runs = []
+        for j, (k, v) in enumerate(data["parts"]):
+            runs += [(k.upper(), {"bold": True, "color": "muted", "size": 7.4 * PT}), (" " + v, {})]
+            if j < len(data["parts"]) - 1:
+                runs.append(("  ·  ", {}))
+        tb(slide, blk["parts"], [runs], 8.3, line_height=1.3, grow=12, color="ink2")
+    tb(slide, ns["proxy"], O["north_star_proxy"], 9, line_height=1.3, color="ink2")
 
     # Moat and frontier lab test
     mo = L["moat"]
     card(slide, mo["box"], name="Moat card")
     label(slide, mo["label"], "Moat · built along the journey", "valuer")
     for rect, (name, tag, text_) in zip(mo["items"], O["moats"]):
-        tb(slide, rect, [[(name, {"bold": True}), ("  " + tag.upper(), {"color": "muted", "size": 8.4 * PT})],
-                         [(text_, {})]], 9.6, line_height=1.3)
+        tb(slide, rect, [[(name, {"bold": True}), ("  " + tag.upper(), {"color": "muted", "size": 8.4 * PT}),
+                          ("  " + text_, {})]], 9.6, line_height=1.3)
     tx, ty, tw, th = inch(mo["test"])
     D.box(slide, tx, ty, tw, th, fill="valuer_weak", radius=7 * PX).name = "Frontier lab test"
     inner = {"x": mo["test"]["x"] + 9, "y": mo["test"]["y"] + 5, "w": mo["test"]["w"] - 18, "h": mo["test"]["h"] - 8}

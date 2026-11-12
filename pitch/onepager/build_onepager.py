@@ -42,7 +42,7 @@ ONE_PAGER = {
               "from the due-diligence budget (labour, not IT).",
     # Vision, mission and North Star follow the course templates (Session 2, p. 19, 23, 27-29);
     # [[...]] marks the template's fixed words, which the page highlights.
-    "vision": "[[By 2032,]] anyone who buys, finances or inherits a building in Europe [[can]] get a signed value "
+    "vision": "[[By 2032,]] anyone who buys, sells, finances or inherits a building in Europe [[can]] get a signed value "
               "within days and check every figure in it against its source, [[because]] property records have "
               "become machine-readable and experts spend their time only on judgement. [[This matters because]] a "
               "building is most owners' largest asset, and its value should be checked, not taken on trust.",
@@ -53,7 +53,7 @@ ONE_PAGER = {
     "will": ["own the signed result and its liability", "disclose every AI step in every report",
              "hire only seniors; AI does the junior work"],
     "will_not": ["license our software to other valuers", "publish unsigned automated values (AVMs)",
-                 "issue a figure without a source or a named senior's reasoning"],
+                 "let a deal fee influence a valuation"],
     "playbook_title": "From one German wedge to the standard for signed property values: DACH first, then Europe",
     "playbook": [
         ("Year 1 · 2027", "Prove the wedge",
@@ -67,41 +67,45 @@ ONE_PAGER = {
          "Banks: lending values with a site visit, signed by HypZert seniors; corrections train our own models.",
          P[Y[2]]["valuations"]),
         ("Year 4 · 2030", "Network effect",
-         "Lender panels: every bank that accepts our files makes Censio worth more to each buyer it finances. "
-         "Commercial property, Austria, Switzerland.",
+         "Marketplace: owners list their buildings on Censio with a signed value and our buy-side clients bid; "
+         "every listing draws buyers, every buyer draws listings. Austria, Switzerland.",
          P[Y[3]]["valuations"]),
         ("Year 5 · 2031+", "Lead the category",
-         "#1 for signed buy-side valuations of German apartment buildings (≈14% in 2031), the file format banks "
-         "accept; then Europe. A separate deal platform on top; valuation fees never tied to a closing.",
+         "#1 for signed valuations of German apartment buildings (≈14% of buy-side in 2031) and the place to buy "
+         "and sell them; then Europe. Valuation fees never tied to a closing.",
          P[Y[4]]["valuations"]),
     ],
-    # Course p. 29 (SpaceX): count the unit, set the quality bar, bound the scope, fix the cadence.
-    "north_star": "Signed valuations delivered within 48 hours of a client-confirmed document list, every figure "
-                  "sourced and the value upheld in a blind re-review of 1 in 10, across all paying clients, "
-                  "reviewed weekly.",
-    "north_star_parts": [("Unit", "signed valuations"),
-                         ("Quality bar", "≤ 48 h · all figures sourced · blind 10% re-review upheld"),
-                         ("Scope", "all paying clients (site visits: from the visit)"),
-                         ("Cadence", "weekly")],
-    "north_star_proxy": "Early proxy: senior minutes per valuation (target ≤ 120). Today: working prototype, "
-                        "0 paid valuations.",
+    # Course p. 27-29: one controllable metric with unit, quality bar, scope and cadence. One North Star at a
+    # time: the marketplace metric replaces the valuation metric when the marketplace opens (playbook Year 4).
+    "north_stars": [
+        {"phase": "Phase 1 · Years 1–3 · valuation firm",
+         "statement": "Signed valuations delivered within 48 hours of a client-confirmed document list, every figure "
+                      "sourced and the value upheld in a blind re-review of 1 in 10, across all paying clients, "
+                      "reviewed weekly.",
+         "parts": [("Unit", "signed valuations"), ("Bar", "≤ 48 h, blind check"), ("Scope", "all clients"),
+                   ("Cadence", "weekly")]},
+        {"phase": "Phase 2 · from Year 4 · marketplace",
+         "statement": "Listings with a signed Censio value that receive a bid from a verified buyer with proof of "
+                      "funds within 30 days, across all listings on Censio, reviewed monthly.",
+         "parts": [("Unit", "signed listings"), ("Bar", "funded bid ≤ 30 days"), ("Scope", "all listings"),
+                   ("Cadence", "monthly")]},
+    ],
+    "north_star_proxy": "One North Star at a time: Phase 2 replaces Phase 1 when the marketplace opens. Proxies: "
+                        "senior minutes per valuation (≤ 120); share of valuation clients who also list.",
     # Course p. 5 moat names, ordered by the playbook stage that builds them (template p. 37: "along that journey").
     "moats": [
-        ("Brand & trust", "market · from Y1",
-         "We sign, carry indemnity insurance and disclose every AI step."),
-        ("Cost advantage", "new with AI · Y1",
-         "≈€0.45 of AI (est.) + 2 senior hours (plan) per valuation vs ≈35 billable hours for a full report."),
-        ("Workflow lock-in", "amplified by AI · Y2",
-         "We keep each client's valuation file: revaluations and refinancing take hours with us, a restart "
-         "elsewhere."),
-        ("Data flywheel + regulation", "new with AI · Y3",
-         "Senior corrections, matched to later sale prices, train our own models; banks need an independent "
-         "valuer (CRR III Art. 229)."),
+        ("Brand & trust", "market · Y1", "we sign, insure and disclose every AI step."),
+        ("Cost advantage", "new with AI · Y1", "≈€0.45 of AI (est.) + 2 senior hours per valuation vs ≈35 for a "
+                                                "full report."),
+        ("Workflow lock-in", "amplified by AI · Y2", "we keep each client's valuation file; revaluations take hours."),
+        ("Data flywheel + regulation", "new with AI · Y3", "corrections, matched to sale prices, train our models; "
+                                                            "banks need an independent valuer (CRR III)."),
+        ("Network of users", "pre-AI · Y4", "each listing draws buyers, each buyer draws listings."),
     ],
     "frontier_test": "If the next GPT, Claude or Gemini release ships our feature, do we still exist? Yes: it cuts "
-                     "our preparation cost but cannot sign or carry liability, and a valuer using it still bills "
-                     "hours, staffs juniors and lacks our correction data and client files. Verdict: defensible "
-                     "vertical platform (own data + end-to-end workflow), not a wrapper.",
+                     "our preparation cost but cannot sign or carry liability, and rivals using it lack our "
+                     "correction data, client files and marketplace. Verdict: defensible vertical platform, not a "
+                     "wrapper.",
     "team_model": "Founders are the overhead; the operating team is senior valuers who sign (17 of 28 people in "
                   "2031) plus a small platform team. No juniors: AI does the junior work. First hire: a HypZert / "
                   "öbuv senior valuer.",
@@ -146,13 +150,17 @@ def build() -> Path:
             </li>"""
         for i, (when, theme, text, n) in enumerate(o["playbook"]))
     moats = "\n".join(
-        f"""<li><b>{esc(name)}</b> <span class="tag">{esc(tag)}</span><br>{esc(text)}</li>"""
+        f"""<li><b>{esc(name)}</b> <span class="tag">{esc(tag)}</span> {esc(text)}</li>"""
         for name, tag, text in o["moats"])
     founders = "\n".join(
         f"""<div class="founder"><div class="avatar">{esc(''.join(p[0] for p in m['name'].split()[:2]).upper())}</div>
               <div><b>{esc(m['name'])}</b><br><span>{esc(m['role'])} · {esc(m.get('school', ''))}</span></div></div>"""
         for m in team[:4])
-    ns_parts = "".join(f"<div><span>{esc(k)}</span>{esc(v)}</div>" for k, v in o["north_star_parts"])
+    ns_blocks = "\n".join(
+        f"""<div class="nsblock"><div class="phase">{esc(b['phase'])}</div>
+              <p class="statement">{esc(b['statement'])}</p>
+              <p class="parts">{' · '.join(f'<span>{esc(k)}</span> {esc(v)}' for k, v in b['parts'])}</p></div>"""
+        for b in o["north_stars"])
     will = "".join(f"<li>{esc(x)}</li>" for x in o["will"])
     will_not = "".join(f"<li>{esc(x)}</li>" for x in o["will_not"])
     page = f"""<!doctype html>
@@ -182,7 +190,7 @@ header .meta {{ margin-left: auto; font-size: 10.5px; color: #98a2b3; text-align
 .strip .label {{ color: var(--brand); margin-bottom: 2px; }}
 .strip .wedge-box {{ border-color: var(--brand); }}
 .strip .wedge-box p {{ font-family: 'Space Grotesk'; font-weight: 700; font-size: 13px; line-height: 1.25; }}
-.cols {{ display: grid; grid-template-columns: 1fr 1.32fr 1.12fr; gap: 9px; min-height: 0; }}
+.cols {{ display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.32fr) minmax(0, 1.12fr); gap: 9px; min-height: 0; }}
 .col {{ display: flex; flex-direction: column; gap: 9px; min-height: 0; }}
 .box {{ background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; }}
 .dark {{ background: var(--brand); border-color: var(--brand); color: #fff; }}
@@ -210,11 +218,14 @@ header .meta {{ margin-left: auto; font-size: 10.5px; color: #98a2b3; text-align
 .stage.lead .when {{ color: var(--brand-accent); }} .stage.lead .ns, .stage.lead .ns span {{ color: #fff; }}
 .northstar {{ flex: 0 0 auto; border-color: var(--ai-strong); }}
 .northstar .label {{ color: var(--ai); }}
-.northstar .statement {{ font-weight: 700; font-size: 12.4px; }}
-.parts {{ display: grid; grid-template-columns: repeat(4, auto); gap: 2px 10px; margin-top: 6px; font-size: 9.4px; }}
-.parts span {{ display: block; color: var(--muted); font-size: 8.4px; text-transform: uppercase;
+.northstar .statement {{ font-weight: 700; font-size: 11.2px; line-height: 1.25; margin-top: 1px; }}
+.nsblock {{ margin-top: 5px; }}
+.nsblock + .nsblock {{ border-top: 1px solid var(--line); padding-top: 5px; }}
+.phase {{ font-weight: 700; font-size: 9px; color: var(--ai); }}
+.parts {{ margin-top: 2px; font-size: 8.3px; color: var(--ink2); line-height: 1.3; }}
+.parts span {{ color: var(--muted); font-size: 7.4px; text-transform: uppercase;
   letter-spacing: 0.06em; font-weight: 600; }}
-.proxy {{ margin-top: 5px; color: var(--ink2); font-size: 9.5px; }}
+.proxy {{ margin-top: 5px; color: var(--ink2); font-size: 9px; line-height: 1.3; }}
 .moat {{ flex: 1; min-height: 0; }}
 .moat .label {{ color: var(--valuer); }}
 .moat ul {{ list-style: none; margin-top: 4px; display: flex; flex-direction: column; gap: 3.5px; }}
@@ -261,9 +272,8 @@ footer .model b {{ color: var(--valuer); }}
       </div>
     </div>
     <div class="col">
-      <div class="box northstar"><div class="label">North Star · one metric</div>
-        <p class="statement">{esc(o['north_star'])}</p>
-        <div class="parts">{ns_parts}</div>
+      <div class="box northstar"><div class="label">North Star · one metric per phase</div>
+        {ns_blocks}
         <p class="proxy">{esc(o['north_star_proxy'])}</p>
       </div>
       <div class="box moat"><div class="label">Moat · built along the journey</div>
