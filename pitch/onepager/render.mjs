@@ -11,10 +11,15 @@ await page.goto(pathToFileURL(path.resolve(input)).href, { waitUntil: "networkid
 await page.evaluate(() => document.fonts.ready);
 const overflow = await page.evaluate(() => {
   const sheet = document.querySelector(".page");
-  return { scroll: sheet.scrollHeight, client: sheet.clientHeight };
+  // Every card must hold its own content: nothing may run past a card's bottom edge.
+  const spills = [...document.querySelectorAll(".box, .strip > div, footer, .stage, .test")]
+    .filter((el) => el.scrollHeight > el.clientHeight + 1 || [...el.children].some((c) =>
+      c.getBoundingClientRect().bottom > el.getBoundingClientRect().bottom + 0.5))
+    .map((el) => el.className || el.tagName);
+  return { scroll: sheet.scrollHeight, client: sheet.clientHeight, spills };
 });
-if (overflow.scroll > overflow.client + 1) {
-  console.error(`content overflows the page: ${overflow.scroll}px > ${overflow.client}px`);
+if (overflow.scroll > overflow.client + 1 || overflow.spills.length) {
+  console.error(`content overflows: page ${overflow.scroll}px > ${overflow.client}px; cards: ${overflow.spills}`);
   process.exitCode = 2;
 }
 await page.pdf({ path: output, width: "13.333in", height: "7.5in", printBackground: true, preferCSSPageSize: true });
