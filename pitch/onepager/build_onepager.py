@@ -91,20 +91,20 @@ ONE_PAGER = {
                         "senior minutes per valuation (≤ 120); share of valuation clients who also list.",
     # Course p. 5 moat names, ordered by the playbook stage that builds them (template p. 37: "along that journey").
     "moats": [
-        ("Brand & trust", "market · Y1", "we sign, insure and disclose every AI step."),
-        ("Cost advantage", "new with AI · Y1", "≈€0.45 of AI (est.) + 2 senior hours per valuation vs ≈35 for a "
-                                                "full report."),
-        ("Workflow lock-in", "amplified by AI · Y2", "we keep each client's valuation file; revaluations take hours."),
-        ("Data flywheel + regulation", "new with AI · Y3", "corrections, matched to sale prices, train our models; "
-                                                            "banks need an independent valuer (CRR III)."),
-        ("Network of users", "pre-AI · Y4", "owners, buyers and lenders on one file; each side draws the others."),
+        ("Brand & trust + regulation", "market · Y1", "we sign, insure and disclose every AI step; banks need an "
+                                                       "independent valuer (CRR III)."),
+        ("Cost advantage", "new with AI · Y1", "≈€0.45 of AI + 2 senior hours per valuation vs ≈35 h (est.)."),
+        ("Workflow lock-in", "amplified by AI · Y2", "we keep each client's valuation file."),
+        ("Data flywheel", "new with AI · Y3–4", "every valuation and deal on Censio adds a verified price and rent "
+                                                "roll to our comparables."),
+        ("Network of users", "pre-AI · Y4", "owners, buyers and lenders draw each other."),
     ],
     "frontier_test": "If the next GPT, Claude or Gemini release ships our feature, do we still exist? Yes: it cuts "
                      "our preparation cost but cannot sign or carry liability, and rivals using it lack our "
-                     "correction data, client files and marketplace. Verdict: defensible vertical platform, not a "
+                     "closing prices, correction data, client files and marketplace. Verdict: defensible vertical platform, not a "
                      "wrapper.",
-    "team_model": "Founders are the overhead; the operating team is senior valuers who sign (17 of 28 people in "
-                  "2031) plus a small platform team. No juniors: AI does the junior work. First hire: a HypZert / "
+    "team_model": "Founders are the overhead; the operating team is senior valuers and deal managers (27 of 43 "
+                  "people in 2031) plus a small platform team. No juniors: AI does the junior work. First hire: a HypZert / "
                   "öbuv senior valuer.",
 }
 

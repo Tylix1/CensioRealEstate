@@ -199,17 +199,18 @@ def s_cover(slide, s):
 
 def s_vision(slide, s):
     cw = (CW - 0.35) / 2
-    card = box(slide, LEFT, TOP + 0.1, cw, 2.75, fill="brand", radius=0.12)
+    h = 3.35
+    card = box(slide, LEFT, TOP + 0.05, cw, h, fill="brand", radius=0.12)
     card.name = "Vision card"
-    label(slide, LEFT + 0.4, TOP + 0.45, 3, "Vision", color="brand_accent")
-    text(slide, LEFT + 0.4, TOP + 0.85, cw - 0.8, 1.8, s["vision"], size=22, font=HEAD, bold=True, color="card",
-         spacing=1.1)
+    label(slide, LEFT + 0.4, TOP + 0.35, 3, "Vision · 2032", color="brand_accent")
+    text(slide, LEFT + 0.4, TOP + 0.72, cw - 0.8, h - 0.85, s["vision"], size=15, font=HEAD, color="card",
+         spacing=1.12)
     x2 = LEFT + cw + 0.35
-    box(slide, x2, TOP + 0.1, cw, 2.75, fill="card", line="line", radius=0.12).name = "Mission card"
-    label(slide, x2 + 0.4, TOP + 0.45, 3, "Mission")
-    text(slide, x2 + 0.4, TOP + 0.85, cw - 0.8, 1.8, s["mission"], size=20, font=HEAD, bold=True, spacing=1.1)
+    box(slide, x2, TOP + 0.05, cw, h, fill="card", line="line", radius=0.12).name = "Mission card"
+    label(slide, x2 + 0.4, TOP + 0.35, 3, "Mission")
+    text(slide, x2 + 0.4, TOP + 0.72, cw - 0.8, h - 0.85, s["mission"], size=15, font=HEAD, spacing=1.12)
     # The colour code the deck (and the prototype) uses.
-    y = 5.55
+    y = 5.75
     label(slide, LEFT, y, 4, "Colour code in this deck and in the product", color="ink2", size=10)
     keys = [("ai_strong", "AI does it"), ("valuer", "A senior valuer decides"), ("doc", "Source documents"),
             ("brand", "Censio")]
@@ -386,19 +387,21 @@ def s_competition(slide, s):
 
 
 def s_traction(slide, s):
-    box(slide, LEFT, TOP + 0.05, 5.1, 2.05, fill="brand", radius=0.12).name = "North star"
-    label(slide, LEFT + 0.4, TOP + 0.35, 3, "North star", color="brand_accent")
-    text(slide, LEFT + 0.4, TOP + 0.7, 4.4, 0.88, "Signed valuations delivered within 48 hours", size=22, font=HEAD,
-         bold=True, color="card", spacing=1.05)
-    text(slide, LEFT + 0.4, TOP + 1.62, 4.6, 0.3, s["star_note"], size=12, color="brand_accent")
-    y = TOP + 2.35
-    label(slide, LEFT, y, 4, "Input metrics", color="ink2", size=10)
-    y += 0.35
+    y = TOP + 0.05
+    for i, (phase, metric, note) in enumerate(s["stars"]):
+        box(slide, LEFT, y, 5.1, 1.3, fill="brand" if i == 0 else "ink", radius=0.12).name = f"North star {i + 1}"
+        label(slide, LEFT + 0.35, y + 0.17, 4.5, phase, color="brand_accent")
+        text(slide, LEFT + 0.35, y + 0.42, 4.5, 0.52, metric, size=16, font=HEAD, bold=True, color="card",
+             spacing=1.0)
+        text(slide, LEFT + 0.35, y + 1.0, 4.5, 0.25, note, size=11, color="brand_accent" if i == 0 else "faint")
+        y += 1.42
+    label(slide, LEFT, y + 0.02, 4, "Input metrics", color="ink2", size=10)
+    y += 0.33
     for head, tail in s["inputs"]:
-        box(slide, LEFT, y, 5.1, 0.55, fill="card", line="line", radius=0.08)
-        text(slide, LEFT + 0.25, y, 4.7, 0.55, [[(head, {"bold": True}), ("  " + tail, {"color": "ink2"})]], size=13,
+        box(slide, LEFT, y, 5.1, 0.5, fill="card", line="line", radius=0.08)
+        text(slide, LEFT + 0.25, y, 4.7, 0.5, [[(head, {"bold": True}), ("  " + tail, {"color": "ink2"})]], size=13,
              anchor=MSO_ANCHOR.MIDDLE)
-        y += 0.66
+        y += 0.58
     x0 = 6.75
     line = slide.shapes.add_connector(1, Inches(x0 + 0.13), Inches(TOP + 0.35), Inches(x0 + 0.13), Inches(6.3))
     line.line.color.rgb = rgb("line_strong")
@@ -452,7 +455,7 @@ def s_gtm(slide, s):
     chart.category_axis.tick_labels.font.bold = True
     plot = chart.plots[0]
     plot.gap_width = 55
-    for series, colour in zip(plot.series, ["brand", "brand_accent", "ink2", "line_strong"]):
+    for series, colour in zip(plot.series, ["brand", "brand_accent", "ink2", "line_strong", "ink"]):
         series.format.fill.solid()
         series.format.fill.fore_color.rgb = rgb(colour)
 
@@ -577,8 +580,8 @@ def s_financials(slide, s):
                                                       {"bold": True, "font": HEAD, "size": 18, "color": "brand"})]],
          size=13, anchor=MSO_ANCHOR.MIDDLE)
     text(slide, x + 0.35, y + 0.65, w - 0.7, 0.75,
-         f"At full senior use; company gross margin {C.FMT['company_gm']} in 2029–31. Bank valuations take 6 "
-         "senior hours incl. a site visit, plus €100 travel.", size=10.5, color="ink2", spacing=1.05)
+         f"Bank valuations add a site visit (6 h). Marketplace from 2030: {C.FMT['take_rate']} deal fee, "
+         "≈€15k on a €1m building (est.).", size=10.5, color="ink2", spacing=1.05)
 
 
 def cell_text(cell, value, bold=False, colour="ink", align=PP_ALIGN.LEFT):

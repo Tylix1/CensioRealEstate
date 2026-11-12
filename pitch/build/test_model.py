@@ -17,6 +17,8 @@ def test_market(n):
     assert m["sam_eur"] == pytest.approx(60.7e6, abs=0.2e6)
     assert m["som_2031_eur"] == 4.8e6
     assert m["som_share_of_sam"] == pytest.approx(0.138, abs=0.002)
+    assert m["deal_tam_eur"] == pytest.approx(3.615e9, rel=0.001)   # EUR 241bn x 1.5%
+    assert m["deal_sam_eur"] == pytest.approx(1.574e9, rel=0.001)   # EUR 79.2bn x 1.5% + valuation TAM
 
 
 def test_bank_valuations_include_a_site_visit():
@@ -34,11 +36,14 @@ def test_unit_economics(n):
 def test_plan(n):
     p = n["plan"]
     assert [p[y]["valuations"] for y in p] == [100, 550, 1450, 2950, 4800]
-    assert p["2031"]["revenue"] == pytest.approx(9.16e6)
+    assert p["2031"]["valuation_revenue"] == pytest.approx(9.16e6)
+    assert p["2031"]["marketplace_revenue"] == pytest.approx(22.5e6)  # 1,500 deals x EUR 1m x 1.5%
+    assert p["2031"]["revenue"] == pytest.approx(31.66e6)
+    assert p["2029"]["marketplace_revenue"] == 0  # the marketplace opens in 2030
     assert p["2028"]["ebitda"] < 0 < p["2029"]["ebitda"]
     assert n["breakeven_year"] == 2029
-    assert [p[y]["headcount_ye"] for y in p] == [7, 9, 13, 20, 28]
-    assert p["2031"]["ebitda_margin"] == pytest.approx(0.34, abs=0.01)
+    assert [p[y]["headcount_ye"] for y in p] == [7, 9, 13, 26, 43]
+    assert p["2031"]["ebitda_margin"] == pytest.approx(0.48, abs=0.01)
     assert all(p[y]["senior_utilisation"] <= 0.85 for y in p)
 
 
@@ -56,7 +61,8 @@ def test_team(n):
     assert t["valuations_per_senior_2031"] == pytest.approx(331, abs=1)
     assert 95 <= t["classic_valuers_low"] <= 97
     assert 167 <= t["classic_valuers_high"] <= 169
-    assert t["people_2031"] == 28
+    assert t["people_2031"] == 43
+    assert t["deals_2031"] == 1500
 
 
 def test_downside_is_reported(n):

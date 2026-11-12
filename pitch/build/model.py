@@ -62,6 +62,20 @@ NON_STAFF = {  # thousand EUR per year
 }
 
 # ---- Round -----------------------------------------------------------------
+# ---- Marketplace (from 2030): owners list with a signed value, investors bid, lenders finance ------
+EU_INVESTMENT_2025 = 241e9       # S CBRE: European real-estate investment volume 2025
+DE_INCOME_TURNOVER_2025F = 36.5e9 + 42.7e9  # S GEWOS 2025 forecast: multi-family + commercial turnover
+DEALS = [0, 0, 0, 300, 1500]     # A deals closed on Censio per year
+AVG_TICKET = 1_000_000           # A ~ GEWOS 2024 average income-property deal (EUR 0.95m)
+TAKE_RATE = 0.015                # A deal fee; brokers charge ~3-7% on multi-family and commercial deals
+DEAL_VARIABLE = 4_000            # A per closed deal: KYC, escrow, contracts
+DEAL_TEAM_YE = [0, 0, 0, 4, 10]  # senior transaction managers
+DEAL_TEAM_AVG = [0, 0, 0, 2.0, 8.0]
+DEAL_TEAM_COST = 140_000
+MKT_TECH_YE = [0, 0, 0, 2, 5]
+MKT_TECH_AVG = [0, 0, 0, 1.5, 4.5]
+MKT_NON_STAFF = {"marketing": [0, 0, 0, 600, 2500], "compliance": [0, 0, 0, 100, 150]}  # thousand EUR
+
 ASK = 1_500_000
 CAPEX = 40_000
 RECEIVABLE_DAYS = 30
@@ -100,6 +114,12 @@ def market() -> dict:
         "som_2031_eur": som,
         "som_2031_valuations": seg[0][-1],
         "som_share_of_sam": seg[0][-1] / sam_count,
+        # The deal engine: valuation plus a deal fee on every closed transaction.
+        "deal_tam_eur": EU_INVESTMENT_2025 * TAKE_RATE,
+        "deal_sam_eur": DE_INCOME_TURNOVER_2025F * TAKE_RATE + tam,
+        "eu_investment": EU_INVESTMENT_2025,
+        "de_income_turnover": DE_INCOME_TURNOVER_2025F,
+        "take_rate": TAKE_RATE,
     }
 
 
@@ -117,24 +137,40 @@ def plan() -> dict:
         staff = (FOUNDERS * FOUNDER_COST[i] + PLATFORM_AVG[i] * PLATFORM_COST
                  + SALES_AVG[i] * SALES_COST + OPS_AVG[i] * OPS_COST)
         non_staff = sum(v[i] for v in NON_STAFF.values()) * 1000
-        ebitda = gross_profit - staff - non_staff
-        hc_ye = FOUNDERS + SENIORS_YE[i] + PLATFORM_YE[i] + SALES_YE[i] + OPS_YE[i]
-        hc_avg = FOUNDERS + SENIORS_AVG[i] + PLATFORM_AVG[i] + SALES_AVG[i] + OPS_AVG[i]
+        val_ebitda = gross_profit - staff - non_staff
+        # Marketplace: deal fee on closed deals; the deal team delivers (cost of sales), tech and marketing are opex.
+        mk_rev = DEALS[i] * AVG_TICKET * TAKE_RATE
+        mk_cogs = DEALS[i] * DEAL_VARIABLE + DEAL_TEAM_AVG[i] * DEAL_TEAM_COST
+        mk_opex = MKT_TECH_AVG[i] * PLATFORM_COST + sum(v[i] for v in MKT_NON_STAFF.values()) * 1000
+        total_rev = rev + mk_rev
+        cogs = senior_cost + variable + mk_cogs
+        opex = staff + non_staff + mk_opex
+        ebitda = total_rev - cogs - opex
+        hc_ye = (FOUNDERS + SENIORS_YE[i] + PLATFORM_YE[i] + SALES_YE[i] + OPS_YE[i]
+                 + DEAL_TEAM_YE[i] + MKT_TECH_YE[i])
+        hc_avg = (FOUNDERS + SENIORS_AVG[i] + PLATFORM_AVG[i] + SALES_AVG[i] + OPS_AVG[i]
+                  + DEAL_TEAM_AVG[i] + MKT_TECH_AVG[i])
         out[year] = {
             "valuations": n,
-            "revenue": rev,
-            "segment_revenue": seg_rev,
+            "deals": DEALS[i],
+            "revenue": total_rev,
+            "valuation_revenue": rev,
+            "marketplace_revenue": mk_rev,
+            "segment_revenue": {**seg_rev, "Marketplace (deal fee)": mk_rev},
             "review_hours": hours,
             "senior_utilisation": hours / (SENIORS_AVG[i] * REVIEW_HOURS),
-            "cogs": senior_cost + variable,
-            "gross_margin": gross_profit / rev,
-            "opex": staff + non_staff,
+            "cogs": cogs,
+            "gross_margin": (total_rev - cogs) / total_rev,
+            "opex": opex,
+            "valuation_opex": staff + non_staff,
+            "valuation_ebitda": val_ebitda,
             "ebitda": ebitda,
-            "ebitda_margin": ebitda / rev,
+            "ebitda_margin": ebitda / total_rev,
             "headcount_ye": hc_ye,
             "headcount_avg": hc_avg,
             "seniors_ye": SENIORS_YE[i],
-            "revenue_per_head": rev / hc_avg,
+            "deal_team_ye": DEAL_TEAM_YE[i],
+            "revenue_per_head": total_rev / hc_avg,
             "valuations_per_senior": n / SENIORS_AVG[i],
         }
     return out
@@ -181,15 +217,16 @@ def proceeds(p: dict) -> dict:
 
 
 def downside(p: dict, drop_expansion: bool = False) -> dict:
-    """-40% volume, -10% price, 3 senior hours on the beachhead segment; optionally without the DACH expansion."""
+    """Valuation business only: -40% volume, -10% price, 3 senior hours on the beachhead segment; optionally without
+    the DACH expansion. The marketplace is left out: it only starts after a seed round."""
     cum, worst, rows = 0.0, 0.0, {}
     for i, year in enumerate(YEARS):
         n = p[year]["valuations"] * 0.6
-        rev = p[year]["revenue"] * 0.6 * 0.9
+        rev = p[year]["valuation_revenue"] * 0.6 * 0.9
         hours = sum(v[0][i] * (3.0 if k.startswith("Investors") else v[2]) for k, v in SEGMENTS.items()) * 0.6
         seniors = max(1.5, hours / (REVIEW_HOURS * 0.85))
         cogs = seniors * SENIOR_COST + n * (AI_COST + DATA_COST + HOSTING_COST) + rev * (INSURANCE_RATE + PAYMENTS_RATE)
-        opex = p[year]["opex"] - (NON_STAFF["expansion"][i] * 1000 if drop_expansion else 0)
+        opex = p[year]["valuation_opex"] - (NON_STAFF["expansion"][i] * 1000 if drop_expansion else 0)
         ebitda = rev - cogs - opex
         cum += ebitda
         worst = min(worst, cum)
@@ -218,6 +255,8 @@ def team(p: dict) -> dict:
         "people_2031": last["headcount_ye"],
         "seniors_2031": last["seniors_ye"],
         "valuations_2031": last["valuations"],
+        "deals_2031": last["deals"],
+        "deal_team_2031": last["deal_team_ye"],
         "valuations_per_senior_2031": last["valuations_per_senior"],
         "classic_hours_per_report": classic_hours_per_report,
         "classic_reports_per_valuer_low": classic_reports_low,

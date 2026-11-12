@@ -35,6 +35,10 @@ def eur_sig2(value: float) -> str:
     return f"€{millions:.1f}m"
 
 
+def eur_bn(value: float) -> str:
+    return f"€{value / 1e9:.1f}bn"
+
+
 def eur(value: float) -> str:
     return f"€{value:,.0f}"
 
@@ -104,6 +108,21 @@ FMT = {
     "downside_extra_no_dach": eur_m(D["without_expansion"]["extra_cash_needed"]),
     "avg_seniors_last": f"{PLAN[YEARS[-1]]['valuations'] / T['valuations_per_senior_2031']:.1f}",
     "avg_hours_last": f"{PLAN[YEARS[-1]]['review_hours'] / PLAN[YEARS[-1]]['valuations']:.1f}",
+    # The deal engine (marketplace from 2030)
+    "deal_tam": eur_bn(M["deal_tam_eur"]),
+    "deal_sam": eur_bn(M["deal_sam_eur"]),
+    "eu_investment": f"€{M['eu_investment'] / 1e9:.0f}bn",
+    "de_income_turnover": f"€{M['de_income_turnover'] / 1e9:.0f}bn",
+    "take_rate": f"{M['take_rate'] * 100:.1f}%",
+    "revenue_last": eur_m(LAST["revenue"]),
+    "valuation_revenue_last": eur_m(LAST["valuation_revenue"]),
+    "marketplace_revenue_last": eur_m(LAST["marketplace_revenue"]),
+    "deals_last": f"{T['deals_2031']:,}",
+    "deals_first": f"{PLAN[YEARS[3]]['deals']:,}",
+    "deal_team_last": str(T["deal_team_2031"]),
+    "experts_last": str(T["seniors_2031"] + T["deal_team_2031"]),
+    "som_total_share": pct(LAST["revenue"] / M["deal_sam_eur"]),
+    "rev_per_head_last": eur_m(LAST["revenue_per_head"]),
 }
 
 BUCKETS = P["buckets"]
@@ -116,8 +135,9 @@ LEGEND_TAILS = {
 
 # 2031 team by function, for the team slide's bar (people at year end).
 TEAM_2031 = [
-    ("Senior valuers", T["seniors_2031"], "valuer"),
-    ("Platform & AI", 4, "brand_accent"),
+    ("Valuers", T["seniors_2031"], "valuer"),
+    ("Deal team", T["deal_team_2031"], "ink"),
+    ("Platform & AI", 9, "brand_accent"),
     ("Sales & ops", 3, "ink2"),
     ("Founders", 4, "brand"),
 ]
@@ -140,6 +160,9 @@ def load_team() -> list[dict]:
 
 
 SOURCES = {
+    "cbre": "CBRE press release, Jan 2026 (European real-estate investment €241bn in 2025)",
+    "broker": "Immowelt, reduco.ai (broker fees on multi-family and commercial deals, freely negotiable, ~3–7%)",
+    "kps": "§ 195 BauGB; state rules on purchase-price register extracts (confidential, legitimate interest only)",
     "akoga": "AK OGA/BBSR Immobilienmarktbericht 2026 (872,000 sales, €278bn in 2025)",
     "gewos": "GEWOS IMA 2025 (multi-family 34,700 sales, commercial 38,800 sales, 2024)",
     "bvs": "BVS Honorarrichtlinie 2026 (non-binding fee guideline)",
@@ -163,6 +186,9 @@ SOURCES = {
 }
 
 SHORT = {
+    "cbre": "CBRE 2026",
+    "broker": "Immowelt; reduco.ai",
+    "kps": "§ 195 BauGB",
     "akoga": "AK OGA/BBSR 2026",
     "gewos": "GEWOS IMA 2025",
     "bvs": "BVS fee guideline 2026",
@@ -188,36 +214,40 @@ SLIDES = [
     {
         "key": "cover",
         "eyebrow": "",
-        "title": "Signed property valuations in 48 hours, not weeks",
-        "sub": "The AI-native valuation firm for income-producing real estate in Germany",
-        "seconds": 10,
-        "notes": "A property deal can wait six weeks for one signed valuation. We're Censio: we deliver it in 48 hours.",
+        "title": "The AI-native deal engine for real estate",
+        "sub": "Starting where every deal stalls: signed property valuations in 48 hours",
+        "seconds": 11,
+        "notes": "Buying a building still takes months. We're Censio, the AI-native deal engine for real estate, "
+                 "starting with signed valuations in 48 hours.",
         "qa": [],
         "sources": [],
     },
     {
         "key": "vision",
         "eyebrow": "Vision & mission",
-        "title": "Every property deal deserves a value you can trace",
-        "sub": "We want every property value to be traceable: AI prepares, a senior valuer signs",
-        "seconds": 18,
-        "vision": "Every property decision rests on a signed value that anyone can trace back to its sources.",
-        "mission": "AI does the groundwork, senior valuers make the call: a signed ImmoWertV desktop valuation "
-                   "in 48 hours, for less than half the fee of a full report.",
-        "notes": "Our vision: every property decision rests on a value anyone can trace to its sources. Our mission: "
-                 "AI prepares, a senior valuer signs, in 48 hours. Orange means AI on every slide, violet the senior.",
-        "qa": [f"Less than half: {FMT['price']} is 46% of the BVS guideline fee for a full report at €1m (€4,360 "
-               "net, before surcharges and VAT) and below a large firm's €3–5k for an indicative valuation alone.",
-               "Desktop valuation = from documents and public data, no site visit; stated in every report. "
-               "Buy-side investors inspect the building in their own technical due diligence."],
-        "sources": ["bvs"],
+        "title": "A building should change hands as easily as a share",
+        "sub": "Where we are going, and the step we take first",
+        "seconds": 17,
+        "vision": "By 2032, a building changes hands anywhere in the world almost as easily as a share: valued, "
+                  "financed and closed within a week, because AI runs every step of the deal and experts sign only "
+                  "the judgement calls. This matters because a building is most people's largest asset, yet buying "
+                  "one is still slow, costly and based on trust.",
+        "mission": "We take the slowest steps out of every property deal for investors, owners and lenders, by letting "
+                   "AI prepare every figure and document while senior experts judge and sign, starting with the "
+                   "valuation, so that valuing, financing and closing a building within a week becomes possible.",
+        "notes": "Our vision: by 2032, a building changes hands almost as easily as a share, valued, financed and "
+                 "closed within a week. Our mission: AI prepares every step, senior experts sign, starting with the "
+                 "valuation.",
+        "qa": ["Today a building takes months to change hands: weeks for the valuation alone, then financing and the "
+               "notary. We start where every deal stalls.",
+               "Independence: valuation fees are fixed and never tied to a closing; valuers are not paid on deals."],
+        "sources": [],
     },
     {
         "key": "problem",
         "eyebrow": "Problem",
         "title": "Every deal waits weeks for one signature",
-        "sub": "Even an indicative valuation of a €1–3m apartment building costs €3–5k at a large firm; a signed one "
-               "costs more and takes 3–6 weeks",
+        "sub": "Valuation, financing and closing run one after another, by hand, and the valuation is the first wall",
         "seconds": 30,
         "stats": [
             ("Time", "3–6 weeks", "for a full valuation report from a private valuer; public valuation boards "
@@ -229,9 +259,9 @@ SLIDES = [
         ],
         "footnote": f"≈{FMT['classic_hours']} billable expert hours in a full report's fee, incl. site visit and "
                     "travel (est.: €4,360 ÷ €125/h court rate)",
-        "notes": "When an investor buys a one-to-three-million-euro apartment building, even an indicative valuation "
-                 "from a large firm costs three to five thousand euros; a signed full report costs more and takes "
-                 "three to six weeks. And the experts who sign are ageing: Germany's sworn experts, across all fields, "
+        "notes": "A property deal runs step by step, by hand: valuation, financing, notary. The first wall is the "
+                 "valuation. Even an indicative one from a large firm costs three to five thousand euros; a signed "
+                 "report costs more and takes three to six weeks. And the experts who sign are ageing: sworn experts "
                  "are 60 on average.",
         "qa": ["The expert count covers all fields; no official count of property valuers exists. HypZert certifies "
                "~200 new valuers a year (>2,000 in total), which is the pool we hire from.",
@@ -243,9 +273,9 @@ SLIDES = [
     },
     {
         "key": "solution",
-        "eyebrow": "Playbook & solution",
+        "eyebrow": "Playbook & solution · our wedge",
         "title": "AI does the groundwork. Seniors make the call",
-        "sub": "Our playbook: sell the signed valuation, not software. AI does the junior work, a senior valuer "
+        "sub": "Our wedge: sell the signed valuation, not software. AI does the junior work, a senior valuer "
                "judges and signs",
         "seconds": 28,
         "steps": [
@@ -290,35 +320,33 @@ SLIDES = [
     {
         "key": "market",
         "eyebrow": "Market size",
-        "title": f"A {FMT['tam']} market, starting with apartment buildings",
-        "sub": f"Germany sells ~{FMT['income_sales']} income properties a year, each valued once or twice (est.). "
-               "Beachhead: buy-side valuations of multi-family houses",
+        "title": f"A €390m wedge into a {FMT['deal_tam']} deal market",
+        "sub": f"We enter through valuations and grow into a fee on every deal: {FMT['eu_investment']} of European "
+               "real-estate investment in 2025 alone",
         "seconds": 25,
         "rings": [
-            ("TAM", FMT["tam"], "a year",
-             f"Valuations triggered by income-property sales: {FMT['income_sales']} sales × 1.5 valuations × "
-             "€3,500 (est.)"),
-            ("SAM", FMT["sam"], "a year",
-             f"Buy-side valuations of multi-family houses: {FMT['mfh_sales']} sales × 50% × €3,500 (est.)"),
-            ("SOM", FMT["som"], "investors, 2031",
-             f"{FMT['som_valuations']} signed valuations at {FMT['price']}: ≈{FMT['som_share']} of the SAM's "
-             f"{FMT['sam_valuations']} valuations"),
+            ("TAM", FMT["deal_tam"], "a year",
+             f"Europe's deal market: {FMT['eu_investment']} of real-estate investment (2025) × {FMT['take_rate']} "
+             "for valuation and deal (est.)"),
+            ("SAM", FMT["deal_sam"], "a year",
+             f"Germany: {FMT['de_income_turnover']} of income-property sales × {FMT['take_rate']}, plus €390m of "
+             "valuations (est.)"),
+            ("SOM", FMT["revenue_last"], "in 2031",
+             f"Our plan: {FMT['valuation_revenue_last']} valuations + {FMT['marketplace_revenue_last']} deal fees "
+             f"({FMT['deals_last']} deals), ≈{FMT['som_total_share']} of the SAM"),
         ],
-        "on_top": f"Our 2031 plan of {FMT['revenue'][-1]} = {FMT['som']} from investors + "
-                  f"{eur_m(PLAN[YEARS[-1]]['revenue'] - M['som_2031_eur'])} from fund revaluations, banks and "
-                  f"commercial & DACH. Fund revaluations, refinancing, inheritance tax and DACH are not in the "
-                  f"{FMT['tam']}.",
-        "notes": f"Germany sells about {FMT['income_sales']} income properties a year: roughly 390 million euros of "
-                 "valuations from sales alone. Our beachhead, buy-side valuations of apartment buildings, is about "
-                 "61 million. By 2031 we plan 4.8 million there, 9.2 million in total.",
-        "qa": ["No official count of valuations exists; 1.5 per sale, 50% buy-side and the €3,500 mean fee are "
-               "assumptions.",
-               f"At our price the beachhead pool is {FMT['sam_at_price']} ({FMT['sam_valuations']} × €2,000); "
-               f"our 2031 investor revenue is ≈{FMT['som_share']} of its valuations, ≈{FMT['som_value_share']} of "
-               "its value at market fees.",
-               "Context: 872,000 property sales worth €278bn in 2025 (AK OGA); €51.6bn of property in taxed "
-               "inheritances and gifts (Destatis)."],
-        "sources": ["gewos", "akoga", "bvs", "destatis_tax", "kagb"],
+        "on_top": f"Wedge: ≈€390m of income-property valuations a year in Germany; beachhead: buy-side valuations of "
+                  f"multi-family houses, ≈{FMT['sam']}. A {FMT['take_rate']} fee is a fraction of the ~3–7% brokers "
+                  "charge on these deals.",
+        "notes": "Every deal starts with a valuation, about 390 million euros a year in Germany: our wedge. The prize "
+                 "is the deal: 241 billion euros of European investment in 2025. At one and a half percent, that is "
+                 "3.6 billion euros a year.",
+        "qa": ["1.5% for valuation plus deal is our assumption; brokers charge about 3–7% on multi-family and "
+               "commercial deals, freely negotiable.",
+               f"Beachhead: buy-side valuations of multi-family houses, ≈{FMT['sam']} a year ({FMT['mfh_sales']} "
+               "sales × 50% × €3,500, est.).",
+               "Context: 872,000 property sales worth €278bn in Germany in 2025 (AK OGA)."],
+        "sources": ["cbre", "gewos", "broker", "akoga", "bvs"],
     },
     {
         "key": "competition",
@@ -343,35 +371,39 @@ SLIDES = [
              "A court paid €0 for an expert report written with undisclosed AI (LG Darmstadt, 2025). Censio "
              "discloses every AI step."),
             ("brand", "Why we can win",
-             "Incumbents bill expert hours and staff junior pyramids; AVM vendors sell software. Censio is built "
-             "for one senior reviewing a queue, and every correction is logged as training data. US precedent: "
-             "Bowery Valuation, appraiser-signed, $35m Series B (2021)."),
+             "Every valuation and every deal closed on Censio adds a verified price and rent roll to our own "
+             "comparables: data the official purchase-price register keeps confidential and no frontier model can "
+             "see. US precedent: Bowery Valuation, $35m Series B."),
         ],
         "notes": "Today you must choose. Automated models answer in seconds, but nobody signs them. Indicative "
-                 "valuations cost three to five thousand euros. Full reports are signed, but take weeks, and EU bank rules require an "
-                 "independent valuer. Censio is built to be both; in the US, Bowery raised 35 million dollars this "
-                 "way.",
-        "qa": ["Also competing: the buyer's own spreadsheet (the status quo, unsigned) and, for bank loans, in-house "
-               "valuers working on platforms like on-geo LORA (used by ≈98% of Sparkassen). VALUE AG also sells "
-               "valuations.",
+                 "valuations cost three to five thousand euros. Full reports are signed, but take weeks. Censio is "
+                 "built to be both, and every deal we close improves our comparables, data no frontier model can see.",
+        "qa": ["Our comparables: the valuation boards' purchase-price register is confidential; detailed extracts go "
+               "only to experts with a legitimate interest, per valuation (§ 195 BauGB). Our own closed deals give "
+               "us full prices with rent rolls for the sales-comparison approach.",
+               "Also competing: the buyer's own spreadsheet, in-house bank valuers on platforms like on-geo LORA "
+               "(≈98% of Sparkassen), VALUE AG; for deals, brokers and listing portals.",
                "Why €2,000? A large firm charges €3–5k for an indicative valuation and more for a signed full "
                "report; we deliver a signed, sourced desktop valuation in 48 hours for less.",
                "Is LG Darmstadt a risk for us? That fee was cut because the expert hid AI use in a court report. "
-               "Censio's reports disclose every AI step, and each judgement call is the signing valuer's, as the "
-               "IHK guidance for experts asks."],
-        "sources": ["crr", "darmstadt", "bowery", "fees", "ongeo"],
+               "Censio's reports disclose every AI step, and each judgement call is the signing valuer's."],
+        "sources": ["crr", "darmstadt", "bowery", "fees", "kps"],
     },
     {
         "key": "traction",
         "eyebrow": "Traction · north star",
-        "title": "North star: signed valuations within 48 hours",
-        "sub": "No customers yet: a working prototype today, shadow valuations next, first revenue in 2027",
-        "seconds": 20,
-        "star_note": f"counted weekly · today 0 · 2027 plan: {FMT['valuations'][0]}",
+        "title": "North star: valuations in 48 hours, deals in 7 days",
+        "sub": "One North Star per phase. Today: a working prototype, no customers yet",
+        "seconds": 22,
+        "stars": [
+            ("Phase 1 · valuation firm", "Signed valuations delivered within 48 hours",
+             f"weekly · today 0 · 2027 plan: {FMT['valuations'][0]}"),
+            ("Phase 2 · marketplace, from 2030", "Listings with a funded bid within 7 days",
+             "monthly · replaces phase 1 when the marketplace opens"),
+        ],
         "inputs": [
             ("Senior minutes per valuation", "target ≤ 120"),
-            ("AI values kept unchanged", "baseline from shadow valuations"),
-            ("Repeat customers", "from the first paid order"),
+            ("Valuation clients who also list", "share, from 2030"),
         ],
         "timeline": [
             ("Today", "Working prototype",
@@ -380,9 +412,9 @@ SLIDES = [
              "Target: 5 investors, 50 shadow valuations side by side with signed reports, senior minutes measured."),
             ("2027", "First revenue", f"{FMT['valuations'][0]} paid valuations, 10 customers (plan)."),
         ],
-        "notes": "We steer by one number: signed valuations delivered within 48 hours. Today that number is zero: we "
-                 "have a working prototype and no customers yet. Next come 50 shadow valuations with five investors, "
-                 "measuring the senior minutes each one takes.",
+        "notes": "We steer by one number per phase: first, signed valuations delivered within 48 hours; from 2030, "
+                 "listings that get a funded bid within seven days. Today that number is zero: a working prototype, "
+                 "no customers yet. Next: 50 shadow valuations with five investors.",
         "qa": ["Shadow valuation = we value a deal the investor is already valuing, and compare our result and time "
                "with the signed report they receive.",
                "The 48 hours run from complete documents; missing documents pause the clock."],
@@ -391,34 +423,38 @@ SLIDES = [
     {
         "key": "gtm",
         "eyebrow": "Go-to-market & revenue",
-        "title": "Land with investors, then add funds and banks",
-        "sub": f"{FMT['price']} per signed valuation for multi-family investors first; funds, banks and commercial "
-               "follow",
+        "title": "Enter with the valuation, then own the deal",
+        "sub": "Valuations stay a business of their own and feed the marketplace: owners list, investors bid, "
+               "lenders finance",
         "seconds": 25,
         "path": [
-            ("2027", "Multi-family investors", "€2,000", "asset managers, family offices, housing companies"),
-            ("2028", "Portfolio & fund revaluations", "€1,100", "recurring: open-ended funds revalue every quarter"),
-            ("2029", "Banks", "€2,200", "lending values with a site visit, HypZert seniors"),
-            ("2030", "Commercial & DACH", "€3,200", "offices and retail; Austria and Switzerland"),
+            ("2027", "Valuations for multi-family investors", "€2,000",
+             "the wedge: asset managers, family offices, housing firms"),
+            ("2028", "All income property, funds, DACH", "€1.1–3.2k",
+             "offices, retail, logistics; quarterly fund revaluations"),
+            ("2029", "Banks: lending values and financing", "€2,200",
+             "site visits by HypZert seniors; loans pre-approved on our file"),
+            ("2030", "Marketplace across Europe", f"{FMT['take_rate']} fee",
+             "owners list with a signed value, investors bid, lenders finance"),
         ],
-        "later": "Later option: a deal platform. Buyers and sellers are already on Censio, so a transaction "
-                 "fee becomes possible. Upside only, not in the numbers.",
-        "notes": "We land with asset managers, family offices and housing companies that buy multi-family houses, at "
-                 "2,000 euros per valuation. Then we add fund revaluations, banks with site visits, and commercial "
-                 "property. Revenue grows to 9.2 million euros in 2031. Later, with buyers and sellers on Censio, a "
-                 "deal fee is upside.",
-        "qa": [f"Customers: 10 in 2027 and {FMT['customers_2028']} in 2028, so about 20 valuations per customer a "
-               "year, counting valuations per bid, not only per closed deal (est.).",
-               "2027 is a €1,800 launch price; €2,000 from 2028. Segment volumes and prices are in model.py."],
-        "sources": ["model", "kagb", "belwertv"],
+        "later": "2031+: the deal engine. Value, finance and close any building within a week. Valuation fees stay "
+                 "fixed, never tied to a closing.",
+        "notes": "We enter with signed valuations for multi-family investors at 2,000 euros, then all income property, "
+                 "funds and DACH, then banks and financing. From 2030 our marketplace: owners list with a signed "
+                 "value, investors bid, and we earn a deal fee. Revenue reaches 31.7 million euros in 2031.",
+        "qa": [f"Plan: {FMT['deals_first']} deals in 2030 and {FMT['deals_last']} in 2031 at ≈€1m each and a "
+               f"{FMT['take_rate']} fee (est.); valuations alone reach {FMT['valuation_revenue_last']} in 2031.",
+               "2027 is a €1,800 launch price; €2,000 from 2028. Segment volumes and prices are in model.py.",
+               "Independence: valuers are not paid on deals; valuation fees are fixed."],
+        "sources": ["model", "broker", "kagb", "belwertv"],
     },
     {
         "key": "team",
         "eyebrow": "Team",
         "title": "No juniors. Only seniors and AI",
-        "sub": f"AI does the junior work, so in 2031, {FMT['seniors_last']} of our {FMT['people_last']} people are "
-               "senior valuers who sign",
-        "seconds": 30,
+        "sub": f"AI does the junior work, so in 2031, {FMT['experts_last']} of our {FMT['people_last']} people are "
+               "senior valuers and deal experts",
+        "seconds": 28,
         "classic": [("Partners", "ink"), ("Senior valuers", "ink"), ("Juniors & analysts", "ink")],
         "censio": [("Founders", "brand"), ("Senior valuers", "valuer"), ("AI does the preparation", "ai")],
         "stats": [
@@ -426,49 +462,48 @@ SLIDES = [
             (FMT["per_senior"], f"signed valuations per senior a year (2031 plan, {FMT['avg_seniors_last']} "
                                 "seniors on average)"),
         ],
-        "bridge": f"{FMT['valuations_last']} valuations in 2031: {FMT['people_last']} people at Censio vs "
-                  f"≈{FMT['classic_valuers_low']}–{FMT['classic_valuers_high']} valuers in a classic firm "
-                  "(est., full reports)",
+        "bridge": f"{FMT['valuations_last']} valuations and {FMT['deals_last']} deals in 2031 with "
+                  f"{FMT['people_last']} people; a classic firm needs ≈{FMT['classic_valuers_low']}–"
+                  f"{FMT['classic_valuers_high']} valuers for the valuations alone (est.)",
         "first_hire": "First hire: a HypZert / öbuv senior who signs from 2027",
         "notes": "AI-native means: AI does the junior work, so we hire only seniors. We four founders run the company; "
-                 "senior valuers sign every report. One senior signs about 330 valuations a year, instead of 30 to 50 "
-                 "full reports. By 2031, a team of 28 does the work of 100 to 170 classic valuers.",
+                 "senior valuers sign and senior deal managers close. One senior signs about 330 "
+                 "valuations a year, instead of 30 to 50. By 2031, 43 people run 4,800 valuations and 1,500 deals.",
         "qa": ["Who signs the first report? Our first hire, a HypZert / öbuv senior valuer, paid from the Deliver "
                "share. Hiring pool: >2,000 HypZert valuers, ~200 newly certified a year.",
+               f"Revenue per person in 2031: ≈{FMT['rev_per_head_last']} (plan).",
                "Entry-level work is already shrinking: −13% employment for 22–25-year-olds in the most AI-exposed "
                "jobs (Stanford, 2025).",
-               "Founder roles are placeholders until the team fixes them.",
-               f"≈330 = 4,800 ÷ {FMT['avg_seniors_last']} seniors on average in 2031 (17 at year end); review "
-               f"averages {FMT['avg_hours_last']} h because bank valuations take 6 h with the site visit."],
+               "Founder roles are placeholders until the team fixes them."],
         "sources": ["model", "hypzert", "stanford", "bvs", "jveg"],
     },
     {
         "key": "financials",
         "eyebrow": "Financial projections",
-        "title": f"Break-even in {FMT['breakeven']}, {FMT['ebitda_margin_last']} EBITDA margin by 2031",
-        "sub": f"Each valuation leaves {FMT['gross_profit']} ({FMT['gross_margin']}); EBITDA turns positive in "
-               f"{FMT['breakeven']} and reaches {FMT['ebitda_last']} on {FMT['revenue'][-1]} revenue in 2031",
+        "title": f"Break-even in {FMT['breakeven']}, {FMT['revenue_last']} revenue by 2031",
+        "sub": f"Valuations break even in {FMT['breakeven']}; from 2030 the marketplace lifts revenue to "
+               f"{FMT['revenue_last']} and EBITDA to {FMT['ebitda_last']} in 2031",
         "seconds": 22,
-        "downside": f"Downside (−40% volume, −10% price, 3 senior hours): still loss-making in 2031; the round runs "
-                    f"out in {FMT['downside_out_of_cash']} and {FMT['downside_extra']} more is needed "
-                    f"({FMT['downside_extra_no_dach']} without DACH expansion), so we raise a seed on 2028 data",
-        "notes": "Each valuation sells for 2,000 euros and costs about 425 to deliver, mostly senior time. We break "
-                 "even in 2029 and reach a 34 percent EBITDA margin in 2031. The number we must prove first is those "
-                 "two senior hours.",
-        "qa": [f"Downside with plan costs: EBITDA 2031 {FMT['downside_2031']}, cumulative low {FMT['downside_cum']}; "
-               f"cash runs out in {FMT['downside_out_of_cash']} and the round is {FMT['downside_extra']} short "
-               f"({FMT['downside_extra_no_dach']} without the DACH expansion). We would slow hiring, drop DACH and "
-               "raise a seed on 2028 data.",
+        "downside": f"Downside for the valuation business (−40% volume, −10% price, 3 senior hours): the round runs "
+                    f"out in {FMT['downside_out_of_cash']} and {FMT['downside_extra']} more is needed, so we raise a "
+                    "seed on 2028 data",
+        "notes": "Valuations alone break even in 2029. From 2030 the deal fee takes revenue to 31.7 million and "
+                 "EBITDA to 15.3 million in 2031. Each valuation earns 79 percent gross; first we must prove two "
+                 "senior hours per valuation.",
+        "qa": [f"Downside (valuation business, plan costs): EBITDA 2031 {FMT['downside_2031']}, cumulative low "
+               f"{FMT['downside_cum']}; cash runs out in {FMT['downside_out_of_cash']} and the round is "
+               f"{FMT['downside_extra']} short ({FMT['downside_extra_no_dach']} without the DACH expansion).",
                f"79% is per valuation at full senior use; company gross margin is {FMT['company_gm']} in 2029–31.",
-               "Bank valuations include a site visit: 6 senior hours and €100 travel each in the model."],
-        "sources": ["model", "prototype"],
+               "Marketplace assumptions: deals per year, ≈€1m average ticket (GEWOS: €0.95m), 1.5% fee, €4k cost "
+               "per deal, a senior deal team; none of it is proven yet."],
+        "sources": ["model", "prototype", "gewos"],
     },
     {
         "key": "ask",
         "eyebrow": "Use of proceeds",
-        "title": f"{FMT['ask']} pre-seed to reach {FMT['revenue_2028']} revenue in 2028",
-        "sub": f"24 months to {FMT['valuations_2027_28']} signed valuations and {FMT['customers_2028']} paying "
-               f"customers, with {FMT['runway']} months of runway even at zero revenue",
+        "title": f"{FMT['ask']} pre-seed to prove the wedge",
+        "sub": f"24 months to {FMT['valuations_2027_28']} signed valuations, {FMT['customers_2028']} customers and "
+               f"{FMT['revenue_2028']} revenue, with {FMT['runway']} months of runway at zero revenue",
         "seconds": 22,
         "donut_caption": f"Split of all 2027–28 spending ({FMT['spend_2027_28']}), funded by the "
                          f"{FMT['ask']} round and {FMT['revenue_2027_28']} of revenue; {FMT['buffer']} of the round "
@@ -477,12 +512,12 @@ SLIDES = [
             ("2027", f"First senior signs · {FMT['valuations'][0]} valuations · 10 customers"),
             ("2028", f"{FMT['valuations'][1]} valuations · {FMT['customers_2028']} customers · "
                      f"{FMT['revenue'][1]} revenue"),
-            ("Seed-ready", "≤ 2 senior hours per valuation, proven on 500+"),
+            ("2029", "Seed round to build the marketplace; ≤ 2 senior hours per valuation proven"),
         ],
-        "closing": "Censio. Signed valuations at the speed of the deal.",
-        "notes": "We're raising 1.5 million euros pre-seed, mostly for product and senior valuers. It takes us to "
-                 "650 signed valuations over two years and one million euros of revenue in 2028. Censio: signed "
-                 "valuations at the speed of the deal.",
+        "closing": "Censio. Buildings change hands as easily as shares.",
+        "notes": "We're raising 1.5 million euros pre-seed to prove the wedge: 650 signed valuations and one million "
+                 "euros of revenue by 2028. Then we raise a seed and build the deal engine. Censio: buildings change "
+                 "hands as easily as shares.",
         "qa": [f"Net burn 2027–28 {eur_m(P['net_burn_2027_28'])}; working capital {eur_m(P['working_capital'])}; "
                f"equipment €0.04m; reserve {FMT['buffer']}."],
         "sources": ["model"],

@@ -75,12 +75,13 @@ def test_numbers_match_model(prs):
     by_key = {s["key"]: slide for slide, s in zip(prs.slides, C.SLIDES)}
     F = C.FMT
     expect = {
-        "market": [F["tam"], F["sam"], F["som"], F["income_sales"], F["mfh_sales"]],
-        "gtm": [F["price"], *F["revenue"]],
-        "team": [F["per_senior"], F["people_last"], F["seniors_last"], F["valuations_last"],
+        "market": [F["deal_tam"], F["deal_sam"], F["revenue_last"], F["eu_investment"], F["de_income_turnover"],
+                   F["valuation_revenue_last"], F["marketplace_revenue_last"], F["deals_last"], F["sam"]],
+        "gtm": [F["price"], F["take_rate"], *F["revenue"]],
+        "team": [F["per_senior"], F["people_last"], F["experts_last"], F["valuations_last"], F["deals_last"],
                  F["classic_valuers_low"], F["classic_valuers_high"]],
-        "financials": [F["breakeven"], F["ebitda_margin_last"], F["ebitda_last"], F["gross_profit"],
-                       F["gross_margin"], F["company_gm"], F["downside_extra"], *F["valuations"], *F["people"]],
+        "financials": [F["breakeven"], F["revenue_last"], F["ebitda_last"], F["gross_profit"],
+                       F["gross_margin"], F["downside_extra"], *F["valuations"], *F["people"]],
         "ask": [F["ask"], F["revenue_2028"], F["valuations_2027_28"], F["customers_2028"], F["runway"],
                 F["spend_2027_28"], F["revenue_2027_28"], F["buffer"]],
     }
