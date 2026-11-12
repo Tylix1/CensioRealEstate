@@ -92,11 +92,12 @@ ONE_PAGER = {
                         "senior minutes per valuation (≤ 120); closing prices captured.",
     # Course p. 5 moat names, ordered by the playbook stage that builds them (template p. 37: "along that journey").
     "moats": [
-        ("Brand & trust + regulation", "market · Y1", "we sign, insure and disclose every AI step; banks need an "
-                                                       "independent valuer (CRR III)."),
-        ("Cost advantage", "new with AI · Y1", "≈€0.45 of AI + 2 senior hours per valuation vs ≈35 h (est.)."),
+        ("Data flywheel", "new with AI · Y3–4", "every valuation and closed deal feeds our own price data → sharper "
+                                                "values, our own sales comparisons → more buyers and sellers on "
+                                                "Censio → more data."),
+        ("Brand & trust", "market · Y1", "we sign, insure and disclose every AI step."),
+        ("Cost advantage", "new with AI · Y1", "≈€0.45 of AI + 2 senior hours per valuation (est.)."),
         ("Workflow lock-in", "amplified by AI · Y2", "we keep each client's valuation file."),
-        ("Data flywheel", "new with AI · Y3–4", "each valuation adds a rent roll, each deal a verified price."),
         ("Network of users", "pre-AI · Y4", "owners, buyers and lenders draw each other."),
     ],
     "frontier_test": "If the next GPT, Claude or Gemini release ships our feature, do we still exist? Yes: it cuts "

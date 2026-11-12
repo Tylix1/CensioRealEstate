@@ -376,9 +376,9 @@ SLIDES = [
              "A court paid €0 for an expert report written with undisclosed AI (LG Darmstadt, 2025). Censio "
              "discloses every AI step."),
             ("brand", "Our data flywheel",
-             "Each valuation adds a rent roll, each deal closed on Censio its verified price: our own cap rates and "
-             "sales comparables, data the official register keeps confidential and no frontier model can see. More "
-             "data, sharper values, fewer senior minutes, more deals."),
+             "Every valuation and every deal closed on Censio feeds our own price data: sharper values, sales "
+             "comparisons on prices the official register keeps confidential, and buyers and sellers already on "
+             "our platform. More data → better values → more users → more data."),
         ],
         "notes": "Today you must choose. Automated models answer in seconds, but nobody signs them. Indicative "
                  "valuations cost three to five thousand euros. Full reports are signed, but take weeks. Censio is "
