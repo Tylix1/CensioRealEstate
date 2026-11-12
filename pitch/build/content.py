@@ -184,7 +184,8 @@ SOURCES = {
     "hypzert": "HypZert (>2,000 certified valuers, ~200 new per year)",
     "stanford": "Brynjolfsson, Chandar, Chen: Canaries in the Coal Mine, Stanford Digital Economy Lab 2025",
     "prototype": "Censio prototype; AI cost per run estimated from token prices (README)",
-    "model": "Censio plan model (pitch/build/model.py, numbers.json); assumptions in the design spec, appendix B",
+    "model": "Censio financial model (Censio-Financial-Model.xlsx, built from pitch/build/model.py): every input with "
+             "its kind and source on the Assumptions sheet, public sources on the Sources sheet",
 }
 
 SHORT = {
@@ -209,8 +210,48 @@ SHORT = {
     "hypzert": "HypZert",
     "stanford": "Stanford DEL 2025",
     "prototype": "Censio prototype",
-    "model": "Censio plan model (assumptions marked est.)",
+    "model": "Censio financial model (backup; assumptions marked est.)",
 }
+
+I = NUM["inputs"]
+
+
+def margin(value: float) -> str:
+    """Margins on tiny or negative profits mean little; the table says n/m (not meaningful) there."""
+    return pct(value) if value > 0 else "n/m"
+
+
+BACKUP_ROWS = [
+    ("Signed valuations", [f"{PLAN[y]['valuations']:,}" for y in YEARS], False),
+    ("Deals closed on Censio", [f"{PLAN[y]['deals']:,}" if PLAN[y]["deals"] else "–" for y in YEARS], False),
+    ("Revenue", [eur_m(PLAN[y]["revenue"]) for y in YEARS], True),
+    ("of which deal fees", [eur_m(PLAN[y]["marketplace_revenue"]) if PLAN[y]["marketplace_revenue"] else "–"
+                            for y in YEARS], False),
+    ("Gross margin", [margin(PLAN[y]["gross_margin"]) for y in YEARS], False),
+    ("Operating costs", [eur_m(PLAN[y]["opex"]) for y in YEARS], False),
+    ("EBITDA", [eur_m(PLAN[y]["ebitda"]) for y in YEARS], True),
+    ("EBITDA margin", [margin(PLAN[y]["ebitda_margin"]) for y in YEARS], False),
+    ("Net income after tax", [eur_m(PLAN[y]["net_income"]) for y in YEARS], False),
+    ("Cash at year end", [eur_m(PLAN[y]["cash_end"]) for y in YEARS], False),
+    ("People at year end", [str(PLAN[y]["headcount_ye"]) for y in YEARS], False),
+]
+
+# How the numbers are built: (kind, text). S sourced · B public benchmark · T team experience · A our assumption.
+BACKUP_DRIVERS = [
+    ("T", f"Price {eur(U['price'])} per signed valuation; large firms charge €3–5k for an indicative one"),
+    ("A", f"2 senior hours per valuation; {I['review_hours']:,} review hours per senior a year"),
+    ("B", f"Senior valuer {eur(I['senior_salary'])} gross, {eur(round(I['senior_cost'], -2))} with employer social "
+          "security"),
+    ("B", f"Per valuation: AI {eur(I['ai_cost'])}, data {eur(I['data_cost'])}, e-signature "
+          f"{eur(I['hosting_cost'])}, insurance {eur(I['insurance'])}"),
+    ("B", f"Per head: workplace {eur(I['workplace'])} a month, IT {eur(I['it'])} a year, recruiting "
+          f"{eur(I['recruiting'])} per hire"),
+    ("A", f"Marketplace: {I['take_rate'] * 100:.1f}% deal fee on ≈{eur_m(I['avg_ticket'], 0)} deals "
+          "(brokers charge 3–7%)"),
+    ("S", f"Tax ≈{pct(I['tax_first'])} falling to ≈{pct(I['tax_last'])} with the corporate-tax cut; losses "
+          "carried forward"),
+]
+
 
 SLIDES = [
     {
@@ -533,7 +574,26 @@ SLIDES = [
                  "euros of revenue by 2028. Then we raise a seed and build the deal engine. Censio: buildings change "
                  "hands as easily as shares.",
         "qa": [f"Net burn 2027–28 {eur_m(P['net_burn_2027_28'])}; working capital {eur_m(P['working_capital'])}; "
-               f"equipment €0.04m; reserve {FMT['buffer']}."],
+               f"equipment {eur_m(P['capex'], 2)}; reserve {FMT['buffer']}."],
+        "sources": ["model"],
+    },
+    {
+        "key": "backup",
+        "appendix": True,
+        "eyebrow": "Appendix · financial model",
+        "title": "Backup: one model behind every number",
+        "sub": "Censio-Financial-Model.xlsx: each input is sourced or marked as our assumption, and every figure "
+               "in this deck links to a cell",
+        "seconds": 0,
+        "notes": "",
+        "rows": BACKUP_ROWS,
+        "drivers": BACKUP_DRIVERS,
+        "qa": [f"Valuation business alone (before the marketplace): EBITDA 2031 "
+               f"{eur_m(LAST['valuation_ebitda'])}; the marketplace adds {eur_m(LAST['marketplace_ebitda'])}.",
+               f"Cash never falls below {eur_m(min(PLAN[y]['cash_end'] for y in YEARS))} at a year end without a "
+               "further round; the downside needs a seed on 2028 data (financials slide).",
+               "Change any input on the Assumptions sheet and the workbook recalculates; the Checks sheet must stay "
+               "TRUE."],
         "sources": ["model"],
     },
 ]

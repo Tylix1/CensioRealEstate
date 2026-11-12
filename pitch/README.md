@@ -9,6 +9,7 @@ Dieser Ordner enthält alles, um das Pitch-Deck für Censio neu zu bauen: die Za
 | `out/Censio-Pitch.pptx` | Das Deck zum Bearbeiten und Präsentieren. Der Sprechtext steht in den Notizen, das 30-Sekunden-Demo-Video ist auf Folie 5 eingebettet und startet von selbst |
 | `out/Censio-Pitch.pdf` | Backup zum Präsentieren, Schriften eingebettet, ohne Video |
 | `out/censio-demo-30s.mp4` | Das Demo-Video einzeln, z. B. für Google Slides oder als Backup |
+| `out/Censio-Financial-Model.xlsx` | Das Finanzmodell hinter allen Zahlen im Deck (Backup für Fragen), siehe unten |
 
 `out/` liegt nicht im Repository. Das Repo ist öffentlich, und das Deck enthält eure Namen und das gekaufte Template. Die Dateien bekommt ihr direkt aus der Session. Teilt sie über Drive oder Teams.
 
@@ -68,6 +69,46 @@ cd pitch/build && python3 -m pytest -q
 ```
 
 Die Tests prüfen unter anderem: Zahlen auf den Folien gleich Modell, Sprechtext passt in die Zeit, nur Farben aus dem Prototyp, nur die zwei Schriften, Text passt auch mit 10 % breiterer Ersatzschrift, Video und Vorschaubild auf Folie 5.
+
+## Finanzmodell (Backup)
+
+`out/Censio-Financial-Model.xlsx` ist das Modell hinter Umsatz, Marge, EBITDA und Cash im Deck. Folie 13 (Anhang, nach der Ask-Folie) fasst es zusammen. Präsentiert wird sie nicht, sie ist für Fragen gedacht.
+
+**So ist es aufgebaut:**
+
+- **Assumptions:** Jede Eingabe steht genau einmal hier, in blauer Schrift. Daneben steht die Art:
+  - **S:** öffentliche Quelle (z. B. Steuersätze, Sozialabgaben, GEWOS)
+  - **B:** aus öffentlichen Benchmarks abgeleitet (z. B. Gehälter, Büro, Gebühren)
+  - **T:** eure Markterfahrung (Preis)
+  - **A:** unsere Annahme, die wir beweisen müssen (Volumen, 2 Senior-Stunden, Deals)
+
+  Dazu steht in jeder Zeile, warum der Wert so gewählt ist und welche Quelle dahintersteht.
+- **Alle anderen Blätter rechnen nur mit Formeln:**
+  - Revenue, Team und P&L: vom Umsatz über die Kosten bis zum Jahresüberschuss, mit Steuer und Verlustvortrag
+  - Cash flow und Use of funds: Liquidität und wofür die Runde ausgegeben wird
+  - Unit economics: eine Bewertung, ein Deal
+  - Market und Downside: Marktgröße und der Stressfall
+- **Peer check** stellt eure Marge und die Deal-Zahlen neben Scout24, Zillow, CBRE & Co. Das Blatt zeigt offen, was stimmen muss. Am ehrgeizigsten sind 1.500 Deals 2031 und rund 75 Deals pro Deal-Manager.
+- **Deck tie-out** verknüpft jede Zahl im Deck mit ihrer Zelle.
+- **Checks** muss überall TRUE zeigen.
+- **Sources** listet alle Quellen mit Link.
+
+**Ausprobieren:** Auf Assumptions stehen gelbe Hebel für Volumen, Preis, Senior-Stunden und Deals (1,00× = Plan). Ändert man einen Hebel, rechnet das ganze Modell neu. Checks und Deck tie-out zeigen dann an, dass das Deck nicht mehr zum Modell passt. So ist es gewollt.
+
+**Zahlen im Deck ändern:** Die Eingaben stehen in `build/model.py`, die Erklärungen und Quellen in `build/model_sources.py`. Danach neu bauen:
+
+```bash
+python3 pitch/build/model.py && python3 pitch/build/build_model_xlsx.py && python3 pitch/build/deck.py
+```
+
+Eine Änderung nur in der Excel-Datei ändert das Deck nicht.
+
+**Prüfen:** `cd pitch/build && python3 -m pytest -q`. Der Test `test_model_xlsx.py` lässt LibreOffice alle Formeln rechnen und vergleicht jede Zeile mit `model.py`.
+
+**Vorsicht bei den Quellen:**
+- Die meisten Seiten konnten aus der Build-Umgebung nur über Such-Auszüge gelesen werden. Ein zweiter Suchlauf hat sie gegengeprüft. Wo das nicht ging, steht es bei der Quelle.
+- Vor externer Nutzung einmal die Links öffnen.
+- Die Berufshaftpflicht (€50 pro Bewertung) ist ein Platzhalter, bis ein Makler ein Angebot macht.
 
 ## One-Pager (Group work 1)
 

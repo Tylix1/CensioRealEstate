@@ -29,8 +29,8 @@ def test_bank_valuations_include_a_site_visit():
 def test_unit_economics(n):
     u = n["unit"]
     assert u["price"] == 2000
-    assert u["cost"] == pytest.approx(425)
-    assert u["gross_margin"] == pytest.approx(0.7875)
+    assert u["cost"] == pytest.approx(442.57, abs=0.01)
+    assert u["gross_margin"] == pytest.approx(0.7787, abs=0.0001)
 
 
 def test_plan(n):
@@ -43,7 +43,7 @@ def test_plan(n):
     assert p["2028"]["ebitda"] < 0 < p["2029"]["ebitda"]
     assert n["breakeven_year"] == 2029
     assert [p[y]["headcount_ye"] for y in p] == [7, 9, 15, 32, 64]
-    assert p["2031"]["ebitda_margin"] == pytest.approx(0.40, abs=0.01)
+    assert p["2031"]["ebitda_margin"] == pytest.approx(0.39, abs=0.01)
     assert p["2029"]["valuation_ebitda"] > 0  # valuations alone break even while the marketplace is built
     assert all(p[y]["senior_utilisation"] <= 0.85 for y in p)
 
@@ -74,5 +74,24 @@ def test_downside_is_reported(n):
     # The round runs out in 2029 in the downside, before the DACH expansion (2030-31) starts, so dropping the
     # expansion halves the gap but does not close it: a seed round on 2028 data is needed.
     assert d["out_of_cash_year"] == 2029
-    assert 0.85e6 <= d["extra_cash_needed"] <= 0.95e6
-    assert 0.4e6 <= d["without_expansion"]["extra_cash_needed"] <= 0.55e6
+    assert 0.9e6 <= d["extra_cash_needed"] <= 1.05e6
+    assert 0.35e6 <= d["without_expansion"]["extra_cash_needed"] <= 0.5e6
+
+
+def test_employer_cost_follows_the_ceilings():
+    """Social security stops at the contribution ceilings, so the employer share falls as salaries rise."""
+    from model import employer_cost
+    assert employer_cost(50_000) == pytest.approx(50_000 * (1 + 0.1075 + 0.1055 + 0.02))
+    assert employer_cost(120_000) == pytest.approx(120_000 + 101_400 * 0.1075 + 69_750 * 0.1055 + 2_400)
+    assert employer_cost(120_000) / 120_000 < employer_cost(80_000) / 80_000
+
+
+def test_tax_and_cash(n):
+    p = n["plan"]
+    # Start-up losses are carried forward: no tax until they are used up, then both taxes apply.
+    assert [p[y]["tax"] for y in ("2027", "2028", "2029")] == [0, 0, 0]
+    assert p["2031"]["cit_loss_carried_forward"] == 0 and p["2031"]["trade_loss_carried_forward"] == 0
+    assert 0.25 < p["2031"]["tax"] / p["2031"]["ebit"] < 0.27  # 11% x 1.055 + 14.35% = 25.96%
+    # The pre-seed carries the plan: cash never falls below zero without a further round.
+    assert min(p[y]["cash_end"] for y in p) > 0
+    assert sum(p[y]["equity_in"] for y in p) == n["proceeds"]["ask"]

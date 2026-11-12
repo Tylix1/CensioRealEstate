@@ -41,7 +41,10 @@ def slide_text(slide) -> str:
 
 
 def test_twelve_slides_in_order(prs):
-    assert len(prs.slides) == 12
+    """Twelve presented slides, then the appendix (backup for questions) after the ask."""
+    assert len(prs.slides) == len(C.SLIDES)
+    presented = [s for s in C.SLIDES if not s.get("appendix")]
+    assert len(presented) == 12 and C.SLIDES[:12] == presented and presented[-1]["key"] == "ask"
     for slide, s in zip(prs.slides, C.SLIDES):
         assert s["title"] in slide_text(slide)
 
@@ -63,8 +66,9 @@ def test_notes_fit_timing():
     """285 s of slides leaves 15 s of the 5 minutes for clicks, the video start and hand-overs.
     Numbers count as spoken words (about three each); 2.3 spoken words a second is a calm pitch pace."""
     assert sum(s["seconds"] for s in C.SLIDES) <= 285
+    assert all(s["seconds"] == 0 for s in C.SLIDES if s.get("appendix"))
     total = 0
-    for s in C.SLIDES:
+    for s in (s for s in C.SLIDES if not s.get("appendix")):
         words = C.spoken_words(s["notes"])
         total += words
         assert words <= 2.3 * s["seconds"], f"{s['key']}: {words} spoken words for {s['seconds']} s"
@@ -84,6 +88,7 @@ def test_numbers_match_model(prs):
                        F["gross_margin"], F["downside_extra"], *F["valuations"], *F["people"]],
         "ask": [F["ask"], F["revenue_2028"], F["valuations_2027_28"], F["customers_2028"], F["runway"],
                 F["spend_2027_28"], F["revenue_2027_28"], F["buffer"]],
+        "backup": [v for _name, values, _bold in C.BACKUP_ROWS for v in values] + F["revenue"] + F["ebitda"],
     }
     for key, values in expect.items():
         text = slide_text(by_key[key])

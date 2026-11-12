@@ -658,10 +658,52 @@ def s_ask(slide, s):
          anchor=MSO_ANCHOR.MIDDLE)
 
 
+KIND_COLOURS = {"S": "brand", "B": "doc", "T": "valuer", "A": "ink2"}
+KIND_NAMES = {"S": "sourced", "B": "public benchmark", "T": "team experience", "A": "our assumption to prove"}
+
+
+def s_backup(slide, s):
+    """Appendix: the P&L from the Excel model and the drivers behind it, each tagged with its kind."""
+    rows = s["rows"]
+    w_label, w_year, h_row = 2.45, 1.05, 0.335
+    gf = slide.shapes.add_table(len(rows) + 1, 6, Inches(LEFT), Inches(TOP), Inches(w_label + 5 * w_year),
+                                Inches(h_row * (len(rows) + 1)))
+    gf.name = "P&L table"
+    table = gf.table
+    table.columns[0].width = Inches(w_label)
+    for k in range(1, 6):
+        table.columns[k].width = Inches(w_year)
+    for r in range(len(rows) + 1):
+        table.rows[r].height = Inches(h_row)
+    cell_text(table.cell(0, 0), "€, year end", colour="ink2")
+    for k, year in enumerate(C.YEARS, start=1):
+        cell_text(table.cell(0, k), year, bold=True, colour="ink2", align=PP_ALIGN.RIGHT)
+    for r, (name, values, bold) in enumerate(rows, start=1):
+        cell_text(table.cell(r, 0), name, bold=bold, colour="ink" if bold else "ink2")
+        for k, value in enumerate(values, start=1):
+            cell_text(table.cell(r, k), value, bold=bold, align=PP_ALIGN.RIGHT)
+    x = 8.95
+    w = RIGHT - x
+    box(slide, x, TOP, w, 3.98, fill="card", line="line", radius=0.08).name = "Drivers"
+    label(slide, x + 0.25, TOP + 0.2, w - 0.5, "How the numbers are built", color="ink2", size=10)
+    y = TOP + 0.55
+    for kind, words in s["drivers"]:
+        box(slide, x + 0.25, y + 0.04, 0.3, 0.26, fill=KIND_COLOURS[kind], radius=0.05)
+        text(slide, x + 0.25, y + 0.04, 0.3, 0.26, kind, size=10, bold=True, color="card", align=PP_ALIGN.CENTER,
+             anchor=MSO_ANCHOR.MIDDLE)
+        text(slide, x + 0.65, y, w - 0.9, 0.46, words, size=10.5, color="ink", spacing=1.0)
+        y += 0.49
+    legend = [[(f"{k} ", {"bold": True, "color": KIND_COLOURS[k]}), (f"{v}   ", {})] for k, v in KIND_NAMES.items()]
+    text(slide, LEFT, 6.3, CW, 0.32, [[run for part in legend for run in part]], size=10.5, color="ink2",
+         name="Kinds")
+    text(slide, LEFT, 6.6, CW, 0.32, "The workbook adds the line-by-line P&L, cash flow, downside case, sources and "
+         "integrity checks; it recalculates when an input changes.", size=10.5, color="ink2", name="Workbook note")
+
+
 BUILDERS = {
     "cover": s_cover, "vision": s_vision, "problem": s_problem, "solution": s_solution, "demo": s_demo,
     "market": s_market, "competition": s_competition, "traction": s_traction, "gtm": s_gtm, "team": s_team,
-    "financials": s_financials, "ask": s_ask,
+    "financials": s_financials, "ask": s_ask, "backup": s_backup,
 }
 
 
