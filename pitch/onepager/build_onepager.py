@@ -30,7 +30,7 @@ Y = C.YEARS
 
 ONE_PAGER = {
     "name": "Censio RE",
-    "tagline": "AI prepares, senior valuers sign: property valuations in 48 hours, not weeks",
+    "tagline": "The AI-native deal engine for real estate, starting with signed valuations in 48 hours",
     # Course p. 13: "[Workflow] for [specific user] in [industry]."
     "wedge": "Signed desktop income valuations of multi-family houses for acquisition teams in German residential "
              "real-estate investment.",
@@ -42,38 +42,35 @@ ONE_PAGER = {
               "from the due-diligence budget (labour, not IT).",
     # Vision, mission and North Star follow the course templates (Session 2, p. 19, 23, 27-29);
     # [[...]] marks the template's fixed words, which the page highlights.
-    "vision": "[[By 2032,]] anyone who buys, sells, finances or inherits a building in Europe [[can]] get a signed value "
-              "within days and check every figure in it against its source, [[because]] property records have "
-              "become machine-readable and experts spend their time only on judgement. [[This matters because]] a "
-              "building is most owners' largest asset, and its value should be checked, not taken on trust.",
-    "mission": "[[We]] run the senior-only valuation firm [[for]] property investors and lenders, [[by]] letting AI "
-               "prepare every figure from documents and public data while senior valuers judge and sign, [[so that]] "
-               "a signed value, checkable against its sources within days, [[becomes possible]] for every property "
-               "deal.",
+    "vision": "[[By 2032,]] a building changes hands anywhere in the world almost as easily as a share: valued, "
+              "financed and closed within a week, [[because]] AI runs every step of the deal and experts sign only "
+              "the judgement calls. [[This matters because]] a building is most people's largest asset, yet buying "
+              "one is still slow, costly and based on trust.",
+    "mission": "[[We]] take the slowest steps out of every property deal [[for]] investors, owners and lenders, [[by]] "
+               "letting AI prepare every figure and document while senior experts judge and sign, starting with the "
+               "valuation, [[so that]] valuing, financing and closing a building within a week [[becomes possible]].",
     "will": ["own the signed result and its liability", "disclose every AI step in every report",
              "hire only seniors; AI does the junior work"],
     "will_not": ["license our software to other valuers", "publish unsigned automated values (AVMs)",
                  "let a deal fee influence a valuation"],
-    "playbook_title": "From one German wedge to the standard for signed property values: DACH first, then Europe",
+    "playbook_title": "From one German wedge to the global deal engine for real estate",
+    # (when, theme, focus, North Star target, unit): targets are ambitions, not the deck's financial base case.
     "playbook": [
         ("Year 1 · 2027", "Prove the wedge",
-         "Signed desktop valuations of multi-family houses for investors' acquisition teams: €2,000 (launch "
-         "€1,800), 48 h.",
-         P[Y[0]]["valuations"]),
+         "Signed desktop valuations of multi-family houses for investors' acquisition teams in Germany: €2,000, "
+         "48 h.", "100", "signed valuations"),
         ("Year 2 · 2028", "Repeatability",
-         "Same firms, second budget: quarterly fund and portfolio revaluations; all major German cities.",
-         P[Y[1]]["valuations"]),
+         "Every income property (offices, retail, logistics) and quarterly fund revaluations; Germany, Austria, "
+         "Switzerland.", "1,000", "signed valuations"),
         ("Year 3 · 2029", "Scale & compound",
-         "Banks: lending values with a site visit, signed by HypZert seniors; corrections train our own models.",
-         P[Y[2]]["valuations"]),
+         "Deeper into the deal: lending values with a site visit for banks and the full due-diligence pack; first "
+         "markets beyond DACH.", "5,000", "signed valuations"),
         ("Year 4 · 2030", "Network effect",
-         "Marketplace: owners list their buildings on Censio with a signed value and our buy-side clients bid; "
-         "every listing draws buyers, every buyer draws listings. Austria, Switzerland.",
-         P[Y[3]]["valuations"]),
+         "Marketplace across Europe: owners list with a signed value, investors bid, lenders pre-approve financing "
+         "on the same file; every listing draws buyers, every buyer draws listings.", "1,000", "fast funded bids"),
         ("Year 5 · 2031+", "Lead the category",
-         "#1 for signed valuations of German apartment buildings (≈14% of buy-side in 2031) and the place to buy "
-         "and sell them; then Europe. Valuation fees never tied to a closing.",
-         P[Y[4]]["valuations"]),
+         "The deal engine for real estate: value, finance and close any building within a week, in Europe, then "
+         "worldwide; our signed, traceable deal file becomes the standard.", "10,000", "fast funded bids"),
     ],
     # Course p. 27-29: one controllable metric with unit, quality bar, scope and cadence. One North Star at a
     # time: the marketplace metric replaces the valuation metric when the marketplace opens (playbook Year 4).
@@ -86,8 +83,8 @@ ONE_PAGER = {
                    ("Cadence", "weekly")]},
         {"phase": "Phase 2 · from Year 4 · marketplace",
          "statement": "Listings with a signed Censio value that receive a bid from a verified buyer with proof of "
-                      "funds within 30 days, across all listings on Censio, reviewed monthly.",
-         "parts": [("Unit", "signed listings"), ("Bar", "funded bid ≤ 30 days"), ("Scope", "all listings"),
+                      "funds within 7 days, across all listings on Censio, reviewed monthly.",
+         "parts": [("Unit", "signed listings"), ("Bar", "funded bid ≤ 7 days"), ("Scope", "all listings"),
                    ("Cadence", "monthly")]},
     ],
     "north_star_proxy": "One North Star at a time: Phase 2 replaces Phase 1 when the marketplace opens. Proxies: "
@@ -100,7 +97,7 @@ ONE_PAGER = {
         ("Workflow lock-in", "amplified by AI · Y2", "we keep each client's valuation file; revaluations take hours."),
         ("Data flywheel + regulation", "new with AI · Y3", "corrections, matched to sale prices, train our models; "
                                                             "banks need an independent valuer (CRR III)."),
-        ("Network of users", "pre-AI · Y4", "each listing draws buyers, each buyer draws listings."),
+        ("Network of users", "pre-AI · Y4", "owners, buyers and lenders on one file; each side draws the others."),
     ],
     "frontier_test": "If the next GPT, Claude or Gemini release ships our feature, do we still exist? Yes: it cuts "
                      "our preparation cost but cannot sign or carry liability, and rivals using it lack our "
@@ -146,9 +143,9 @@ def build() -> Path:
         f"""<li class="stage{' wedge' if i == 0 else ''}{' lead' if i == len(o['playbook']) - 1 else ''}">
               <div class="when">{esc(when)}</div>
               <div class="what"><b>{esc(theme)}.</b> {esc(text)}</div>
-              <div class="ns"><span>{n:,}</span>signed/yr (plan) · {n / o['playbook'][0][3]:.0f}×</div>
+              <div class="ns"><span>{target}</span>{esc(unit)}<br>North Star target</div>
             </li>"""
-        for i, (when, theme, text, n) in enumerate(o["playbook"]))
+        for i, (when, theme, text, target, unit) in enumerate(o["playbook"]))
     moats = "\n".join(
         f"""<li><b>{esc(name)}</b> <span class="tag">{esc(tag)}</span> {esc(text)}</li>"""
         for name, tag, text in o["moats"])

@@ -130,8 +130,7 @@ def build(layout_path: Path = OUT / "layout.json", out: Path = OUT / "Censio-One
     card(slide, pb["box"], name="Playbook card")
     label(slide, pb["label"], "Playbook · five years of focus", "brand")
     tb(slide, pb["title"], [[(O["playbook_title"], {"bold": True, "font": D.HEAD})]], 13.4, line_height=1.3)
-    first = O["playbook"][0][3]
-    for i, (st, (when, theme, text_, n)) in enumerate(zip(pb["stages"], O["playbook"])):
+    for i, (st, (when, theme, text_, target, unit)) in enumerate(zip(pb["stages"], O["playbook"])):
         wedge, lead = i == 0, i == len(O["playbook"]) - 1
         fill = "brand_weak" if wedge else ("ink" if lead else "card")
         line = "brand_accent" if wedge else (None if lead else "line")
@@ -144,8 +143,8 @@ def build(layout_path: Path = OUT / "layout.json", out: Path = OUT / "Censio-One
         ns = dict(st["ns"])
         ns["x"] -= 6
         small = {"color": "card" if lead else "ink2"}
-        tb(slide, ns, [[(f"{n:,}", {"bold": True, "font": D.HEAD, "size": 15 * PT, "color": ink})],
-                       [("signed/yr (plan)", small)], [(f"{n / first:.0f}×", small)]],
+        tb(slide, ns, [[(target, {"bold": True, "font": D.HEAD, "size": 15 * PT, "color": ink})],
+                       [(unit, small)], [("North Star target", small)]],
            9, line_height=1.15, grow=6, align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
 
     # North Star: one metric per phase
