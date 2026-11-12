@@ -30,7 +30,7 @@ SEGMENTS = {
 PRICE = 2_000                    # A list price per signed valuation (beachhead)
 SENIOR_COST = 150_000            # A fully loaded senior valuer per year
 REVIEW_HOURS = 1_000             # A review hours per senior per year
-AI_COST = 5                      # A per valuation (measured ~0.45 EUR, plus buffer)
+AI_COST = 5                      # A per valuation (est. ~0.45 EUR from token prices, plus buffer)
 DATA_COST = 40                   # A documents and data per valuation
 HOSTING_COST = 10                # A hosting, storage, e-signature per valuation
 SITE_VISIT_COST = {"Banks": 100}  # A travel per site visit; bank lending values need an inspection (BelWertV)
@@ -180,8 +180,8 @@ def proceeds(p: dict) -> dict:
     }
 
 
-def downside(p: dict) -> dict:
-    """-40% volume, -10% price, 3 senior hours on the beachhead segment."""
+def downside(p: dict, drop_expansion: bool = False) -> dict:
+    """-40% volume, -10% price, 3 senior hours on the beachhead segment; optionally without the DACH expansion."""
     cum, worst, rows = 0.0, 0.0, {}
     for i, year in enumerate(YEARS):
         n = p[year]["valuations"] * 0.6
@@ -189,7 +189,8 @@ def downside(p: dict) -> dict:
         hours = sum(v[0][i] * (3.0 if k.startswith("Investors") else v[2]) for k, v in SEGMENTS.items()) * 0.6
         seniors = max(1.5, hours / (REVIEW_HOURS * 0.85))
         cogs = seniors * SENIOR_COST + n * (AI_COST + DATA_COST + HOSTING_COST) + rev * (INSURANCE_RATE + PAYMENTS_RATE)
-        ebitda = rev - cogs - p[year]["opex"]
+        opex = p[year]["opex"] - (NON_STAFF["expansion"][i] * 1000 if drop_expansion else 0)
+        ebitda = rev - cogs - opex
         cum += ebitda
         worst = min(worst, cum)
         rows[year] = {"revenue": rev, "ebitda": ebitda}
@@ -198,9 +199,14 @@ def downside(p: dict) -> dict:
         running += rows[year]["ebitda"]
         cum_by_year[year] = running
     breakeven = next((y for y in YEARS if rows[y]["ebitda"] > 0), None)
-    return {"years": rows, "cum": cum_by_year, "ebitda_2031": rows[YEARS[-1]]["ebitda"], "cum_min": worst,
-            "breakeven_year": breakeven,
-            "extra_cash_needed": max(0.0, -worst - (ASK - CAPEX - p[YEARS[1]]["revenue"] * RECEIVABLE_DAYS / 365))}
+    usable = ASK - CAPEX - p[YEARS[1]]["revenue"] * RECEIVABLE_DAYS / 365
+    out_of_cash = next((y for y in YEARS if cum_by_year[y] < -usable), None)
+    result = {"years": rows, "cum": cum_by_year, "ebitda_2031": rows[YEARS[-1]]["ebitda"], "cum_min": worst,
+              "breakeven_year": breakeven, "usable_cash": usable, "out_of_cash_year": out_of_cash,
+              "extra_cash_needed": max(0.0, -worst - usable)}
+    if not drop_expansion:
+        result["without_expansion"] = downside(p, drop_expansion=True)
+    return result
 
 
 def team(p: dict) -> dict:

@@ -63,5 +63,8 @@ def test_downside_is_reported(n):
     d = n["downside"]
     assert d["cum_min"] < 0
     assert set(d["years"]) == {2027, 2028, 2029, 2030, 2031}
-    # Dropping the DACH expansion (2030-31) covers the downside's extra cash need.
-    assert d["extra_cash_needed"] <= 900_000 + 20_000
+    # The round runs out in 2029 in the downside, before the DACH expansion (2030-31) starts, so dropping the
+    # expansion halves the gap but does not close it: a seed round on 2028 data is needed.
+    assert d["out_of_cash_year"] == 2029
+    assert 0.85e6 <= d["extra_cash_needed"] <= 0.95e6
+    assert 0.4e6 <= d["without_expansion"]["extra_cash_needed"] <= 0.55e6

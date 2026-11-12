@@ -557,7 +557,7 @@ def s_financials(slide, s):
     u = C.U
     lines = [("Price", u["price"], "brand", False)]
     colours = {"Senior review (2 h)": "valuer", "AI": "ai_strong", "Data & documents": "doc"}
-    names = {"AI": "AI (est.)"}
+    names = {"AI": "AI (≈€0.45 + buffer)"}
     for name, value in u["cost_lines"].items():
         lines.append((names.get(name, name), value, colours.get(name, "faint"), True))
     y = TOP + 0.7
@@ -577,8 +577,8 @@ def s_financials(slide, s):
                                                       {"bold": True, "font": HEAD, "size": 18, "color": "brand"})]],
          size=13, anchor=MSO_ANCHOR.MIDDLE)
     text(slide, x + 0.35, y + 0.65, w - 0.7, 0.75,
-         f"At full senior use; company gross margin {C.FMT['company_gm']} in 2029–31. Bank valuations add a "
-         "site visit (6 h, €100 travel).", size=10.5, color="ink2", spacing=1.05)
+         f"At full senior use; company gross margin {C.FMT['company_gm']} in 2029–31. Bank valuations take 6 "
+         "senior hours incl. a site visit, plus €100 travel.", size=10.5, color="ink2", spacing=1.05)
 
 
 def cell_text(cell, value, bold=False, colour="ink", align=PP_ALIGN.LEFT):
@@ -618,7 +618,7 @@ def s_ask(slide, s):
     chart.has_legend = False
     chart.has_title = False
     plot = chart.plots[0]
-    colours = ["ai_strong", "valuer", "brand", "ink2"]
+    colours = ["brand_accent", "valuer", "ink2", "brand"]  # as on the team slide: platform mint, seniors violet
     for point, colour in zip(plot.series[0].points, colours):
         point.format.fill.solid()
         point.format.fill.fore_color.rgb = rgb(colour)
@@ -645,9 +645,8 @@ def s_ask(slide, s):
     y = TOP + 0.4
     for when, what in s["milestones"]:
         box(slide, x0, y, RIGHT - x0, 0.78, fill="card", line="line", radius=0.08)
-        text(slide, x0 + 0.25, y, RIGHT - x0 - 0.5, 0.78, [[(when + "  ", {"bold": True, "color": "brand"}),
-                                                             (what, {})]], size=12.5, anchor=MSO_ANCHOR.MIDDLE,
-             spacing=1.05)
+        text(slide, x0 + 0.25, y, RIGHT - x0 - 0.5, 0.78, [[(when, {"bold": True, "color": "brand"})], [(what, {})]],
+             size=12.5, anchor=MSO_ANCHOR.MIDDLE, spacing=1.05)
         y += 0.9
     box(slide, LEFT, 5.95, CW, 0.82, fill="brand", radius=0.12).name = "Closing"
     picture(slide, ASSETS / "censio-mark.png", LEFT + 0.3, 6.11, 0.5, 0.5)

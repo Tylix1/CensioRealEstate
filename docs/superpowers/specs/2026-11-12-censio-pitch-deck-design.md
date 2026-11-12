@@ -106,6 +106,7 @@ After the independent review (5 lenses, each finding checked by a second agent; 
 - AI cost labelled as an estimate from token prices (≈€0.45), in euros throughout.
 - Colour code kept: orange only for AI; human expert time in violet; the "Compute" step is green (fixed rules), not AI.
 - Script: 612 spoken words (numbers count as three) in 285 s, leaving 15 s for clicks and hand-overs; outline eyebrows on every slide.
+- Final check (fresh reviewer): 24 of 26 blocker/major findings resolved, 2 partly; fixed afterwards: the downside runs out of cash in 2029 and needs €0.9m more (€0.5m without DACH), so the plan raises a seed on 2028 data; the €390m already includes commercial sales and lender valuations; ≈330 per senior is per average senior (14.5) in 2031.
 
 ---
 
