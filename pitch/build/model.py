@@ -24,7 +24,7 @@ BUY_SIDE_SHARE = 0.5             # A share of MFH purchases with a buy-side valu
 SEGMENTS = {
     "Investors (multi-family)": ([100, 450, 1000, 1700, 2400], [1800, 2000, 2000, 2000, 2000], 2.0),
     "Portfolio & fund revaluations": ([0, 100, 300, 700, 1200], [1100] * 5, 1.0),
-    "Banks": ([0, 0, 150, 400, 800], [2200] * 5, 3.0),
+    "Banks": ([0, 0, 150, 400, 800], [2200] * 5, 6.0),  # 3 h review + 3 h site visit incl. travel (lending values)
     "Commercial & DACH": ([0, 0, 0, 150, 400], [3200] * 5, 3.5),
 }
 PRICE = 2_000                    # A list price per signed valuation (beachhead)
@@ -33,14 +33,15 @@ REVIEW_HOURS = 1_000             # A review hours per senior per year
 AI_COST = 5                      # A per valuation (measured ~0.45 EUR, plus buffer)
 DATA_COST = 40                   # A documents and data per valuation
 HOSTING_COST = 10                # A hosting, storage, e-signature per valuation
+SITE_VISIT_COST = {"Banks": 100}  # A travel per site visit; bank lending values need an inspection (BelWertV)
 INSURANCE_RATE = 0.025           # A professional indemnity insurance, share of price
 PAYMENTS_RATE = 0.01             # A payments and other, share of price
 
 # ---- Team: year-end and average heads, cost per head ---------------------
 FOUNDERS = 4                                     # CEO, AI, business development, sales
 FOUNDER_COST = [60_000, 80_000, 110_000, 130_000, 150_000]
-SENIORS_YE = [2, 3, 5, 9, 14]
-SENIORS_AVG = [1.5, 2.5, 4.0, 7.0, 11.5]
+SENIORS_YE = [2, 3, 5, 10, 17]
+SENIORS_AVG = [1.5, 2.5, 4.0, 8.5, 14.5]
 PLATFORM_YE = [1, 2, 2, 3, 4]
 PLATFORM_AVG = [1.0, 1.5, 2.0, 2.5, 3.5]
 PLATFORM_COST = 120_000
@@ -110,7 +111,8 @@ def plan() -> dict:
         rev = sum(seg_rev.values())
         hours = sum(v[0][i] * v[2] for v in SEGMENTS.values())
         senior_cost = SENIORS_AVG[i] * SENIOR_COST
-        variable = n * (AI_COST + DATA_COST + HOSTING_COST) + rev * (INSURANCE_RATE + PAYMENTS_RATE)
+        variable = (n * (AI_COST + DATA_COST + HOSTING_COST) + rev * (INSURANCE_RATE + PAYMENTS_RATE)
+                    + sum(SEGMENTS[k][0][i] * c for k, c in SITE_VISIT_COST.items()))
         gross_profit = rev - senior_cost - variable
         staff = (FOUNDERS * FOUNDER_COST[i] + PLATFORM_AVG[i] * PLATFORM_COST
                  + SALES_AVG[i] * SALES_COST + OPS_AVG[i] * OPS_COST)
@@ -191,7 +193,14 @@ def downside(p: dict) -> dict:
         cum += ebitda
         worst = min(worst, cum)
         rows[year] = {"revenue": rev, "ebitda": ebitda}
-    return {"years": rows, "ebitda_2031": rows[YEARS[-1]]["ebitda"], "cum_min": worst}
+    cum_by_year, running = {}, 0.0
+    for year in YEARS:
+        running += rows[year]["ebitda"]
+        cum_by_year[year] = running
+    breakeven = next((y for y in YEARS if rows[y]["ebitda"] > 0), None)
+    return {"years": rows, "cum": cum_by_year, "ebitda_2031": rows[YEARS[-1]]["ebitda"], "cum_min": worst,
+            "breakeven_year": breakeven,
+            "extra_cash_needed": max(0.0, -worst - (ASK - CAPEX - p[YEARS[1]]["revenue"] * RECEIVABLE_DAYS / 365))}
 
 
 def team(p: dict) -> dict:

@@ -19,6 +19,11 @@ def test_market(n):
     assert m["som_share_of_sam"] == pytest.approx(0.138, abs=0.002)
 
 
+def test_bank_valuations_include_a_site_visit():
+    from model import SEGMENTS, SITE_VISIT_COST
+    assert SEGMENTS["Banks"][2] == 6.0 and SITE_VISIT_COST["Banks"] > 0
+
+
 def test_unit_economics(n):
     u = n["unit"]
     assert u["price"] == 2000
@@ -32,8 +37,9 @@ def test_plan(n):
     assert p["2031"]["revenue"] == pytest.approx(9.16e6)
     assert p["2028"]["ebitda"] < 0 < p["2029"]["ebitda"]
     assert n["breakeven_year"] == 2029
-    assert [p[y]["headcount_ye"] for y in p] == [7, 9, 13, 19, 25]
-    assert p["2031"]["ebitda_margin"] == pytest.approx(0.40, abs=0.01)
+    assert [p[y]["headcount_ye"] for y in p] == [7, 9, 13, 20, 28]
+    assert p["2031"]["ebitda_margin"] == pytest.approx(0.34, abs=0.01)
+    assert all(p[y]["senior_utilisation"] <= 0.85 for y in p)
 
 
 def test_proceeds(n):
@@ -47,13 +53,15 @@ def test_proceeds(n):
 
 def test_team(n):
     t = n["team"]
-    assert t["valuations_per_senior_2031"] == pytest.approx(417, abs=1)
+    assert t["valuations_per_senior_2031"] == pytest.approx(331, abs=1)
     assert 95 <= t["classic_valuers_low"] <= 97
     assert 167 <= t["classic_valuers_high"] <= 169
-    assert t["people_2031"] == 25
+    assert t["people_2031"] == 28
 
 
 def test_downside_is_reported(n):
     d = n["downside"]
     assert d["cum_min"] < 0
     assert set(d["years"]) == {2027, 2028, 2029, 2030, 2031}
+    # Dropping the DACH expansion (2030-31) covers the downside's extra cash need.
+    assert d["extra_cash_needed"] <= 900_000 + 20_000

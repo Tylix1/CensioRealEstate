@@ -95,6 +95,18 @@ Each slide's notes hold the spoken text (~650 words for 4:30 of talking), with t
 - Headlines shortened to fit one line: "A €390m market, starting with apartment buildings", "North star: signed valuations within 48 hours", "Land with investors, then add funds and banks", "Break-even in 2029, 40% EBITDA margin by 2031", "€1.5m pre-seed to reach €1.0m revenue in 2028".
 - `pitch/build/model.py` and `numbers.json` replace appendix B's plan table as the single source of the numbers.
 
+After the independent review (5 lenses, each finding checked by a second agent; 55 findings, 1 blocker):
+
+- **Scope stated:** Censio sells a signed *desktop* valuation (no site visit; on request). Comparisons now say "full report" where they mean one. Bank valuations include a site visit in the model (6 senior hours, €100 travel), which raises seniors to 17 and headcount to 28 in 2031; EBITDA 2031 is now €3.1m (34%), and one senior signs ≈330 valuations a year.
+- Demo slide retitled ("Upload, check, sign: the prototype in 30 seconds"), labelled as demo mode, sped up 1.2×, with video cues in the notes; the poster shows the revision, not the cover screen.
+- Market: SOM labelled as investor revenue; the plan bridge (€9.2m = €4.8m investors + €4.4m other segments) replaces the loan-volume box; "circles not to scale".
+- Competition: axis "Complete & signed" vs "Indicative"; short reports signed but indicative; on-geo shown as LORA value indication; "Why we can win" replaces "Proof it can scale"; Bowery cited as its $35m Series B; Censio discloses every AI step.
+- Team: the 2031 team as one bar (17 seniors, 4 platform & AI, 3 sales & ops, 4 founders), classic vs Censio throughput under the right pyramid, first hire named (a HypZert/öbuv senior).
+- Use of proceeds shown as the split of 2027–28 spending (€2.1m), funded by the round and revenue, with the €0.5m reserve stated.
+- AI cost labelled as an estimate from token prices (≈€0.45), in euros throughout.
+- Colour code kept: orange only for AI; human expert time in violet; the "Compute" step is green (fixed rules), not AI.
+- Script: 612 spoken words (numbers count as three) in 285 s, leaving 15 s for clicks and hand-overs; outline eyebrows on every slide.
+
 ---
 
 ## Appendix A — Sourced numbers
@@ -120,36 +132,43 @@ Each slide's notes hold the spoken text (~650 words for 4:30 of talking), with t
 | Open-ended property funds | Two external valuers per property; values set every 3 months | [§ 250 KAGB](https://www.gesetze-im-internet.de/kagb/__250.html) |
 | Bank valuation volume | on-geo: 1.6m valuation reports and 250,000 inspections a year; ~98% of Sparkassen use LORA | [bulwiengesa/on-geo press release](https://live.bulwiengesa.de/sites/default/files/2025-04/pm_bulwiengesa_ongeo_2025_final_neu.pdf), [on-geo LORA](https://www.on-geo.de/en/solutions/lora/lora-value-indication) |
 | PriceHubble (AVM) | $34m Series B (2021) | [tech.eu](https://tech.eu/2021/07/19/swiss-proptech-pricehubble-raises-34-million/) |
-| Bowery Valuation (US) | Tech-enabled appraisal firm; >$80m raised; $35m Series B led by Goldman Sachs (2021) | [BusinessWire](https://www.businesswire.com/news/home/20210628005506/en/Bowery-Valuation-Announces-35-Million-Series-B-Funding-Fueling-Rapid-National-Expansion) |
+| Bowery Valuation (US) | Tech-enabled appraisal firm whose appraisers sign; $35m Series B led by Goldman Sachs (2021); ≈$70–80m total per trackers | [BusinessWire](https://www.businesswire.com/news/home/20210628005506/en/Bowery-Valuation-Announces-35-Million-Series-B-Funding-Fueling-Rapid-National-Expansion) |
 | CBRE / JLL 2025 | $40.6bn revenue, >155,000 staff / $26.1bn, >113,000 staff | [CBRE FY2025](https://www.businesswire.com/news/home/20260212253465/en/cbre-group-inc.-reports-financial-results-for-q4-and-full-year-2025/), [JLL 10-K 2025](https://s202.q4cdn.com/536608393/files/doc_financials/2025/q4/JLL-10K-2025.pdf) |
 | Young workers and AI | −13% relative employment for 22–25-year-olds in the most AI-exposed jobs | [Stanford Digital Economy Lab, "Canaries in the Coal Mine" (2025)](https://siepr.stanford.edu/publications/working-paper/canaries-coal-mine-six-facts-about-recent-employment-effects-artificial) |
+| Inheritance and gift tax | €51.6bn of real estate in taxed inheritances and gifts (2025) | [Destatis PD26_306_736](https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/08/PD26_306_736.html) |
 | Service-as-software | $4.6T opportunity (VC thesis) | [Foundation Capital](https://foundationcapital.com/ai-service-as-software/) |
-| AI cost per valuation | ~US$0.50 per complete AI run (prototype measurement) | `README.md`; [Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
+| AI cost per valuation | ~US$0.50 (≈€0.45) per complete AI run, estimated from token prices | `README.md`; [Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
 
 ## Appendix B — Assumptions (labelled on the slides as estimates)
 
+The single source of these numbers is `pitch/build/model.py`; it writes `pitch/build/numbers.json`, which the slides read.
+
 | Assumption | Value | Why |
 |---|---|---|
+| Product scope | Signed **desktop** valuation (documents and public data, no site visit); site visit on request | What the prototype produces ("Desktop valuation, no internal inspection") |
 | Valuations per income-property sale | 1.5 (range 1–2) | Buyer and/or lender. No official count of valuations exists. |
 | Average market fee per valuation | €3,500 | Between the BVS minimum (€2,750) and the €1m row (€4,360); average MFH deal ~€0.9m |
 | Share of MFH purchases with a buy-side valuation | 50% (30–70%) | Not every buyer commissions one |
-| Censio price | €2,000 (2027: €1,800 launch price) | Less than half of the BVS fee at €1m |
-| Senior review time | 2 hours per valuation; 1,000 review hours per senior per year | Prototype flow: the AI prepares, the senior checks flagged calls |
+| Segments: valuations a year 2027–31, price, senior hours | Investors 100·450·1,000·1,700·2,400 at €1,800 (2027) / €2,000, 2 h · Funds 0·100·300·700·1,200 at €1,100, 1 h · Banks 0·0·150·400·800 at €2,200, 6 h (3 h review + 3 h site visit incl. travel, €100 travel cost) · Commercial & DACH 0·0·0·150·400 at €3,200, 3.5 h | Investors first; bank lending values need an inspection (BelWertV § 5) |
+| Senior review capacity | 1,000 review hours per senior a year; utilisation kept ≤ 85% | |
 | Fully loaded senior valuer | €150k per year | Senior HypZert/öbuv level |
-| Variable cost per valuation | AI €5 (measured ~€0.45, plus buffer), data €40, hosting €10, PI insurance 2.5%, payments 1% | |
-| Volumes 2027–2031 | 100 · 550 · 1,450 · 2,950 · 4,800 valuations | Segment ramp: investors first, then funds (2028), banks (2029), commercial + DACH (2030) |
-| Headcount (year end) | 7 · 10 · 15 · 20 · 29 | 3 founders + seniors + tech + sales/ops |
-| Pre-seed | €1.5m | Covers net burn 2027–28 (~€1.0m), working capital and a ~€0.4m buffer |
+| Variable cost per valuation | AI €5 (est. ≈€0.45 from token prices, plus buffer), data €40, hosting €10, PI insurance 2.5%, payments 1% | |
+| Team (year end) | 4 founders + seniors 2·3·5·10·17 + platform 1·2·2·3·4 + sales 0·0·1·2·2 + ops 0·0·1·1·1 = 7·9·13·20·28 | Founders are the overhead; no juniors |
+| Customers | 10 (2027), 25 (2028) | ≈20 valuations per customer a year, counted per bid |
+| Classic comparison | 20–35 h per full report, 1,000 report hours a year → 30–50 reports per valuer | 35 h = BVS fee at €1m ÷ €125/h court rate (billable hours incl. site visit) |
+| Pre-seed | €1.5m | Net burn 2027–28 €0.89m, working capital €0.08m, equipment €0.04m, reserve €0.49m |
 
-### Plan output (from the model in appendix B)
+### Plan output (numbers.json)
 
 | | 2027 | 2028 | 2029 | 2030 | 2031 |
 |---|---|---|---|---|---|
 | Signed valuations | 100 | 550 | 1,450 | 2,950 | 4,800 |
 | Revenue | €0.18m | €1.01m | €2.66m | €5.53m | €9.16m |
-| Gross margin | −32% | 56% | 71% | 75% | 75% |
-| EBITDA | −€0.62m | −€0.38m | +€0.32m | +€1.65m | +€3.38m |
-| Headcount (year end) | 7 | 10 | 15 | 20 | 29 |
-| Senior valuers (year end) | 2 | 3 | 5 | 9 | 14 |
+| Gross margin | -32% | 56% | 70% | 70% | 69% |
+| EBITDA | −€0.62m | −€0.27m | +€0.50m | +€1.56m | +€3.12m |
+| Headcount (year end) | 7 | 9 | 13 | 20 | 28 |
+| Senior valuers (year end) | 2 | 3 | 5 | 10 | 17 |
 
-Downside case (−40% volume, −10% price, 3 senior hours): still loss-making in 2031 (−€0.1m), cumulative −€2.6m. This is why the 90-day test of review time matters most.
+Downside case (−40% volume, −10% price, 3 senior hours on the beachhead, costs held at plan): EBITDA 2031 −€0.13m, cumulative low −€2.29m; the round falls €0.9m short, which dropping the DACH expansion (€0.9m in 2030–31) covers. This is why the 90-day test of review time matters most.
+
+Use of proceeds: shares of the 2027–28 gross spend (€2.08m), funded by the €1.5m round and €1.19m of revenue; founders are counted where their role works (CEO: Run; AI: Build; business development and sales: Sell).

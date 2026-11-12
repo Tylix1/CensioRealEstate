@@ -26,8 +26,8 @@ def main(out_dir: Path) -> None:
          str(mp4)],
         check=True,
     )
-    # Poster: the senior valuer's review, the frame the audience sees before the video starts.
-    poster_at = (marks["review"] - start) * factor + 0.5
+    # Poster: the revision after the senior's note (differs from the cover's review screen).
+    poster_at = (marks["accept"] - start) * factor - 0.3
     subprocess.run(
         ["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{poster_at:.2f}", "-i", str(mp4), "-frames:v", "1",
          str(out_dir / "demo-poster.png")],

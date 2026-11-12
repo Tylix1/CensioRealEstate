@@ -17,7 +17,7 @@ Dieser Ordner enthält alles, um das Pitch-Deck für Censio neu zu bauen: die Za
 1. **Schriften installieren** (einmal, 2 Minuten): [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) und [Inter](https://fonts.google.com/specimen/Inter), jeweils „Get font“ → „Download all“ → installieren. Ohne die Schriften ersetzt PowerPoint sie, dann verrutschen Zeilen. Das PDF sieht immer richtig aus.
 2. **Folie 5** spielt das Video automatisch ab. Falls nicht: in PowerPoint auf das Video klicken, „Wiedergabe“ → „Start: Automatisch“.
 3. **Google Slides:** PPTX hochladen. Die Schriften sind dort schon vorhanden. Das Video muss man neu einfügen (aus Drive, `censio-demo-30s.mp4`).
-4. **Zeit:** Der Sprechtext hat rund 650 Wörter für 4:30, plus 0:30 Video. Die Sekunden pro Folie stehen in `build/content.py` (`seconds`).
+4. **Zeit:** Die Folien sind auf 4:45 geplant (davon 0:30 Video), es bleiben 15 Sekunden Puffer für Klicks und Übergaben. Der Sprechtext hat rund 610 gesprochene Wörter, wobei jede Zahl als drei Wörter zählt. Die Sekunden pro Folie stehen in `build/content.py` (`seconds`). Auf Folie 5 stehen in den Notizen Zeitmarken, damit ihr synchron zum Video sprecht.
 5. **Fragen:** Unter jedem Sprechtext stehen „If asked“-Antworten und die Quellen.
 
 ## Ändern

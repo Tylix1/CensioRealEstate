@@ -147,20 +147,23 @@ def background(slide, colour):
 
 
 def frame(slide, n, s, dark=False):
-    """The template grid: background, mark + title, sub headline, page number square, source line."""
+    """The template grid: background, eyebrow + mark + title, sub headline, page number square, source line."""
     background(slide, "ink" if dark else "page")
     picture(slide, ASSETS / "censio-mark.png", 0.40, 0.66, 0.42, 0.42, name="Censio mark")
+    if s.get("eyebrow"):
+        text(slide, LEFT, 0.3, CW, 0.25, [[(s["eyebrow"].upper(), {"bold": True})]], size=10,
+             color="brand_accent" if dark else "brand", name="Eyebrow")
     text(slide, LEFT, 0.6, CW, 0.55, s["title"], size=30, font=HEAD, bold=True,
          color="card" if dark else "ink", anchor=MSO_ANCHOR.MIDDLE, name="Title")
     text(slide, LEFT, 1.28, 11.2, 0.62, s["sub"], size=15, color="faint" if dark else "ink2", spacing=1.1,
          name="Sub headline")
-    sq = box(slide, 0, 6.92, 0.58, 0.58, fill="card", radius=0, shape=MSO_SHAPE.RECTANGLE)
+    sq = box(slide, 0, 6.92, 0.58, 0.58, fill="ink" if dark else "card", radius=0, shape=MSO_SHAPE.RECTANGLE)
     sq.name = "Page number"
-    text(slide, 0, 6.92, 0.58, 0.58, str(n), size=10, color="ink2", align=PP_ALIGN.CENTER,
+    text(slide, 0, 6.92, 0.58, 0.58, str(n), size=10, color="faint" if dark else "ink2", align=PP_ALIGN.CENTER,
          anchor=MSO_ANCHOR.MIDDLE, name="Page number text")
     line = C.source_line(s)
     if line:
-        text(slide, LEFT, 7.02, CW, 0.3, line, size=9, color="faint" if not dark else "muted", name="Sources")
+        text(slide, LEFT, 7.02, CW, 0.3, line, size=9, color="muted", name="Sources")
 
 
 def label(slide, x, y, w, words, color="brand", size=11):
@@ -220,37 +223,40 @@ def s_vision(slide, s):
 def s_problem(slide, s):
     gap = 0.35
     cw = (CW - 2 * gap) / 3
-    tags = ["Time", "Cost", "People"]
-    for i, ((big, small), tag) in enumerate(zip(s["stats"], tags)):
+    for i, (tag, big, small) in enumerate(s["stats"]):
         x = LEFT + i * (cw + gap)
         box(slide, x, TOP + 0.15, cw, 2.85, fill="card", line="line", radius=0.1).name = f"Stat card {i + 1}"
-        label(slide, x + 0.35, TOP + 0.45, cw - 0.7, tag, color="ai" if i < 2 else "valuer")
+        label(slide, x + 0.35, TOP + 0.45, cw - 0.7, tag, color="valuer" if tag == "People" else "ink2")
         text(slide, x + 0.35, TOP + 0.8, cw - 0.7, 0.8, big, size=34, font=HEAD, bold=True)
         text(slide, x + 0.35, TOP + 1.75, cw - 0.7, 1.1, small, size=14, color="ink2", spacing=1.1)
     y = 5.55
-    box(slide, LEFT, y, CW, 0.75, fill="ai_weak", radius=0.1).name = "Hours band"
-    text(slide, LEFT + 0.35, y, CW - 0.7, 0.75, s["footnote"], size=15, color="ai", anchor=MSO_ANCHOR.MIDDLE)
+    box(slide, LEFT, y, CW, 0.75, fill="valuer_weak", radius=0.1).name = "Hours band"
+    text(slide, LEFT + 0.35, y, CW - 0.7, 0.75, s["footnote"], size=15, color="valuer", anchor=MSO_ANCHOR.MIDDLE)
 
 
 def s_solution(slide, s):
     y = TOP + 0.05
+    chips = {"ai": ("ai_weak", "ai"), "rules": ("brand_weak", "brand"), "valuer": ("valuer_weak", "valuer")}
     for kind, verb, what in s["steps"]:
-        weak, strong = ("ai_weak", "ai") if kind == "ai" else ("valuer_weak", "valuer")
+        weak, strong = chips[kind]
         chip = box(slide, LEFT, y, 1.35, 0.52, fill=weak, radius=0.26)
         chip.name = f"Step {verb}"
         text(slide, LEFT, y, 1.35, 0.52, [[(verb, {"bold": True})]], size=14, color=strong, align=PP_ALIGN.CENTER,
              anchor=MSO_ANCHOR.MIDDLE)
-        text(slide, LEFT + 1.55, y, 4.6, 0.52, what, size=13, color="ink", anchor=MSO_ANCHOR.MIDDLE, spacing=1.05)
+        text(slide, LEFT + 1.55, y, 4.75, 0.52, what, size=13, color="ink", anchor=MSO_ANCHOR.MIDDLE, spacing=1.05)
         y += 0.66
-    # The senior's moment in the product: an AI judgement call, its evidence, and Revalue.
-    px, pw = 7.25, RIGHT - 7.25
-    ph = pw * 1000 / 2248
+    text(slide, LEFT, y + 0.02, 6.3, 0.3, [[("AI", {"bold": True, "color": "ai"}), ("  reads, researches, flags · ", {}),
+                                          ("Rules", {"bold": True, "color": "brand"}), ("  compute · ", {}),
+                                          ("Senior", {"bold": True, "color": "valuer"}), ("  decides and signs", {})]],
+         size=11.5, color="ink2", name="Who does what")
+    # The senior's moment in the product: an AI judgement call and Revalue, large enough to read.
+    pw = 4.6
+    px = RIGHT - pw
+    ph = pw * 780 / 1232
     box(slide, px - 0.06, TOP - 0.01, pw + 0.12, ph + 0.12, fill="card", line="line", radius=0.08)
-    picture(slide, ASSETS / "flag-evidence.png", px, TOP + 0.05, pw, ph, crop=(584, 650, 2832, 1650),
-            name="Prototype: Needs your eye")
-    text(slide, px, TOP + ph + 0.2, pw, 0.3, "In the prototype: an AI judgement call, its evidence, and Revalue",
-         size=11, color="ink2")
-    # Proof row
+    picture(slide, ASSETS / "flag-evidence.png", px, TOP + 0.05, pw, ph, crop=(584, 860, 1816, 1640),
+            name="Prototype: AI judgement call and Revalue")
+    text(slide, px, TOP + ph + 0.2, pw, 0.5, s["caption"], size=11, color="ink2", spacing=1.05)
     y = 5.85
     gap = 0.35
     cw = (CW - 2 * gap) / 3
@@ -263,17 +269,18 @@ def s_solution(slide, s):
 
 
 def s_demo(slide, s):
-    w = 7.9
+    w = 7.6
     im = Image.open(OUT / "laptop.png")
     h = w * im.height / im.width
-    x, y = (W - w) / 2, 2.05
-    laptop_png()
+    x, y = (W - w) / 2, 2.0
     picture(slide, laptop_png(), x, y, w, h, name="Laptop mockup")
     sx, sy, sw, sh = (x + LAPTOP_SCREEN[0] * w, y + LAPTOP_SCREEN[1] * h, LAPTOP_SCREEN[2] * w, LAPTOP_SCREEN[3] * h)
     movie = slide.shapes.add_movie(str(OUT / "censio-demo-30s.mp4"), Inches(sx), Inches(sy), Inches(sw), Inches(sh),
                                    poster_frame_image=str(OUT / "demo-poster.png"), mime_type="video/mp4")
     movie.name = "Demo video (30 s)"
     autoplay(slide, movie)
+    text(slide, x, y + h + 0.08, w, 0.3, "▶  Demo video, 30 s · starts by itself", size=11, color="faint",
+         align=PP_ALIGN.CENTER, name="Video caption")
 
 
 def autoplay(slide, movie):
@@ -304,8 +311,8 @@ def autoplay(slide, movie):
 
 
 def s_market(slide, s):
-    base_y, cx = 6.55, LEFT + 2.15
-    sizes = [4.3, 2.75, 1.3]
+    base_y, cx = 6.3, LEFT + 2.15
+    sizes = [4.1, 2.6, 1.25]
     fills = ["brand_weak", "brand_accent", "brand"]
     for (tag, value, when, _), d, fill in zip(s["rings"], sizes, fills):
         ring = dot(slide, cx - d / 2, base_y - d, d, fill)
@@ -313,12 +320,11 @@ def s_market(slide, s):
         if fill == "brand_weak":
             ring.line.color.rgb = rgb("brand_accent")
             ring.line.width = Pt(1)
-    labels = [(base_y - sizes[0] + 0.3, "ink"), (base_y - sizes[1] + 0.3, "ink"), (base_y - sizes[2] + 0.28, "card")]
-    for (tag, value, when, _), (ly, colour) in zip(s["rings"], labels):
-        text(slide, cx - 1.1, ly, 2.2, 0.3, [[(tag, {"bold": True, "size": 11})]], color=colour,
+    tops = [base_y - sizes[0] + 0.45, base_y - sizes[1] + 0.45, base_y - sizes[2] / 2 - 0.2]
+    for (tag, value, when, _), ly, colour in zip(s["rings"], tops, ["ink", "ink", "card"]):
+        text(slide, cx - 1.0, ly, 2.0, 0.4, [[(tag, {"bold": True, "font": HEAD})]], size=18, color=colour,
              align=PP_ALIGN.CENTER)
-        text(slide, cx - 1.1, ly + 0.25, 2.2, 0.45, [[(value, {"bold": True, "font": HEAD})]], size=22,
-             color=colour, align=PP_ALIGN.CENTER)
+    text(slide, LEFT, base_y + 0.08, 4.3, 0.25, "Circles not to scale", size=9, color="muted", align=PP_ALIGN.CENTER)
     x = 6.0
     y = TOP + 0.1
     for (tag, value, when, desc), fill in zip(s["rings"], fills):
@@ -336,52 +342,55 @@ def s_market(slide, s):
 
 
 def s_competition(slide, s):
-    mx, my, mw, mh = LEFT + 0.35, TOP + 0.1, 6.0, 4.15
+    mx, my, mw, mh = LEFT + 0.45, TOP + 0.1, 5.95, 4.15
     box(slide, mx + mw / 2, my, mw / 2, mh / 2, fill="brand_weak", radius=0, shape=MSO_SHAPE.RECTANGLE).name = "Target"
     box(slide, mx, my, mw, mh, fill=None, line="line_strong", radius=0, shape=MSO_SHAPE.RECTANGLE)
     ln = slide.shapes.add_connector(1, Inches(mx + mw / 2), Inches(my), Inches(mx + mw / 2), Inches(my + mh))
     ln.line.color.rgb = rgb("line")
     ln2 = slide.shapes.add_connector(1, Inches(mx), Inches(my + mh / 2), Inches(mx + mw), Inches(my + mh / 2))
     ln2.line.color.rgb = rgb("line")
-    text(slide, LEFT - 0.6, my + 0.05, 0.85, 0.3, "Signed", size=11, color="ink2", bold=True, align=PP_ALIGN.RIGHT)
-    text(slide, LEFT - 0.6, my + mh - 0.35, 0.85, 0.3, "Unsigned", size=11, color="ink2", bold=True,
+    top, bottom = s["axis"]
+    text(slide, 0.2, my + 0.05, mx - 0.3, 0.5, [[(top, {"bold": True})]], size=10.5, color="ink2",
+         align=PP_ALIGN.RIGHT, spacing=1.0)
+    text(slide, 0.2, my + mh - 0.3, mx - 0.3, 0.3, [[(bottom, {"bold": True})]], size=10.5, color="ink2",
          align=PP_ALIGN.RIGHT)
     text(slide, mx, my + mh + 0.08, 1.5, 0.3, "Weeks", size=11, color="ink2", bold=True)
     text(slide, mx + mw - 1.5, my + mh + 0.08, 1.5, 0.3, "Hours", size=11, color="ink2", bold=True,
          align=PP_ALIGN.RIGHT)
-    text(slide, mx + mw / 2 - 1.5, my + mh + 0.08, 3, 0.3, "time to value", size=11, color="faint",
+    text(slide, mx + mw / 2 - 1.5, my + mh + 0.08, 3, 0.3, "time to value", size=11, color="muted",
          align=PP_ALIGN.CENTER)
 
     def player(key, x, y, w, fill="card", line="line", colour="ink", sub="ink2"):
         name, who, facts = s["players"][key]
-        box(slide, x, y, w, 1.3, fill=fill, line=line, radius=0.1).name = f"Player {key}"
-        text(slide, x + 0.2, y + 0.12, w - 0.4, 1.1, [
+        box(slide, x, y, w, 1.45, fill=fill, line=line, radius=0.1).name = f"Player {key}"
+        text(slide, x + 0.2, y + 0.12, w - 0.4, 1.25, [
             [(name, {"bold": True, "size": 13, "color": colour})],
             [(who, {"size": 10.5, "color": sub})],
             [(facts, {"size": 10.5, "color": sub, "bold": True})],
         ], spacing=1.05)
 
-    player("classic", mx + 0.2, my + 0.25, 2.65)
-    player("censio", mx + mw / 2 + 0.25, my + 0.25, 2.55, fill="brand", line=None, colour="card", sub="brand_weak")
-    player("short", mx + 0.2, my + mh / 2 + 0.2, 2.65)
-    player("avm", mx + mw / 2 + 0.25, my + mh / 2 + 0.55, 2.55)
-    x = 8.0
+    cw = mw / 2 - 0.4
+    player("classic", mx + 0.2, my + 0.25, cw)
+    player("censio", mx + mw / 2 + 0.2, my + 0.25, cw, fill="brand", line=None, colour="card", sub="brand_weak")
+    player("short", mx + 0.2, my + mh / 2 + 0.25, cw)
+    player("avm", mx + mw / 2 + 0.2, my + mh / 2 + 0.25, cw)
+    x = 7.95
     y = TOP + 0.1
     for kind, head, body in s["why"]:
         colour = "valuer" if kind == "valuer" else "brand"
         fill = "valuer_weak" if kind == "valuer" else "brand_weak"
-        box(slide, x, y, RIGHT - x, 2.0, fill=fill, radius=0.1)
-        text(slide, x + 0.3, y + 0.25, RIGHT - x - 0.6, 0.35, [[(head, {"bold": True})]], size=15, color=colour)
-        text(slide, x + 0.3, y + 0.7, RIGHT - x - 0.6, 1.25, body, size=12.5, color="ink", spacing=1.08)
+        box(slide, x, y, RIGHT - x, 2.05, fill=fill, radius=0.1)
+        text(slide, x + 0.3, y + 0.22, RIGHT - x - 0.6, 0.35, [[(head, {"bold": True})]], size=15, color=colour)
+        text(slide, x + 0.3, y + 0.62, RIGHT - x - 0.6, 1.4, body, size=12, color="ink", spacing=1.06)
         y += 2.2
 
 
 def s_traction(slide, s):
     box(slide, LEFT, TOP + 0.05, 5.1, 2.05, fill="brand", radius=0.12).name = "North star"
     label(slide, LEFT + 0.4, TOP + 0.35, 3, "North star", color="brand_accent")
-    text(slide, LEFT + 0.4, TOP + 0.7, 4.4, 1.0, "Signed valuations delivered within 48 hours", size=22, font=HEAD,
+    text(slide, LEFT + 0.4, TOP + 0.7, 4.4, 0.88, "Signed valuations delivered within 48 hours", size=22, font=HEAD,
          bold=True, color="card", spacing=1.05)
-    text(slide, LEFT + 0.4, TOP + 1.62, 4.4, 0.3, "counted every week", size=12, color="brand_accent")
+    text(slide, LEFT + 0.4, TOP + 1.62, 4.6, 0.3, s["star_note"], size=12, color="brand_accent")
     y = TOP + 2.35
     label(slide, LEFT, y, 4, "Input metrics", color="ink2", size=10)
     y += 0.35
@@ -400,7 +409,7 @@ def s_traction(slide, s):
         text(slide, x0 + 0.55, y, RIGHT - x0 - 0.55, 0.3, [[(when.upper(), {"bold": True})]], size=11,
              color="brand" if i == 0 else "ink2")
         text(slide, x0 + 0.55, y + 0.3, RIGHT - x0 - 0.55, 0.4, [[(head, {"bold": True, "font": HEAD})]], size=19)
-        text(slide, x0 + 0.55, y + 0.75, RIGHT - x0 - 0.55, 0.75, body, size=13, color="ink2", spacing=1.08)
+        text(slide, x0 + 0.55, y + 0.75, RIGHT - x0 - 0.55, 0.6, body, size=13, color="ink2", spacing=1.08)
         y += 1.4
 
 
@@ -455,48 +464,67 @@ def s_team(slide, s):
         y = TOP + 0.5
         for (words, _), w, fill, colour in zip(tiers, widths, fills, text_colours):
             bx = x + (2.95 - w) / 2
-            box(slide, bx, y, w, 0.58, fill=fill, radius=0.08).name = f"{title}: {words}"
-            text(slide, bx, y, w, 0.58, [[(words, {"bold": True})]], size=11.5, color=colour, align=PP_ALIGN.CENTER,
+            box(slide, bx, y, w, 0.55, fill=fill, radius=0.08).name = f"{title}: {words}"
+            text(slide, bx, y, w, 0.55, [[(words, {"bold": True})]], size=11.5, color=colour, align=PP_ALIGN.CENTER,
                  anchor=MSO_ANCHOR.MIDDLE)
-            y += 0.68
+            y += 0.64
 
     stack(LEFT, "Classic valuation firm", s["classic"], ["line_strong", "line_strong", "line"], ["ink", "ink", "ink2"])
     stack(LEFT + 3.3, "Censio", s["censio"], ["brand", "valuer", "ai_weak"], ["card", "card", "ai"])
-    y = 4.75
+    y = 4.55
     for i, (big, small) in enumerate(s["stats"]):
         x = LEFT + i * 3.3
-        text(slide, x, y, 2.95, 0.6, [[(big, {"bold": True, "font": HEAD})]], size=30)
-        text(slide, x, y + 0.62, 2.95, 1.0, small, size=12, color="ink2", spacing=1.08)
-    # Founders: the overhead. Roles are placeholders until the team fixes them.
+        text(slide, x, y, 2.95, 0.55, [[(big, {"bold": True, "font": HEAD})]], size=28,
+             color="ink" if i == 0 else "valuer", align=PP_ALIGN.CENTER)
+        text(slide, x, y + 0.58, 2.95, 0.65, small, size=12, color="ink2", spacing=1.05, align=PP_ALIGN.CENTER)
+    box(slide, LEFT, 5.95, 6.25, 0.62, fill="card", line="line", radius=0.08).name = "Bridge"
+    text(slide, LEFT + 0.2, 5.95, 5.85, 0.62, s["bridge"], size=12, color="ink", anchor=MSO_ANCHOR.MIDDLE,
+         spacing=1.02)
+    # Right: founders as overhead, then the whole 2031 team as one bar.
     x0 = 7.85
-    label(slide, x0, TOP + 0.05, 4, "Founding team", color="ink2", size=10)
+    label(slide, x0, TOP + 0.05, 4.9, "Founders (overhead) · all ESMT Berlin", color="ink2", size=10)
     team = C.load_team()
     for i, member in enumerate(team[:4]):
         col, row = i % 2, i // 2
         x = x0 + col * 2.5
-        y = TOP + 0.45 + row * 1.2
+        y = TOP + 0.42 + row * 0.95
         initials = "".join(part[0] for part in member["name"].split()[:2]).upper()
-        dot(slide, x, y, 0.62, "brand_weak").name = f"Founder {i + 1} avatar"
-        text(slide, x, y, 0.62, 0.62, [[(initials, {"bold": True})]], size=13, color="brand", align=PP_ALIGN.CENTER,
+        dot(slide, x, y, 0.58, "brand_weak").name = f"Founder {i + 1} avatar"
+        text(slide, x, y, 0.58, 0.58, [[(initials, {"bold": True})]], size=12.5, color="brand", align=PP_ALIGN.CENTER,
              anchor=MSO_ANCHOR.MIDDLE)
-        text(slide, x + 0.75, y - 0.02, 1.7, 1.05, [
+        text(slide, x + 0.7, y - 0.02, 1.75, 0.85, [
             [(member["name"], {"bold": True, "size": 12, "color": "ink"})],
             [(member["role"], {"size": 11, "color": "ink2"})],
-            [(member["school"], {"size": 10, "color": "faint"})],
         ], spacing=1.02, name=f"Founder {i + 1}")
-    y = TOP + 2.95
-    box(slide, x0, y, RIGHT - x0, 1.25, fill="valuer_weak", radius=0.1).name = "Operating team"
-    text(slide, x0 + 0.3, y, RIGHT - x0 - 0.6, 1.25, s["operating"], size=13, color="valuer",
-         anchor=MSO_ANCHOR.MIDDLE, spacing=1.08)
+    y = TOP + 2.45
+    total = sum(n for _, n, _ in C.TEAM_2031)
+    label(slide, x0, y, 4.9, f"Censio in 2031: {total} people, no juniors", color="ink2", size=10)
+    bar_w = RIGHT - x0
+    bx = x0
+    for name, count, colour in C.TEAM_2031:
+        w = bar_w * count / total
+        box(slide, bx, y + 0.32, w - 0.03, 0.5, fill=colour, radius=0.06).name = f"Team 2031: {name}"
+        text(slide, bx, y + 0.32, w - 0.03, 0.5, [[(str(count), {"bold": True, "font": HEAD})]], size=14,
+             color="ink" if colour == "brand_accent" else "card", align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+        bx += w
+    legend = []
+    for i, (name, count, colour) in enumerate(C.TEAM_2031):
+        legend += [("■ ", {"color": colour, "size": 10}), (name, {"color": "ink2"}),
+                   ("  " if i < len(C.TEAM_2031) - 1 else "", {})]
+    text(slide, x0, y + 0.9, bar_w, 0.3, [legend], size=9.5, name="Team 2031 legend")
+    box(slide, x0, 5.95, RIGHT - x0, 0.62, fill="valuer_weak", radius=0.08).name = "First hire"
+    text(slide, x0 + 0.2, 5.95, RIGHT - x0 - 0.4, 0.62, s["first_hire"], size=12, color="valuer",
+         anchor=MSO_ANCHOR.MIDDLE, bold=True)
 
 
 def s_financials(slide, s):
     data = CategoryChartData()
-    data.categories = C.YEARS
+    data.categories = [f"{y}\n{v} valuations\n{p} people" for y, v, p in
+                       zip(C.YEARS, C.FMT["valuations"], C.FMT["people"])]
     data.add_series("Revenue", [C.PLAN[y]["revenue"] / 1e6 for y in C.YEARS])
     data.add_series("EBITDA", [C.PLAN[y]["ebitda"] / 1e6 for y in C.YEARS])
-    gf = slide.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Inches(LEFT), Inches(TOP), Inches(6.6),
-                                Inches(3.3), data)
+    gf = slide.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Inches(LEFT), Inches(TOP), Inches(6.7),
+                                Inches(3.95), data)
     gf.name = "Revenue and EBITDA"
     chart = gf.chart
     style_chart(chart, 11)
@@ -505,7 +533,7 @@ def s_financials(slide, s):
     chart.legend.include_in_layout = False
     hide_axis(chart.value_axis)
     chart.category_axis.format.line.color.rgb = rgb("line_strong")
-    chart.category_axis.tick_labels.font.bold = True
+    chart.category_axis.tick_labels.font.size = Pt(10)
     chart.category_axis.tick_label_position = XL_TICK_LABEL_POSITION.LOW
     plot = chart.plots[0]
     plot.gap_width = 60
@@ -521,28 +549,17 @@ def s_financials(slide, s):
         labels.position = XL_LABEL_POSITION.OUTSIDE_END
         labels.font.size = Pt(10.5)
         labels.font.color.rgb = rgb("ink")
-    # Volume and team under the chart, as a small table.
-    rows = [("Signed valuations", C.FMT["valuations"]), ("People (year end)", C.FMT["people"])]
-    tb = slide.shapes.add_table(3, 6, Inches(LEFT), Inches(5.65), Inches(6.6), Inches(0.96)).table
-    head = ["", *C.YEARS]
-    for c, v in enumerate(head):
-        cell_text(tb.cell(0, c), v, bold=True, colour="ink2", align=PP_ALIGN.LEFT if c == 0 else PP_ALIGN.RIGHT)
-    for r, (name, values) in enumerate(rows, start=1):
-        cell_text(tb.cell(r, 0), name, bold=True, colour="ink")
-        for c, v in enumerate(values, start=1):
-            cell_text(tb.cell(r, c), v, colour="ink", align=PP_ALIGN.RIGHT)
-    tb.columns[0].width = Inches(1.85)
-    for c in range(1, 6):
-        tb.columns[c].width = Inches(0.95)
+    text(slide, LEFT, 6.3, 6.7, 0.55, s["downside"], size=11, color="ink2", spacing=1.05, name="Downside")
     # One valuation, line by line: senior time is the cost; AI is a rounding error.
     x, w = 8.15, RIGHT - 8.15
-    box(slide, x, TOP, w, 4.4, fill="card", line="line", radius=0.12).name = "Unit economics"
-    label(slide, x + 0.35, TOP + 0.3, w - 0.7, "One signed valuation", color="ink2", size=10)
+    box(slide, x, TOP, w, 4.6, fill="card", line="line", radius=0.12).name = "Unit economics"
+    label(slide, x + 0.35, TOP + 0.3, w - 0.7, "One signed desktop valuation", color="ink2", size=10)
     u = C.U
     lines = [("Price", u["price"], "brand", False)]
     colours = {"Senior review (2 h)": "valuer", "AI": "ai_strong", "Data & documents": "doc"}
+    names = {"AI": "AI (est.)"}
     for name, value in u["cost_lines"].items():
-        lines.append((name, value, colours.get(name, "faint"), True))
+        lines.append((names.get(name, name), value, colours.get(name, "faint"), True))
     y = TOP + 0.7
     bar_x, bar_w = x + 2.35, w - 2.35 - 0.35
     for name, value, colour, minus in lines:
@@ -559,8 +576,9 @@ def s_financials(slide, s):
                                                      (f"{C.FMT['gross_profit']} · {C.FMT['gross_margin']}",
                                                       {"bold": True, "font": HEAD, "size": 18, "color": "brand"})]],
          size=13, anchor=MSO_ANCHOR.MIDDLE)
-    text(slide, x + 0.35, y + 0.65, w - 0.7, 0.5, "AI measured at ≈€0.45 per run; €5 includes a buffer", size=10.5,
-         color="ink2")
+    text(slide, x + 0.35, y + 0.65, w - 0.7, 0.75,
+         f"At full senior use; company gross margin {C.FMT['company_gm']} in 2029–31. Bank valuations add a "
+         "site visit (6 h, €100 travel).", size=10.5, color="ink2", spacing=1.05)
 
 
 def cell_text(cell, value, bold=False, colour="ink", align=PP_ALIGN.LEFT):
@@ -591,15 +609,16 @@ def s_ask(slide, s):
     names = list(C.BUCKETS)
     data.categories = names
     data.add_series("Use of proceeds", [C.BUCKETS[n] for n in names])
-    gf = slide.shapes.add_chart(XL_CHART_TYPE.DOUGHNUT, Inches(LEFT - 0.1), Inches(TOP + 0.05), Inches(3.6),
-                                Inches(3.6), data)
+    d = 2.8
+    gf = slide.shapes.add_chart(XL_CHART_TYPE.DOUGHNUT, Inches(LEFT - 0.1), Inches(TOP + 0.1), Inches(d),
+                                Inches(d), data)
     gf.name = "Use of proceeds"
     chart = gf.chart
     style_chart(chart)
     chart.has_legend = False
     chart.has_title = False
     plot = chart.plots[0]
-    colours = ["brand", "valuer", "ai_strong", "ink2"]
+    colours = ["ai_strong", "valuer", "brand", "ink2"]
     for point, colour in zip(plot.series[0].points, colours):
         point.format.fill.solid()
         point.format.fill.fore_color.rgb = rgb(colour)
@@ -608,28 +627,31 @@ def s_ask(slide, s):
     if hole is None:
         hole = etree.SubElement(plot._element, qn("c:holeSize"))
     hole.set("val", "62")
-    text(slide, LEFT - 0.1, TOP + 1.45, 3.6, 0.8, [[(C.FMT["ask"], {"bold": True, "font": HEAD, "size": 28})],
-                                                  [("pre-seed", {"size": 12, "color": "ink2"})]],
-         align=PP_ALIGN.CENTER, spacing=1.0)
-    y = TOP + 0.35
+    text(slide, LEFT - 0.1, TOP + 0.1 + d / 2 - 0.42, d, 0.85,
+         [[(C.FMT["spend_2027_28"], {"bold": True, "font": HEAD, "size": 26})],
+          [("spend 2027–28", {"size": 11, "color": "ink2"})]], align=PP_ALIGN.CENTER, spacing=1.0)
+    y = TOP + 0.15
     for name, colour in zip(names, colours):
-        dot(slide, 4.85, y + 0.1, 0.22, colour)
-        head, _, tail = name.partition(": ")
-        text(slide, 5.2, y, 2.6, 0.62, [[(f"{C.pct(C.BUCKETS[name])}  ", {"bold": True, "font": HEAD, "size": 17}),
-                                         (head, {"bold": True, "size": 13})], [(tail, {"size": 11.5, "color": "ink2"})]],
-             spacing=1.0)
-        y += 0.8
+        dot(slide, 4.45, y + 0.1, 0.22, colour)
+        head, _, _ = name.partition(": ")
+        text(slide, 4.8, y, 3.0, 0.62, [[(f"{C.pct(C.BUCKETS[name])}  ", {"bold": True, "font": HEAD, "size": 17}),
+                                         (head, {"bold": True, "size": 13})],
+                                        [(C.LEGEND_TAILS[name], {"size": 11, "color": "ink2"})]], spacing=1.0)
+        y += 0.72
+    text(slide, LEFT, TOP + d + 0.25, 6.9, 0.5, s["donut_caption"], size=11, color="ink2", spacing=1.05,
+         name="Donut caption")
     x0 = 8.15
     label(slide, x0, TOP + 0.05, 4, "Milestones", color="ink2", size=10)
     y = TOP + 0.4
     for when, what in s["milestones"]:
-        box(slide, x0, y, RIGHT - x0, 0.62, fill="card", line="line", radius=0.08)
-        text(slide, x0 + 0.25, y, RIGHT - x0 - 0.5, 0.62, [[(when + "  ", {"bold": True, "color": "brand"}),
-                                                             (what, {})]], size=12.5, anchor=MSO_ANCHOR.MIDDLE)
-        y += 0.72
-    box(slide, LEFT, 5.75, CW, 0.95, fill="brand", radius=0.12).name = "Closing"
-    picture(slide, ASSETS / "censio-mark.png", LEFT + 0.3, 5.97, 0.5, 0.5)
-    text(slide, LEFT + 1.0, 5.75, CW - 1.3, 0.95, s["closing"], size=24, font=HEAD, bold=True, color="card",
+        box(slide, x0, y, RIGHT - x0, 0.78, fill="card", line="line", radius=0.08)
+        text(slide, x0 + 0.25, y, RIGHT - x0 - 0.5, 0.78, [[(when + "  ", {"bold": True, "color": "brand"}),
+                                                             (what, {})]], size=12.5, anchor=MSO_ANCHOR.MIDDLE,
+             spacing=1.05)
+        y += 0.9
+    box(slide, LEFT, 5.95, CW, 0.82, fill="brand", radius=0.12).name = "Closing"
+    picture(slide, ASSETS / "censio-mark.png", LEFT + 0.3, 6.11, 0.5, 0.5)
+    text(slide, LEFT + 1.0, 5.95, CW - 1.3, 0.82, s["closing"], size=24, font=HEAD, bold=True, color="card",
          anchor=MSO_ANCHOR.MIDDLE)
 
 
@@ -650,6 +672,19 @@ def page_background(prs):
         etree.SubElement(fill, qn("a:srgbClr"), val=COL["page"])
 
 
+def video_cues() -> str:
+    """Timestamps in the 30-second video, from the capture marks, so the narration can follow the picture."""
+    import json
+    marks = json.loads((OUT / "demo-marks.json").read_text())
+    factor = 30.0 / (marks["end"] - marks["start"])
+    steps = [("documents", "client uploads"), ("ai-at-work", "AI at work"), ("review", "valuer review"),
+             ("revalue", "note & revalue"), ("accept", "accepts the rest"), ("sign", "signs"),
+             ("report", "client's report")]
+    cues = [f"{int((marks[k] - marks['start']) * factor) // 60}:{int((marks[k] - marks['start']) * factor) % 60:02d}"
+            f" {what}" for k, what in steps]
+    return "Video cues: " + " · ".join(cues)
+
+
 def build_deck(base: Path = OUT / "base.pptx", out: Path = OUT / "Censio-Pitch.pptx") -> Path:
     prs = Presentation(str(base))
     page_background(prs)
@@ -659,7 +694,7 @@ def build_deck(base: Path = OUT / "base.pptx", out: Path = OUT / "Censio-Pitch.p
         if s["key"] not in ("cover",):
             frame(slide, n, s, dark=s["key"] == "demo")
         BUILDERS[s["key"]](slide, s)
-        slide.notes_slide.notes_text_frame.text = C.notes_text(s)
+        slide.notes_slide.notes_text_frame.text = C.notes_text(s, video_cues() if s["key"] == "demo" else "")
     for slide in prs.slides:
         for shape in slide.shapes:
             if shape.has_table:

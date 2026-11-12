@@ -76,13 +76,13 @@
         "Banks": 330000,
         "Commercial & DACH": 0
       },
-      "review_hours": 2750.0,
-      "senior_utilisation": 0.6875,
-      "cogs": 772850.0,
-      "gross_margin": 0.7094548872180451,
+      "review_hours": 3200.0,
+      "senior_utilisation": 0.8,
+      "cogs": 787850.0,
+      "gross_margin": 0.7038157894736842,
       "opex": 1370000.0,
-      "ebitda": 517150.0,
-      "ebitda_margin": 0.1944172932330827,
+      "ebitda": 502150.0,
+      "ebitda_margin": 0.1887781954887218,
       "headcount_ye": 13,
       "headcount_avg": 11.0,
       "seniors_ye": 5,
@@ -98,18 +98,18 @@
         "Banks": 880000,
         "Commercial & DACH": 480000
       },
-      "review_hours": 5825.0,
-      "senior_utilisation": 0.8321428571428572,
-      "cogs": 1405800.0,
-      "gross_margin": 0.7457866184448463,
+      "review_hours": 7025.0,
+      "senior_utilisation": 0.8264705882352941,
+      "cogs": 1670800.0,
+      "gross_margin": 0.6978661844484629,
       "opex": 2295000.0,
-      "ebitda": 1829200.0,
-      "ebitda_margin": 0.3307775768535262,
-      "headcount_ye": 19,
-      "headcount_avg": 16.0,
-      "seniors_ye": 9,
-      "revenue_per_head": 345625.0,
-      "valuations_per_senior": 421.42857142857144
+      "ebitda": 1564200.0,
+      "ebitda_margin": 0.28285714285714286,
+      "headcount_ye": 20,
+      "headcount_avg": 17.5,
+      "seniors_ye": 10,
+      "revenue_per_head": 316000.0,
+      "valuations_per_senior": 347.05882352941177
     },
     "2031": {
       "valuations": 4800,
@@ -120,18 +120,18 @@
         "Banks": 1760000,
         "Commercial & DACH": 1280000
       },
-      "review_hours": 9800.0,
-      "senior_utilisation": 0.8521739130434782,
-      "cogs": 2309600.0,
-      "gross_margin": 0.7478602620087337,
+      "review_hours": 12200.0,
+      "senior_utilisation": 0.8413793103448276,
+      "cogs": 2839600.0,
+      "gross_margin": 0.69,
       "opex": 3200000.0,
-      "ebitda": 3650400.0,
-      "ebitda_margin": 0.3985152838427948,
-      "headcount_ye": 25,
-      "headcount_avg": 22.0,
-      "seniors_ye": 14,
-      "revenue_per_head": 416363.63636363635,
-      "valuations_per_senior": 417.39130434782606
+      "ebitda": 3120400.0,
+      "ebitda_margin": 0.34065502183406116,
+      "headcount_ye": 28,
+      "headcount_avg": 25.0,
+      "seniors_ye": 17,
+      "revenue_per_head": 366400.0,
+      "valuations_per_senior": 331.0344827586207
     }
   },
   "breakeven_year": 2029,
@@ -166,25 +166,34 @@
       },
       "2029": {
         "revenue": 1436400.0,
-        "ebitda": -428782.8235294118
+        "ebitda": -476429.8823529412
       },
       "2030": {
         "revenue": 2986200.0,
-        "ebitda": -307431.7058823528
+        "ebitda": -434490.5294117648
       },
       "2031": {
         "revenue": 4946400.0,
-        "ebitda": 123111.29411764722
+        "ebitda": -131006.35294117685
       }
     },
-    "ebitda_2031": 123111.29411764722,
-    "cum_min": -1987555.5294117646
+    "cum": {
+      "2027": -694502.0,
+      "2028": -1251341.0,
+      "2029": -1727770.8823529412,
+      "2030": -2162261.411764706,
+      "2031": -2293267.764705883
+    },
+    "ebitda_2031": -131006.35294117685,
+    "cum_min": -2293267.764705883,
+    "breakeven_year": null,
+    "extra_cash_needed": 916281.4633360198
   },
   "team": {
-    "people_2031": 25,
-    "seniors_2031": 14,
+    "people_2031": 28,
+    "seniors_2031": 17,
     "valuations_2031": 4800,
-    "valuations_per_senior_2031": 417.39130434782606,
+    "valuations_per_senior_2031": 331.0344827586207,
     "classic_hours_per_report": 34.88,
     "classic_reports_per_valuer_low": 28.6697247706422,
     "classic_reports_per_valuer_high": 50.0,

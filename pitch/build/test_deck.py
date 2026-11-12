@@ -60,13 +60,15 @@ def test_notes_present_with_sources(prs):
 
 
 def test_notes_fit_timing():
-    assert sum(s["seconds"] for s in C.SLIDES) == 300
+    """285 s of slides leaves 15 s of the 5 minutes for clicks, the video start and hand-overs.
+    Numbers count as spoken words (about three each); 2.3 spoken words a second is a calm pitch pace."""
+    assert sum(s["seconds"] for s in C.SLIDES) <= 285
     total = 0
     for s in C.SLIDES:
-        words = len(s["notes"].split())
+        words = C.spoken_words(s["notes"])
         total += words
-        assert words <= 2.4 * s["seconds"], f"{s['key']}: {words} words for {s['seconds']} s"
-    assert total <= 680
+        assert words <= 2.3 * s["seconds"], f"{s['key']}: {words} spoken words for {s['seconds']} s"
+    assert total <= 630
 
 
 def test_numbers_match_model(prs):
@@ -75,10 +77,12 @@ def test_numbers_match_model(prs):
     expect = {
         "market": [F["tam"], F["sam"], F["som"], F["income_sales"], F["mfh_sales"]],
         "gtm": [F["price"], *F["revenue"]],
-        "team": [F["per_senior"], F["people_last"], F["valuations_last"]],
-        "financials": [F["breakeven"], F["ebitda_margin_last"], F["gross_profit"], F["gross_margin"],
-                       *F["valuations"], *F["people"]],
-        "ask": [F["ask"], F["revenue_2028"], F["valuations_2027_28"], F["customers_2028"], F["runway"]],
+        "team": [F["per_senior"], F["people_last"], F["seniors_last"], F["valuations_last"],
+                 F["classic_valuers_low"], F["classic_valuers_high"]],
+        "financials": [F["breakeven"], F["ebitda_margin_last"], F["ebitda_last"], F["gross_profit"],
+                       F["gross_margin"], F["company_gm"], F["downside_extra"], *F["valuations"], *F["people"]],
+        "ask": [F["ask"], F["revenue_2028"], F["valuations_2027_28"], F["customers_2028"], F["runway"],
+                F["spend_2027_28"], F["revenue_2027_28"], F["buffer"]],
     }
     for key, values in expect.items():
         text = slide_text(by_key[key])
@@ -185,6 +189,7 @@ def test_demo_slide_has_video_and_poster(prs):
     assert any(t.endswith("/video") for t in rels)
     assert any(t.endswith("/image") for t in rels)  # poster frame
     assert "mainSeq" in demo.part.blob.decode("utf8")  # starts automatically
+    assert "Video cues:" in demo.notes_slide.notes_text_frame.text
 
 
 def test_team_slide_uses_team_file(prs):
@@ -192,3 +197,39 @@ def test_team_slide_uses_team_file(prs):
     text = slide_text(team)
     for member in C.load_team():
         assert member["name"] in text and member["role"] in text
+
+
+def test_desktop_scope_is_said():
+    """The product is a desktop valuation; the deck must say so wherever it compares with full reports."""
+    text = "\n".join(slide_text(sl) for sl in Presentation(str(DECK)).slides)
+    assert "desktop valuation" in text and "full report" in text and "site visit" in text
+
+
+def test_colour_code_is_kept(prs):
+    """Orange (AI) appears only on AI elements: never on the problem slide's human-time band or on money slices."""
+    problem = prs.slides[[s["key"] for s in C.SLIDES].index("problem")]
+    for shape in problem.shapes:
+        if shape.shape_type == 1 and shape.fill.type == 1:
+            assert str(shape.fill.fore_color.rgb) not in ("FFF4E5", "F79009"), shape.name
+
+
+def test_text_boxes_do_not_overlap(prs):
+    """Two text boxes with text never share space (labels colliding, captions running into banners)."""
+    problems = []
+    for n, slide in enumerate(prs.slides, start=1):
+        boxes = [s for s in slide.shapes if s.has_text_frame and s.text_frame.text.strip()]
+        for i, a in enumerate(boxes):
+            for b in boxes[i + 1:]:
+                w = min(a.left + a.width, b.left + b.width) - max(a.left, b.left)
+                h = min(a.top + a.height, b.top + b.height) - max(a.top, b.top)
+                if w > Emu(36000) and h > Emu(36000):  # more than 1 mm both ways
+                    problems.append(f"slide {n}: '{a.text_frame.text[:25]}' / '{b.text_frame.text[:25]}'")
+    assert not problems, "\n".join(problems)
+
+
+def test_banners_clear_of_text(prs):
+    """Filled shapes that carry their own text (closing banner, bands) do not sit under other slide text."""
+    ask = prs.slides[[s["key"] for s in C.SLIDES].index("ask")]
+    banner = next(s for s in ask.shapes if s.name == "Closing")
+    caption = next(s for s in ask.shapes if s.name == "Donut caption")
+    assert caption.top + caption.height <= banner.top
