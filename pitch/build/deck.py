@@ -10,6 +10,7 @@ Grid kept from the template: title top-left with a mark to its left, page number
 from __future__ import annotations
 
 import copy
+import json
 from pathlib import Path
 
 from lxml import etree
@@ -269,6 +270,18 @@ def s_solution(slide, s):
              anchor=MSO_ANCHOR.MIDDLE, spacing=1.0)
 
 
+TEAM_VIDEO = OUT / "demo-video.mp4"  # the team's own recording wins over the generated censio-demo-30s.mp4
+
+
+def demo_video() -> dict:
+    """The video on the demo slide: the team's recording if present (with its poster and cues), else the generated one."""
+    if TEAM_VIDEO.exists():
+        info = json.loads((OUT / "demo-video.json").read_text())
+        return {"path": TEAM_VIDEO, "poster": OUT / "demo-video-poster.png", "seconds": info["duration"],
+                "cues": [(int(t), what) for t, what in info["cues"]]}
+    return {"path": OUT / "censio-demo-30s.mp4", "poster": OUT / "demo-poster.png", "seconds": 30.0, "cues": None}
+
+
 def s_demo(slide, s):
     w = 7.6
     im = Image.open(OUT / "laptop.png")
@@ -276,12 +289,20 @@ def s_demo(slide, s):
     x, y = (W - w) / 2, 2.0
     picture(slide, laptop_png(), x, y, w, h, name="Laptop mockup")
     sx, sy, sw, sh = (x + LAPTOP_SCREEN[0] * w, y + LAPTOP_SCREEN[1] * h, LAPTOP_SCREEN[2] * w, LAPTOP_SCREEN[3] * h)
-    movie = slide.shapes.add_movie(str(OUT / "censio-demo-30s.mp4"), Inches(sx), Inches(sy), Inches(sw), Inches(sh),
-                                   poster_frame_image=str(OUT / "demo-poster.png"), mime_type="video/mp4")
-    movie.name = "Demo video (30 s)"
+    video = demo_video()
+    # Keep the video's own aspect ratio inside the screen; the dark slide shows as a bezel around a 16:9 video.
+    pw, ph = Image.open(video["poster"]).size
+    if pw / ph > sw / sh:
+        vw, vh = sw, sw * ph / pw
+    else:
+        vw, vh = sh * pw / ph, sh
+    vx, vy = sx + (sw - vw) / 2, sy + (sh - vh) / 2
+    movie = slide.shapes.add_movie(str(video["path"]), Inches(vx), Inches(vy), Inches(vw), Inches(vh),
+                                   poster_frame_image=str(video["poster"]), mime_type="video/mp4")
+    movie.name = f"Demo video ({video['seconds']:.0f} s)"
     autoplay(slide, movie)
-    text(slide, x, y + h + 0.08, w, 0.3, "▶  Demo video, 30 s · starts by itself", size=11, color="faint",
-         align=PP_ALIGN.CENTER, name="Video caption")
+    text(slide, x, y + h + 0.08, w, 0.3, f"▶  Demo video, {video['seconds']:.0f} s · starts by itself", size=11,
+         color="faint", align=PP_ALIGN.CENTER, name="Video caption")
 
 
 def autoplay(slide, movie):
@@ -717,8 +738,11 @@ def page_background(prs):
 
 
 def video_cues() -> str:
-    """Timestamps in the 30-second video, from the capture marks, so the narration can follow the picture."""
-    import json
+    """Timestamps in the demo video, so the narration can follow the picture."""
+    video = demo_video()
+    if video["cues"]:
+        cues = [f"{t // 60}:{t % 60:02d} {what}" for t, what in video["cues"]]
+        return "Video cues: " + " · ".join(cues)
     marks = json.loads((OUT / "demo-marks.json").read_text())
     factor = 30.0 / (marks["end"] - marks["start"])
     steps = [("documents", "client uploads"), ("ai-at-work", "AI at work"), ("review", "valuer review"),

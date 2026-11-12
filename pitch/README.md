@@ -8,7 +8,7 @@ Dieser Ordner enthält alles, um das Pitch-Deck für Censio neu zu bauen: die Za
 |---|---|
 | `out/Censio-Pitch.pptx` | Das Deck zum Bearbeiten und Präsentieren. Der Sprechtext steht in den Notizen, das 30-Sekunden-Demo-Video ist auf Folie 5 eingebettet und startet von selbst |
 | `out/Censio-Pitch.pdf` | Backup zum Präsentieren, Schriften eingebettet, ohne Video |
-| `out/censio-demo-30s.mp4` | Das Demo-Video einzeln, z. B. für Google Slides oder als Backup |
+| `out/demo-video.mp4` | Euer Demo-Video (v2 mit Browser-Leiste, 28 s, mit Ton), auf Folie 5 eingebettet. Ohne diese Datei nimmt das Deck das generierte `out/censio-demo-30s.mp4` |
 | `out/Censio-Financial-Model.xlsx` | Das Finanzmodell hinter allen Zahlen im Deck (Backup für Fragen), siehe unten |
 
 `out/` liegt nicht im Repository. Das Repo ist öffentlich, und das Deck enthält eure Namen und das gekaufte Template. Die Dateien bekommt ihr direkt aus der Session. Teilt sie über Drive oder Teams.
@@ -17,7 +17,7 @@ Dieser Ordner enthält alles, um das Pitch-Deck für Censio neu zu bauen: die Za
 
 1. **Schriften installieren** (einmal, 2 Minuten): [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) und [Inter](https://fonts.google.com/specimen/Inter), jeweils „Get font“ → „Download all“ → installieren. Ohne die Schriften ersetzt PowerPoint sie, dann verrutschen Zeilen. Das PDF sieht immer richtig aus.
 2. **Folie 5** spielt das Video automatisch ab. Falls nicht: in PowerPoint auf das Video klicken, „Wiedergabe“ → „Start: Automatisch“.
-3. **Google Slides:** PPTX hochladen. Die Schriften sind dort schon vorhanden. Das Video muss man neu einfügen (aus Drive, `censio-demo-30s.mp4`).
+3. **Google Slides:** PPTX hochladen. Die Schriften sind dort schon vorhanden. Das Video muss man neu einfügen (aus Drive, `demo-video.mp4`). Das Video hat Ton. Wer darüber spricht, stellt es in PowerPoint leiser: „Wiedergabe“ → „Lautstärke“.
 4. **Zeit:** Die Folien sind auf 4:45 geplant (davon 0:30 Video), es bleiben 15 Sekunden Puffer für Klicks und Übergaben. Der Sprechtext hat rund 610 gesprochene Wörter, wobei jede Zahl als drei Wörter zählt. Die Sekunden pro Folie stehen in `build/content.py` (`seconds`). Auf Folie 5 stehen in den Notizen Zeitmarken, damit ihr synchron zum Video sprecht.
 5. **Fragen:** Unter jedem Sprechtext stehen „If asked“-Antworten und die Quellen.
 
@@ -27,6 +27,13 @@ Dieser Ordner enthält alles, um das Pitch-Deck für Censio neu zu bauen: die Za
 - **Zahlen:** `build/model.py`. Danach `python3 pitch/build/model.py` ausführen, das schreibt `numbers.json`. Die Folien lesen die Zahlen nur von dort.
 - **Namen und Rollen:** `build/team.local.json` (wird nicht committet). Vorlage: `build/team.example.json`.
 - **Layout:** `build/deck.py`
+- **Demo-Video tauschen:** die neue Datei als `out/demo-video.mp4` ablegen und in `out/demo-video.json` die Länge und die Zeitmarken für die Sprechernotizen anpassen. Dazu das Standbild neu ziehen, z. B. bei Sekunde 16, und `python3 pitch/build/deck.py` ausführen:
+
+  ```bash
+  ffmpeg -y -ss 16 -i pitch/out/demo-video.mp4 -frames:v 1 pitch/out/demo-video-poster.png
+  ```
+
+  Das Video wird nicht verzerrt: Ein 16:9-Video sitzt mittig im Laptop-Bildschirm.
 
 Wer nur ein Wort ändern will, macht das direkt in PowerPoint. Beim nächsten Neubau wäre die Änderung dann aber weg.
 

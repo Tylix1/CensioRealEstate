@@ -377,10 +377,10 @@ SLIDES = [
         "key": "demo",
         "eyebrow": "Demo",
         "title": "Upload, check, sign: the prototype in 30 seconds",
-        "sub": "Demo mode with sample data, sped up 1.2×: the client uploads, the AI prepares, the senior revises "
-               "and signs",
+        "sub": "Demo mode with sample data: the client uploads, the AI prepares, the senior revises and signs, and "
+               "the client gets the report",
         "seconds": 30,
-        "notes": "Here is the prototype in demo mode, sped up. The client uploads five documents; the AI reads them, "
+        "notes": "Here is the prototype in demo mode. The client uploads five documents; the AI reads them, "
                  "builds the valuation and flags four judgement calls. The valuer disagrees with the cap rate and "
                  "writes a note; the value is recomputed in seconds. The valuer accepts the other three, signs, and "
                  "the client gets a report where every figure names its source.",

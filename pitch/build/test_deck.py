@@ -4,11 +4,12 @@ import re
 from pathlib import Path
 
 import pytest
-from PIL import ImageFont
+from PIL import Image, ImageFont
 from pptx import Presentation
 from pptx.util import Emu
 
 import content as C
+import deck as D
 from deck import COL
 
 DECK = Path(__file__).resolve().parents[1] / "out" / "Censio-Pitch.pptx"
@@ -239,3 +240,16 @@ def test_banners_clear_of_text(prs):
     banner = next(s for s in ask.shapes if s.name == "Closing")
     caption = next(s for s in ask.shapes if s.name == "Donut caption")
     assert caption.top + caption.height <= banner.top
+
+
+def test_demo_video_is_embedded_undistorted(prs):
+    """The demo slide carries the team's recording (if present) at its own aspect ratio, not stretched."""
+    demo = prs.slides[[s["key"] for s in C.SLIDES].index("demo")]
+    movie = next(sh for sh in demo.shapes if sh.shape_type == 16)
+    video = D.demo_video()
+    pw, ph = Image.open(video["poster"]).size
+    assert movie.width / movie.height == pytest.approx(pw / ph, rel=0.01)
+    blobs = [r.target_part.blob for r in demo.part.rels.values() if r.reltype.endswith("/video")]
+    assert len(blobs) == 1 and len(blobs[0]) == video["path"].stat().st_size
+    if video["cues"]:
+        assert f"{video['cues'][0][0] // 60}:{video['cues'][0][0] % 60:02d}" in demo.notes_slide.notes_text_frame.text
