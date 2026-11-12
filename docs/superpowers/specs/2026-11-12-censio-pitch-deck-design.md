@@ -85,6 +85,16 @@ Each slide's notes hold the spoken text (~650 words for 4:30 of talking), with t
 - Confirm the commercial assumptions: €2,000 price, €1.5m pre-seed ask, 2027 start.
 - Live demo, video, or both?
 
+## 7. Changes after the team's feedback (12 Nov 2026)
+
+- Slides and speaker script in English.
+- Price €2,000 per valuation. A later deal-platform fee (buyers and sellers already on Censio) appears on the GTM slide as an option, outside the numbers.
+- Traction = the working prototype; no customers claimed.
+- Team = 4 founders (CEO, Head of AI, Head of Business Development, Head of Sales; roles are placeholders) as overhead, plus senior valuers and a small platform team. No juniors. Names live only in the gitignored `pitch/build/team.local.json`.
+- Model rerun with 4 founders and a leaner platform/sales team: headcount 7 → 25 (2031); EBITDA 2029 +€0.5m, 2031 +€3.7m (40%); runway 18 months at zero revenue. Use of proceeds grouped by purpose: Build 30%, Deliver 30%, Sell 20%, Run 20%.
+- Headlines shortened to fit one line: "A €390m market, starting with apartment buildings", "North star: signed valuations within 48 hours", "Land with investors, then add funds and banks", "Break-even in 2029, 40% EBITDA margin by 2031", "€1.5m pre-seed to reach €1.0m revenue in 2028".
+- `pitch/build/model.py` and `numbers.json` replace appendix B's plan table as the single source of the numbers.
+
 ---
 
 ## Appendix A — Sourced numbers
