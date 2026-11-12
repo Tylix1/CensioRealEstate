@@ -72,8 +72,8 @@ def test_revenue_and_capacity(built, plan):
     for seg in M.SEGMENTS:
         assert series(built, "Revenue", f"rev_{B.slug(seg)}") == approx([r["segment_revenue"][seg] for r in p])
     assert series(built, "Revenue", "hours") == approx([r["review_hours"] for r in p])
-    assert series(built, "Revenue", "util") == approx([r["senior_utilisation"] for r in p])
-    assert series(built, "Revenue", "per_senior") == approx([r["valuations_per_senior"] for r in p])
+    assert series(built, "Team", "util") == approx([r["senior_utilisation"] for r in p])
+    assert series(built, "Team", "per_senior") == approx([r["valuations_per_senior"] for r in p])
 
 
 def test_pnl_line_by_line(built, plan):
@@ -97,8 +97,10 @@ def test_team_and_cash(built, plan):
     assert series(built, "Team", "avg_total") == approx([r["headcount_avg"] for r in p])
     assert series(built, "Team", "hires_all") == approx([r["hires"] for r in p])
     for key, name in [("receivables", "receivables"), ("operating_cf", "operating_cash_flow"), ("capex", "capex"),
-                      ("free_cf", "free_cash_flow"), ("equity", "equity_in"), ("cash_close", "cash_end")]:
+                      ("free_cf", "free_cash_flow"), ("equity", "equity_in"), ("cash_close", "cash_end"),
+                      ("cash_months", "cash_months"), ("bs_equipment", "net_equipment")]:
         assert series(built, "Cash flow", key) == approx([r[name] for r in p]), key
+    assert series(built, "Cash flow", "bs_diff") == approx([0] * 5)
 
 
 def test_unit_market_funds_downside(built, plan):
@@ -108,6 +110,7 @@ def test_unit_market_funds_downside(built, plan):
     assert cell(built, "Unit economics", "senior") == approx(u["cost_lines"]["Senior review (2 h)"])
     assert cell(built, "Unit economics", "cost") == approx(u["cost"])
     assert cell(built, "Unit economics", "gm") == approx(u["gross_margin"])
+    assert cell(built, "Unit economics", "gm_cap") == approx(u["gross_margin_at_cap"])
     assert cell(built, "Unit economics", "valuers_low") == approx(n["team"]["classic_valuers_low"])
     assert cell(built, "Unit economics", "valuers_high") == approx(n["team"]["classic_valuers_high"])
     m = n["market"]
@@ -124,9 +127,15 @@ def test_unit_market_funds_downside(built, plan):
     assert cell(built, "Use of funds", "runway") == approx(pr["runway_months_zero_revenue"])
     d = n["downside"]
     assert series(built, "Downside", "ebitda") == approx([d["years"][y]["ebitda"] for y in M.YEARS])
+    assert series(built, "Downside", "cash") == approx([d["years"][y]["cash"] for y in M.YEARS])
     assert cell(built, "Downside", "extra") == approx(d["extra_cash_needed"])
-    assert cell(built, "Downside", "extra_nd") == approx(d["without_expansion"]["extra_cash_needed"])
-    assert str(cell(built, "Downside", "out_of_cash_year")) == str(d["out_of_cash_year"])
+    assert cell(built, "Downside", "nd_extra") == approx(d["without_expansion"]["extra_cash_needed"])
+    assert cell(built, "Downside", "out_of_cash_year") == d["out_of_cash_year"]
+    sens = n["marketplace_sensitivity"]
+    for j, share in enumerate(M.SENS_DEALS):
+        r = built["rows"][("Downside", f"sens_{j}")]
+        for c, fee in zip("CDE", M.SENS_FEES):
+            assert built["values"]["Downside"][f"{c}{r}"].value == approx(sens[f"{share:g}x{fee:g}"])
 
 
 def test_all_checks_pass(built):
@@ -139,7 +148,7 @@ def test_all_checks_pass(built):
 
 
 def test_numbers_live_only_on_assumptions(built):
-    """Outside Assumptions every number is a formula (the tie-out's printed deck values are the one exception)."""
+    """Outside Assumptions every number is a formula (the tie-out's copied deck numbers are the one exception)."""
     hard = []
     for ws in built["formulas"].worksheets:
         if ws.title in ("Assumptions", "Sources"):
@@ -176,3 +185,7 @@ def test_inputs_drive_the_model(built, tmp_path):
     assert out["Revenue"][f"G{r}"].value == pytest.approx(M.plan()[2031]["valuations"] * 1.1)
     checks = out["Checks"][f"C{built['rows'][('Checks', 'all')]}"].value
     assert checks is False  # the lever check and the deck tie-out flag that the deck no longer matches
+    seniors = built["rows"][("Team", "avg_senior_valuers")]
+    assert out["Team"][f"G{seniors}"].value > M.ROLES["Senior valuers"][1][-1]  # more hours, more seniors
+    ebitda = built["rows"][("P&L", "ebitda")]
+    assert out["P&L"][f"G{ebitda}"].value != pytest.approx(M.plan()[2031]["ebitda"])

@@ -36,11 +36,11 @@ src("bvs", "BVS-Honorarrichtlinie 2026 (non-binding fee guideline for valuers)",
     "https://www.bvs-ev.de/fileupload/files/6a8ea166d1f80_BVS-Honorarrichtlinie_Fassung_2026.pdf")
 src("jveg", "JVEG Anlage 1 (court fees for experts)", "Hourly rate of a court-appointed property valuer",
     "€125 per hour since 1 Jun 2025", "https://www.gesetze-im-internet.de/jveg/anlage_1.html")
-src("fees", "Team's market experience; ftimmobilien24 Munich guide; Haus & Grund Frankfurt",
+src("fees", "Team's market experience; ftimmobilien24 Munich guide",
     "What income-property valuations cost today", "Indicative valuation at large firms €3–5k (team); multi-family "
-    "reports €4–8k; 0.5–1.5% of value", "https://www.ftimmobilien24.com/immobilienmakler-münchen/verkehrswertgutachten-muenchen/")
-src("broker", "Immowelt; anwaltonline; Homeday", "Broker fees on multi-family and commercial deals",
-    "~3% of the price per side is usual (up to 5% on commercial deals); freely negotiable",
+    "reports €4–8k (Munich guide)", "https://www.ftimmobilien24.com/immobilienmakler-münchen/verkehrswertgutachten-muenchen/")
+src("broker", "Immowelt; reduco.ai; anwaltonline; Homeday", "Broker fees on multi-family and commercial deals",
+    "~3% of the price per side is usual (up to 5% on commercial deals, 3–7% in total); freely negotiable",
     "https://www.anwaltonline.com/mietrecht/tipps/1215/maklerprovision-fuer-den-kauf-von-gewerbeimmobilien/")
 src("tenx", "LoopNet help centre: buyer fee on Auctions by Ten-X", "Fee of the largest US online property auction",
     "3% of the winning bid, paid by the buyer (from 15 Sep 2025)",
@@ -112,8 +112,8 @@ src("founder_salary", "gruender.de: founder salaries; Creandum Founder Compensat
 
 # ---- Sources: overhead ------------------------------------------------------------------------------------------------
 src("office", "Cushman & Wakefield Berlin office marketbeat Q1 2026; teamgnesda Office Report 2025",
-    "Office cost per head", "Average new-letting rent €27.65/m² a month; 19.5 m² per employee (13.2 m² in "
-    "new-work offices)", "https://content.cushmanwakefield.com/api/public/content/3d19da5f64264fbcbd30d78f1c48c1e0")
+    "Office cost per head", "Average new-letting rent €27.65/m² a month; 19.5 m² per employee (2025 report); "
+    "≈13 m² in new-work offices (2026/27 edition)", "https://content.cushmanwakefield.com/api/public/content/3d19da5f64264fbcbd30d78f1c48c1e0")
 src("saas", "Zylo SaaS Management Index 2025", "Software spend per employee", "US$4,830 per employee a year",
     "https://zylo.com/news/2025-saas-management-index")
 src("hire", "HRworks, citing Mühlemann & Pfeifer (IZA)", "Cost per hire in Germany",
@@ -208,7 +208,8 @@ doc("MAX_UTILISATION", "Maximum senior utilisation in the plan", "%", "A", ["mod
     "Head-room for peaks; the Checks sheet flags any year above it")
 
 doc("AI_COST", "AI cost per valuation", "€ per valuation", "B", ["claude"],
-    "≈€0.45 per run measured on the prototype at list token prices; ×10 for re-runs, long documents, price changes")
+    "Founders' estimate of ≈US$0.50 (≈€0.45) per complete run at list token prices; ×10 for re-runs, long "
+    "documents and price changes")
 doc("DATA_COST", "Official documents per valuation", "€ per valuation", "B", ["documents"],
     "Land register €10, building-encumbrance register €17–29, cadastral map free online to €16, land values free")
 doc("COMPARABLES_FEE", "Purchase-price register extract", "€ per valuation", "B", ["kps"],
@@ -219,21 +220,27 @@ doc("COMPARABLES_SHARE", "Share of valuations that need a register extract", "%"
 doc("HOSTING_COST", "Hosting, storage & e-signature per valuation", "€ per valuation", "B", ["qes"],
     "One qualified e-signature (€4–4.50) plus hosting and storage")
 doc("INSURANCE_PER_VALUATION", "Professional indemnity insurance per valuation", "€ per valuation", "A", ["pi"],
-    "No published premium for valuation firms; signed values that lenders rely on need €5–10m cover. Placeholder "
-    "(€390k a year in 2031) until a broker quote")
+    "No published premium for valuation firms; the statutory fallback cover (€250k per claim) is too thin for "
+    "multi-million buildings, so we budget high. Placeholder until a broker quote")
 doc("SITE_VISIT:Banks", "Travel per bank site visit", "€ per valuation", "B", ["travel", "belwertv"],
-    "≈330 km at €0.30 per km; the valuer's time is in the 6 hours")
-doc("PAYMENTS_RATE", "Payments & bad debt", "%", "B", ["stripe"],
-    "Invoicing and payment fees ≈0.5% of the price; the other half covers bad debt")
+    "Regional valuers: ≈150 km round trip at €0.30 per km plus parking; 6 h = 2 h driving + 1 h on site + 3 h review")
+doc("PAYMENTS_RATE", "Invoicing & payment fees", "%", "B", ["stripe"], "Stripe Invoicing 0.4–0.5% per paid invoice")
+doc("BAD_DEBT_RATE", "Bad debt", "%", "A", ["model"],
+    "Unpaid invoices, on valuation revenue and on deal fees (not sourced)")
 
 doc("DEALS", "Deals closed on Censio", "deals", "A", ["model", "crexi"],
     "Ambitious: 1,500 in 2031 is ≈2% of German income-property sales; Crexi's US auctions ran at ≈830 a year in "
     "Q4 2025. Test with the deals lever")
-doc("AVG_TICKET", "Average deal size", "€", "S", ["gewos"], "GEWOS: €36.5bn / 38,700 multi-family sales ≈ €0.94m")
+doc("AVG_TICKET", "Average deal size", "€", "A", ["gewos"],
+    "Rounded up from GEWOS 2025F: €36.5bn / 38,700 multi-family sales ≈ €0.94m (2024: €0.90m)")
 doc("TAKE_RATE", "Deal fee", "%", "A", ["broker", "tenx"],
     "Half of the ≈3% a broker takes per side; Ten-X charges buyers 3%")
-doc("DEAL_VARIABLE", "Cost per closed deal", "€ per deal", "B", ["dataroom", "gwg"],
-    "Data room ≈€0.5–1k, KYC on both parties and beneficial owners (GwG), contracts; the rest is buffer")
+doc("DEAL_VARIABLE", "Cost per closed deal", "€ per deal", "A", ["dataroom", "gwg"],
+    "Data room ≈€0.5–1k (Drooms list price); KYC on both parties and beneficial owners (GwG), contracts and a "
+    "buffer are not sourced")
+doc("DEALS_PER_MANAGER", "Deals a deal manager closes a year (capacity)", "deals", "A", ["nar"],
+    "The plan's most ambitious number (≈107 per average head in 2031): AI does the paperwork. US agents close a "
+    "median 10. Lower it and the model hires more deal managers")
 
 doc("EMP_PENSION_RATE", "Pension insurance (employer share)", "%", "S", ["sv_rates"], "Up to the pension ceiling")
 doc("EMP_UNEMPLOYMENT_RATE", "Unemployment insurance (employer share)", "%", "S", ["sv_rates"],
@@ -256,17 +263,20 @@ ROLE_NOTES = {
                                           "liability, HypZert / öbuv / MRICS"),
     "Platform & AI": (["eng_salary"], "Between the median (€92k) and P75 (€112k) pay of senior engineers in Berlin"),
     "Sales": (["ae_salary"], "On-target pay of a senior account executive (€83–98k)"),
-    "Operations": (["ravio"], "Operations lead: between Berlin's tech median (€80k) and management track (€100k)"),
+    "Operations & finance": (["ravio"], "Below Berlin's tech median (€80k): operations, finance and people "
+                                         "generalists"),
     "Deal team": (["tm_salary"], "Transaction-manager median ≈€73k plus a deal bonus"),
     "Marketplace tech": (["eng_salary"], "Senior engineers, as for the platform"),
 }
 HEAD_NOTES = {
     "Founders": "CEO, Head of AI, Head of Business Development, Head of Sales",
-    "Senior valuers": "Seniors who check and sign; no juniors (AI does the junior work); utilisation ≤ 85%",
+    "Senior valuers": "Seniors who check and sign; no juniors (AI does the junior work). 2028 carries a second "
+                      "senior for four-eyes checks and the bank method; raised automatically if volume needs more",
     "Platform & AI": "Build and run the platform and the AI pipeline",
     "Sales": "Account executives for investors, funds and banks",
-    "Operations": "Finance, office and valuation operations",
-    "Deal team": "Ambitious: ≈75 deals per head at year end (US agents: median 10 a year, NAR)",
+    "Operations & finance": "Finance, people, office and valuation operations (G&A): 1 → 4 heads",
+    "Deal team": "Ambitious: ≈75 deals per year-end head, ≈107 per average head (US agents: median 10, NAR); "
+                 "raised automatically if deals need more",
     "Marketplace tech": "Build the marketplace from 2029",
 }
 for role in M.ROLES:
@@ -278,11 +288,13 @@ for role in M.ROLES:
         note + "; gross incl. variable pay, before employer costs")
 
 doc("WORKPLACE_PER_MONTH", "Workplace per average head", "€/month", "B", ["office"],
-    "≈13 m² at €27.65/m² plus service charges and meeting rooms (hybrid team)")
+    "≈13 m² at €27.65/m² ≈ €360 (sourced) plus ≈€90 service charges and meeting rooms (our assumption)")
 doc("IT_PER_HEAD", "IT & software per average head", "€/yr", "B", ["saas"],
     "Below Zylo's US$4,830 average, which is driven by larger firms")
-doc("RECRUITING_PER_HIRE", "Recruiting cost per hire", "€ per hire", "B", ["hire"],
-    "≈2× the German average (€4,700): senior hires, some through agencies")
+doc("RECRUITING_PER_HIRE", "Recruiting cost per hire (except senior valuers)", "€ per hire", "B", ["hire"],
+    "≈2× the German average (€4,700, 2013 prices, all jobs)")
+doc("SENIOR_SEARCH_FEE", "Headhunter fee per senior valuer", "%", "A", ["model"],
+    "Share of the annual salary; headhunters in Germany usually charge 20–35% (not sourced to a page)")
 doc("EQUIPMENT_PER_HIRE", "Equipment per new head", "€ per head", "A", ["model"], "Laptop and screen")
 doc("DEPRECIATION_YEARS", "Depreciation period for equipment", "years", "A", ["bmf_it"],
     "Tax allows 1 year (BMF 2022); the accounts spread it over 3")
@@ -291,15 +303,21 @@ NS_DOCS = {
     "AI infrastructure": (["model"], "Model hosting, evaluation, monitoring beyond per-run tokens"),
     "Data subscriptions": (["model"], "Market data (rents, yields, comparables) on subscription"),
     "Marketing": (["marketing"], "≈5% of valuation revenue from 2029 (Gartner: 5.8% for business services)"),
-    "Company insurance (D&O, liability)": (["do"], "D&O ≈€3.5–6k for €1m cover at pre-seed, more later"),
+    "Company insurance (D&O, cyber, liability)": (["do"], "D&O ≈€3.5–6k for €1m cover at pre-seed; cyber and "
+                                                           "liability added as the business grows"),
+    "Travel, events & training": (["model"], "Sales travel, trade fairs (e.g. EXPO REAL), HypZert surveillance "
+                                             "and training of the signing valuers (not sourced)"),
+    "Information security & data protection": (["model"], "ISO 27001 certification before the first bank sale, "
+                                                          "pen tests, GDPR (rent rolls hold tenant data); not sourced"),
     "Legal, tax & accounting": (["tax_adviser"], "Tax adviser ≈€5k at start; plus legal work, audit from 2030"),
     "DACH expansion": (["model"], "Entry costs for Austria and Switzerland"),
     "Marketplace marketing": (["model"], "Owner and buyer acquisition (≈€2k per deal in 2031)"),
-    "Marketplace compliance": (["gwg"], "AML/KYC set-up, broker licence, legal opinions"),
+    "Marketplace compliance": (["gwg"], "Money-laundering officer (part-time), AML/KYC set-up, broker licence "
+                                        "(§ 34c GewO), legal opinions"),
 }
 for name, (_values, _area) in M.NON_STAFF.items():
     sources, note = NS_DOCS[name]
-    doc(f"NS:{name}", name, "€/yr", "B" if name in ("Company insurance (D&O, liability)",) else "A", sources, note)
+    doc(f"NS:{name}", name, "€/yr", "B" if name.startswith("Company insurance") else "A", sources, note)
 
 doc("CIT_RATE", "Corporate income tax rate", "%", "S", ["kst"], "Cut by 1 point a year from 2028 to 10% in 2032")
 doc("SOLI", "Solidarity surcharge on corporate tax", "%", "S", ["soli"], "5.5% of the corporate tax")
@@ -314,7 +332,11 @@ doc("LOSS_OFFSET_SHARE_TRADE", "Trade tax: share of profit above the cap that lo
 
 doc("ASK", "Pre-seed round (paid in 2027)", "€", "A", ["model"], "Covers the 2027–28 burn plus a reserve")
 doc("SEED", "Further equity", "€", "A", ["model"],
-    "None in the base plan; a 2029 seed would speed up the marketplace and covers the downside")
+    "Seed early in 2029 on the 2028 proof (ask slide); it also covers the downside's cash gap")
+doc("MIN_CASH_MONTHS", "Minimum cash cover at a year end", "months", "A", ["model"],
+    "Year-end cash plus a round raised early next year must cover this many months of next year's costs (Checks)")
+doc("SENS_DEALS", "Sensitivity: marketplace deals (share of plan)", "×", "A", ["model"], "Downside sheet grid")
+doc("SENS_FEES", "Sensitivity: deal fee", "%", "A", ["model"], "Downside sheet grid")
 doc("RECEIVABLE_DAYS", "Days until customers pay", "days", "B", ["dso"],
     "German B2B average ≈32 days of terms + ≈8 days late")
 doc("CUSTOMERS_2028", "Paying customers by the end of 2028", "customers", "A", ["model"], "Milestone on the ask slide")
@@ -338,6 +360,8 @@ doc("DOWNSIDE_PRICE", "Downside: prices", "×", "A", ["model"], "10% lower price
 doc("DOWNSIDE_HOURS", "Downside: senior hours per investor valuation", "h per valuation", "A", ["model"],
     "3 h instead of 2 h")
 doc("DOWNSIDE_MIN_SENIORS", "Downside: minimum seniors", "heads", "A", ["model"], "Never fewer than 1.5 on average")
+doc("DACH_SHARE", "Share of 'Commercial & DACH' valuations from Austria and Switzerland", "%", "A", ["model"],
+    "Dropped together with the DACH expansion costs in the downside without DACH")
 
 doc("COURT_RATE", "Court rate for property valuers", "€/h", "S", ["jveg"], "JVEG, since 1 Jun 2025")
 doc("BVS_FEE_1M", "BVS guideline fee for a €1m property", "€", "S", ["bvs"], "Net, non-binding")

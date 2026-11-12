@@ -638,7 +638,7 @@ def s_ask(slide, s):
     for name, colour in zip(names, colours):
         dot(slide, 4.45, y + 0.1, 0.22, colour)
         head, _, _ = name.partition(": ")
-        text(slide, 4.8, y, 3.0, 0.62, [[(f"{C.pct(C.BUCKETS[name])}  ", {"bold": True, "font": HEAD, "size": 17}),
+        text(slide, 4.8, y, 3.0, 0.62, [[(f"{C.BUCKET_PCT[name]}%  ", {"bold": True, "font": HEAD, "size": 17}),
                                          (head, {"bold": True, "size": 13})],
                                         [(C.LEGEND_TAILS[name], {"size": 11, "color": "ink2"})]], spacing=1.0)
         y += 0.72
@@ -684,20 +684,19 @@ def s_backup(slide, s):
             cell_text(table.cell(r, k), value, bold=bold, align=PP_ALIGN.RIGHT)
     x = 8.95
     w = RIGHT - x
-    box(slide, x, TOP, w, 3.98, fill="card", line="line", radius=0.08).name = "Drivers"
+    box(slide, x, TOP, w, 4.2, fill="card", line="line", radius=0.08).name = "Drivers"
     label(slide, x + 0.25, TOP + 0.2, w - 0.5, "How the numbers are built", color="ink2", size=10)
     y = TOP + 0.55
     for kind, words in s["drivers"]:
         box(slide, x + 0.25, y + 0.04, 0.3, 0.26, fill=KIND_COLOURS[kind], radius=0.05)
         text(slide, x + 0.25, y + 0.04, 0.3, 0.26, kind, size=10, bold=True, color="card", align=PP_ALIGN.CENTER,
              anchor=MSO_ANCHOR.MIDDLE)
-        text(slide, x + 0.65, y, w - 0.9, 0.46, words, size=10.5, color="ink", spacing=1.0)
-        y += 0.49
+        text(slide, x + 0.65, y, w - 0.9, 0.42, words, size=10, color="ink", spacing=1.0)
+        y += 0.445
     legend = [[(f"{k} ", {"bold": True, "color": KIND_COLOURS[k]}), (f"{v}   ", {})] for k, v in KIND_NAMES.items()]
-    text(slide, LEFT, 6.3, CW, 0.32, [[run for part in legend for run in part]], size=10.5, color="ink2",
+    legend.append([("· full P&L, cash flow and checks in the workbook", {})])
+    text(slide, LEFT, 6.52, CW, 0.32, [[run for part in legend for run in part]], size=10.5, color="ink2",
          name="Kinds")
-    text(slide, LEFT, 6.6, CW, 0.32, "The workbook adds the line-by-line P&L, cash flow, downside case, sources and "
-         "integrity checks; it recalculates when an input changes.", size=10.5, color="ink2", name="Workbook note")
 
 
 BUILDERS = {

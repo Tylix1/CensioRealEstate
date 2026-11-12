@@ -144,23 +144,30 @@ After the independent review (5 lenses, each finding checked by a second agent; 
 | Service-as-software | $4.6T opportunity (VC thesis) | [Foundation Capital](https://foundationcapital.com/ai-service-as-software/) |
 | AI cost per valuation | ~US$0.50 (≈€0.45) per complete AI run, estimated from token prices | `README.md`; [Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
 
-## Appendix B — Assumptions (labelled on the slides as estimates)
+## Appendix B — Assumptions and plan (financial model)
 
-The single source of these numbers is `pitch/build/model.py`; it writes `pitch/build/numbers.json`, which the slides read.
+The inputs live in `pitch/build/model.py`; `pitch/build/model_sources.py` documents each one (kind S sourced · B benchmark · T team experience · A assumption, its source and why). `model.py` writes `pitch/build/numbers.json`, which the slides read. `build_model_xlsx.py` builds the Excel twin `pitch/out/Censio-Financial-Model.xlsx` with live formulas, and `test_model_xlsx.py` checks that both agree line by line.
 
-| Assumption | Value | Why |
+| Assumption | Value | Kind / why |
 |---|---|---|
 | Story | The AI-native deal engine for real estate; the signed desktop valuation is the wedge and stays a business; a marketplace with a deal fee opens in 2030 | Team decision (vision: a building changes hands as easily as a share) |
 | Product scope (wedge) | Signed desktop valuation (documents and public data, no site visit); site visit on request | What the prototype produces |
-| Valuations per income-property sale | 1.5 (range 1–2) | Buyer and/or lender. No official count exists. |
-| Average market fee per valuation | €3,500 | Large firms charge €3–5k for an indicative valuation (team experience) |
-| Share of MFH purchases with a buy-side valuation | 50% (30–70%) | |
-| Valuation segments 2027–31 | Investors 100·450·1,000·1,700·2,400 at €1,800/€2,000, 2 h · Funds 0·100·300·700·1,200 at €1,100, 1 h · Banks 0·0·150·400·800 at €2,200, 6 h (incl. site visit, €100 travel) · Commercial & DACH 0·0·0·150·400 at €3,200, 3.5 h · Owner listings 0·0·0·600·3,000, free to list, 2 h | |
-| Marketplace | Deals 0·0·0·300·1,500; ≈€1m ticket (GEWOS average €0.95m); 1.5% deal fee; €4k cost per deal; deal team 6·20 (≈75 deals each); marketplace tech 2·4·8 from 2029; marketing €0.2m·€1.0m·€3.0m; compliance €0.05m·€0.1m·€0.15m | A fraction of brokers' 3–7%; built in 2029, launched 2030 |
-| Market size | TAM €241bn × 1.5% = €3.6bn+ (Europe, institutional only); SAM €79bn × 1.5% + €390m valuations = €1.6bn (Germany, all income-property sales) | |
-| Senior review capacity | 1,000 review hours per senior a year; utilisation ≤ 85% | |
-| Team (year end) | 7 · 9 · 15 · 32 · 64 (2031: 25 valuers, 20 deal team, 12 platform & AI, 3 sales & ops, 4 founders) | No juniors |
-| Pre-seed | €1.5m | Net burn 2027–28 €0.89m, working capital €0.08m, equipment €0.04m, reserve €0.49m; seed in 2029 for the marketplace (not in the plan) |
+| Valuations per income-property sale | 1.5 (range 1–2) | A: buyer and/or lender; no official count exists |
+| Average market fee per valuation | €3,500 | T: large firms charge €3–5k for an indicative valuation |
+| Share of MFH purchases with a buy-side valuation | 50% (30–70%) | A |
+| Valuation segments 2027–31 | Investors 100·450·1,000·1,700·2,400 at €1,800/€2,000, 2 h · Funds 0·100·300·700·1,200 at €1,100, 1 h · Banks 0·0·150·400·800 at €2,200, 6 h (incl. site visit, €100 travel) · Commercial & DACH 0·0·0·150·400 at €3,200, 3.5 h · Owner listings 0·0·0·600·3,000, free to list, 2 h | A (price: T) |
+| Senior review capacity | 1,000 review hours per senior a year; utilisation ≤ 85% | A |
+| Salaries (gross, constant 2027 €) | Founders €50k·€60k·€80k·€100k·€110k; senior valuers €120k; platform & AI and marketplace engineers €95k; sales €95k on-target; operations & finance €75k (1→4 heads); deal team €95k on-target | B: job ads, levels.fyi, Payscale, Ravio, JOIN, gehalt.de, founder surveys |
+| Heads follow the volume | Seniors at most 85% busy and deal managers at 110 deals each; more volume adds heads automatically | A |
+| Employer costs | 2026 social-security rates up to the contribution ceilings (€101,400 pension, €69,750 health) + 2% other; senior valuer ≈€141k a year | S (other: A) |
+| Cost per signed valuation | Senior 2 h €281; documents €40 + register extract €145 for 25%; e-signature & hosting €10; AI €5; insurance €50 (placeholder); payments 0.5% + bad debt 0.5% → €443, gross margin 78% (75% at the utilisation cap). Free owner-listing valuations are a marketplace cost | B (insurance, register share, bad debt: A) |
+| Overhead per head | Workplace €450/month; IT €3,000/yr; recruiting €10,000 per hire, seniors 25% of salary (10% turnover); equipment €2,500 per new head, written off and replaced after 3 years | B (headhunter fee, equipment: A) |
+| Other operating costs (€k, 2027→2031) | AI infrastructure 30→200; Data subscriptions 20→120; Marketing 40→500; Travel, events & training 30→170; Information security & data protection 5→40; Company insurance (D&O, cyber, liability) 5→30; Legal, tax & accounting 40→150; DACH expansion 0→600; Marketplace marketing 0→3000; Marketplace compliance 0→150 | A (insurance: B) |
+| Marketplace | Deals 0·0·0·300·1,500; ≈€1m ticket (GEWOS ≈€0.94m, rounded up); 1.5% deal fee; €4k cost per deal; deal team 6·20 (≈107 deals per average head); marketplace tech 2·4·8 from 2029 | A: ambitious; see the workbook's Peer check (Crexi ≈830 auctions a year; US agents ≈10 deals a year) |
+| Market size | TAM €241bn × 1.5% = €3.6bn+ (Europe, institutional only); SAM €79bn × 1.5% + €390m valuations = €1.6bn (Germany, all income-property sales) | S × A |
+| Tax | Corporate tax 15%·14%·13%·12%·11% (cut from 2028) + 5.5% solidarity surcharge; Berlin trade tax 3.5% × 410%; losses carried forward with minimum taxation (€1m, then 70%/60%; trade tax 60%) | S |
+| Cash | Customers pay after 40 days; pre-seed €1.5m in 2027; seed €4.0m early in 2029; year-end cash covers ≥ 3 months of next year's costs | B / A |
+| Pre-seed | €1.5m | Net burn 2027–28 €1.04m, working capital €0.11m, equipment €0.02m, reserve €0.32m; runway at zero revenue 17 months |
 
 ### Plan output (numbers.json)
 
@@ -170,8 +177,15 @@ The single source of these numbers is `pitch/build/model.py`; it writes `pitch/b
 | Deals closed on Censio | 0 | 0 | 0 | 300 | 1,500 |
 | Revenue | €0.18m | €1.01m | €2.66m | €10.03m | €31.66m |
 | of which deal fees | €0.00m | €0.00m | €0.00m | €4.50m | €22.50m |
-| EBITDA | −€0.62m | −€0.27m | +€0.13m | +€2.73m | +€12.52m |
-| Valuation business EBITDA | −€0.62m | −€0.27m | +€0.50m | +€1.31m | +€1.91m |
-| Headcount (year end) | 7 | 9 | 15 | 32 | 64 |
+| Gross margin | n/m | 56% | 70% | 65% | 62% |
+| EBITDA | −€0.70m | −€0.34m | +€0.04m | +€2.29m | +€11.45m |
+| EBITDA margin | n/m | n/m | 2% | 23% | 36% |
+| Valuation business EBITDA | −€0.70m | −€0.34m | +€0.44m | +€1.22m | +€2.34m |
+| Income taxes | €0.00m | €0.00m | €0.00m | €0.33m | €2.96m |
+| Net income | −€0.71m | −€0.35m | +€0.03m | +€1.92m | +€8.43m |
+| Cash at year end | €0.76m | €0.32m | €4.17m | €5.25m | €11.27m |
+| Headcount (year end) | 7 | 9 | 15 | 33 | 67 |
 
-Downside (valuation business only; −40% volume, −10% price, 3 senior hours): EBITDA 2031 −€0.13m, cumulative low −€2.29m; cash runs out in 2029 and the round is €0.9m short (€0.5m without the DACH expansion), so a seed on 2028 data is needed.
+Downside (valuation business only, no seed, plan costs; −40% volume, −10% price, 3 senior hours): EBITDA 2031 −€0.97m, cumulative low −€3.71m; the pre-seed runs out in 2029 and €2.88m more is needed by 2031 (€2.30m without DACH), which the seed covers.
+
+Marketplace sensitivity (2031 EBITDA): half the deals €3.25m; 1% fee €3.98m; both −€0.48m.

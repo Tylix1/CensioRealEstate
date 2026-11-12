@@ -88,12 +88,15 @@ Die Tests prüfen unter anderem: Zahlen auf den Folien gleich Modell, Sprechtext
   - Cash flow und Use of funds: Liquidität und wofür die Runde ausgegeben wird
   - Unit economics: eine Bewertung, ein Deal
   - Market und Downside: Marktgröße und der Stressfall
-- **Peer check** stellt eure Marge und die Deal-Zahlen neben Scout24, Zillow, CBRE & Co. Das Blatt zeigt offen, was stimmen muss. Am ehrgeizigsten sind 1.500 Deals 2031 und rund 75 Deals pro Deal-Manager.
+- **Peer check** stellt eure Marge und die Deal-Zahlen neben Scout24, Zillow, CBRE & Co. Das Blatt zeigt offen, was stimmen muss. Am ehrgeizigsten sind 1.500 Deals 2031 und rund 107 Deals pro Deal-Manager im Jahr (US-Makler: etwa 10).
+- **Downside** zeigt das Bewertungsgeschäft im Stressfall mit eigenem Cash-Verlauf bis 2031. Dazu kommt ein Raster: EBITDA 2031 bei weniger Deals oder niedrigerer Gebühr. Rund 80 % des EBITDA 2031 kommen aus den Deal-Gebühren.
 - **Deck tie-out** verknüpft jede Zahl im Deck mit ihrer Zelle.
 - **Checks** muss überall TRUE zeigen.
 - **Sources** listet alle Quellen mit Link.
 
-**Ausprobieren:** Auf Assumptions stehen gelbe Hebel für Volumen, Preis, Senior-Stunden und Deals (1,00× = Plan). Ändert man einen Hebel, rechnet das ganze Modell neu. Checks und Deck tie-out zeigen dann an, dass das Deck nicht mehr zum Modell passt. So ist es gewollt.
+**Ausprobieren:** Auf Assumptions stehen gelbe Hebel für Volumen, Preis, Senior-Stunden und Deals (1,00× = Plan). Ändert man einen Hebel, rechnet das ganze Modell neu. Brauchen die Stunden oder Deals mehr Leute, stellt das Team-Blatt Senior-Gutachter und Deal-Manager dazu, und die Kosten steigen mit. Checks und Deck tie-out zeigen dann an, dass das Deck nicht mehr zum Modell passt. So ist es gewollt.
+
+**Finanzierung im Plan:** €1,5 Mio. Pre-Seed 2027 und €4 Mio. Seed Anfang 2029 (Annahme, wie auf der Ask-Folie). Ohne Seed fiele die Kasse Ende 2029 unter einen Monat Kosten.
 
 **Zahlen im Deck ändern:** Die Eingaben stehen in `build/model.py`, die Erklärungen und Quellen in `build/model_sources.py`. Danach neu bauen:
 

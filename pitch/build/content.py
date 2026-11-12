@@ -85,7 +85,7 @@ FMT = {
     "ebitda_margin_last": pct(LAST["ebitda_margin"]),
     "breakeven": str(NUM["breakeven_year"]),
     "ask": eur_m(P["ask"]),
-    "runway": f"{P['runway_months_zero_revenue']:.0f}",
+    "runway": f"{int(P['runway_months_zero_revenue'])}",  # rounded down
     "valuations_2027_28": f"{P['valuations_2027_28']:,}",
     "revenue_2028": eur_m(P["revenue_2028"], 1),
     "revenue_2027_28": eur_m(PLAN[YEARS[0]]["revenue"] + PLAN[YEARS[1]]["revenue"]),
@@ -125,9 +125,34 @@ FMT = {
     "rev_per_head_last": eur_m(LAST["revenue_per_head"]),
     "deal_share_last": pct(LAST["marketplace_revenue"] / LAST["revenue"]),
     "per_senior_spoken": f"{round(T['valuations_per_senior_2031'], -1):.0f}",
+    "gross_margin_cap": pct(U["gross_margin_at_cap"]),
+    "deals_per_manager": f"{T['deals_per_manager_avg_2031']:.0f}",
+    "mkt_share_ebitda": pct(LAST["marketplace_ebitda"] / LAST["ebitda"]),
+    "net_income_last": eur_m(LAST["net_income"]),
+    "valuation_ebitda_last": eur_m(LAST["valuation_ebitda"]),
+    "marketplace_ebitda_last": eur_m(LAST["marketplace_ebitda"]),
+    "tax_first": pct(NUM["inputs"]["tax_first"]),
+    "tax_last": pct(NUM["inputs"]["tax_last"]),
+    "seed": eur_m(NUM["inputs"]["seed"]),
+    "min_cash": eur_m(min(PLAN[y]["cash_end"] for y in YEARS)),
+    "cash_months_min": f"{int(min(PLAN[y]['cash_months'] for y in YEARS))}",
 }
 
 BUCKETS = P["buckets"]
+
+
+def whole_percents(shares: dict) -> dict:
+    """Whole percentages that add up to 100 (largest remainder)."""
+    raw = {k: v * 100 for k, v in shares.items()}
+    out = {k: int(v) for k, v in raw.items()}
+    for k in sorted(raw, key=lambda k: raw[k] - out[k], reverse=True)[:100 - sum(out.values())]:
+        out[k] += 1
+    return out
+
+
+BUCKET_PCT = whole_percents(BUCKETS)
+SENS = NUM["marketplace_sensitivity"]
+SENS_SHOWN = {k: eur_m(SENS[k]) for k in ("0.5x0.015", "1x0.01", "0.5x0.01")}
 LEGEND_TAILS = {
     "Build: product & AI": "platform, AI, data",
     "Deliver: senior valuers": "the people who sign",
@@ -171,7 +196,7 @@ SOURCES = {
     "jveg": "JVEG Anlage 1, Sachgebiet 7 (€125/h since 1 Jun 2025)",
     "speed": "ImmoScout24, jacasa (3–4 weeks, up to 6); service.berlin.de, Heidelberg board (4–6 months)",
     "fees": "Team's market experience (indicative valuations at large firms €3–5k); ftimmobilien24 Munich guide "
-            "(multi-family reports €4–8k); Haus & Grund (0.5–1.5% of value)",
+            "(multi-family reports €4–8k)",
     "ihk": "IHK Nürnberg / DIHK 2025 (publicly appointed experts, all fields)",
     "crr": "CRR III Art. 229 and EBA Q&A 2020_5470",
     "darmstadt": "LG Darmstadt, 10 Nov 2025, 19 O 527/16; IHK AI guidance for experts, 24 Jun 2026",
@@ -197,7 +222,7 @@ SHORT = {
     "bvs": "BVS fee guideline 2026",
     "jveg": "JVEG",
     "speed": "ImmoScout24; Berlin and Heidelberg valuation boards",
-    "fees": "team market experience; Munich guide; Haus & Grund",
+    "fees": "team market experience; Munich guide",
     "ihk": "IHK/DIHK 2025",
     "crr": "CRR III Art. 229; EBA Q&A",
     "darmstadt": "LG Darmstadt 19 O 527/16",
@@ -240,14 +265,14 @@ BACKUP_ROWS = [
 BACKUP_DRIVERS = [
     ("T", f"Price {eur(U['price'])} per signed valuation; large firms charge €3–5k for an indicative one"),
     ("A", f"2 senior hours per valuation; {I['review_hours']:,} review hours per senior a year"),
-    ("B", f"Senior valuer {eur(I['senior_salary'])} gross, {eur(round(I['senior_cost'], -2))} with employer social "
-          "security"),
-    ("B", f"Per valuation: AI {eur(I['ai_cost'])}, data {eur(I['data_cost'])}, e-signature "
-          f"{eur(I['hosting_cost'])}, insurance {eur(I['insurance'])}"),
-    ("B", f"Per head: workplace {eur(I['workplace'])} a month, IT {eur(I['it'])} a year, recruiting "
-          f"{eur(I['recruiting'])} per hire"),
-    ("A", f"Marketplace: {I['take_rate'] * 100:.1f}% deal fee on ≈{eur_m(I['avg_ticket'], 0)} deals "
-          "(brokers charge 3–7%)"),
+    ("B", f"Senior valuer {eur(I['senior_salary'])} gross, {eur(round(I['senior_cost'], -2))} employer cost"),
+    ("B", f"Per valuation: AI {eur(I['ai_cost'])}, documents {eur(I['documents'])}, e-signature "
+          f"{eur(I['hosting_cost'])}"),
+    ("A", f"Insurance {eur(I['insurance'])} per valuation; register extract ({eur(I['register_fee'])}) for 1 in 4"),
+    ("B", f"Per head: workplace {eur(I['workplace'])}/mo, IT {eur(I['it'])}/yr, hiring {eur(I['recruiting'])} "
+          f"(seniors {pct(I['senior_search_fee'])})"),
+    ("A", f"Marketplace: {I['take_rate'] * 100:.1f}% fee on ≈{eur_m(I['avg_ticket'], 0)} deals, "
+          f"≈{T['deals_per_manager_avg_2031']:.0f} deals per deal manager"),
     ("S", f"Tax ≈{pct(I['tax_first'])} falling to ≈{pct(I['tax_last'])} with the corporate-tax cut; losses "
           "carried forward"),
 ]
@@ -283,7 +308,8 @@ SLIDES = [
                  "valuation.",
         "qa": ["Today a building takes months to change hands: weeks for the valuation alone, then financing and the "
                "notary. We start where every deal stalls.",
-               "Independence: valuation fees are fixed and never tied to a closing; valuers are not paid on deals."],
+               "Independence: paid valuation fees are fixed and never tied to a closing; valuers are not paid on "
+               "deals. Free listing values follow the same signing rules."],
         "sources": [],
     },
     {
@@ -297,7 +323,7 @@ SLIDES = [
             ("Time", "3–6 weeks", "for a full valuation report from a private valuer; public valuation boards "
                                   "take months (Heidelberg: 4–6)"),
             ("Cost", "€3–5k+", "for just an indicative valuation at a large firm; a signed full report costs "
-                               "more (up to 0.5–1.5% of value)"),
+                               "more (BVS guide: €4,360 at €1m)"),
             ("People", "60 years", "average age of Germany's sworn experts (all fields), with 10–12% fewer "
                                    "than five years ago"),
         ],
@@ -312,7 +338,8 @@ SLIDES = [
                "The 35 hours are an estimate: the BVS fee at €1m divided by the €125/h court rate. They include "
                "the site visit, travel and the written report.",
                "Fees: €3–5k for an indicative valuation at large firms is our team's market experience; public "
-               "guides show €4–8k for multi-family reports (Munich) and 0.5–1.5% of value (Haus & Grund)."],
+               "guides show €4–8k for multi-family reports (Munich); the BVS guideline gives €4,360 net at €1m and "
+               "€6,800 at €3m."],
         "sources": ["fees", "broker", "speed", "bvs", "ihk", "jveg", "hypzert"],
     },
     {
@@ -488,7 +515,7 @@ SLIDES = [
              "owners list with a signed value; investors bid"),
         ],
         "later": "2031+: Europe, then the deal engine. Value, finance and close any building within a week. "
-                 "Valuation fees stay fixed, never tied to a closing.",
+                 "Paid valuation fees stay fixed, never tied to a closing.",
         "notes": "We enter with signed valuations for multi-family investors at 2,000 euros, then fund revaluations, "
                  "then banks and financing. From 2030 our marketplace, plus commercial and DACH: owners list with a "
                  "signed value, investors bid, and we earn a deal fee. Revenue reaches 31.7 million euros in 2031.",
@@ -534,23 +561,29 @@ SLIDES = [
         "key": "financials",
         "eyebrow": "Financial projections",
         "title": f"{FMT['revenue_last']} revenue by 2031, {FMT['deal_share_last']} from deal fees",
-        "sub": f"Valuations break even in {FMT['breakeven']} and fund the marketplace build; from 2030 deal fees lift "
-               f"EBITDA to {FMT['ebitda_last']} ({FMT['ebitda_margin_last']}) in 2031",
+        "sub": f"We break even in {FMT['breakeven']}; with the seed, valuations fund the marketplace build, and from "
+               f"2030 deal fees lift EBITDA to {FMT['ebitda_last']} ({FMT['ebitda_margin_last']}) in 2031",
         "seconds": 22,
-        "downside": f"Downside for the valuation business (−40% volume, −10% price, 3 senior hours): the round runs "
-                    f"out in {FMT['downside_out_of_cash']} and {FMT['downside_extra']} more is needed, so we raise a "
-                    "seed on 2028 data",
-        "notes": "Valuations alone break even in 2029 and fund the marketplace build. From 2030 the deal fee takes "
+        "downside": f"Downside for the valuation business (−40% volume, −10% price, 3 senior hours): the pre-seed "
+                    f"runs out in {FMT['downside_out_of_cash']} and {FMT['downside_extra']} more is needed by 2031, "
+                    f"which the {FMT['seed']} seed covers",
+        "notes": "We break even in 2029; with the seed, valuations fund the marketplace build. From 2030 the "
+                 "deal fee takes "
                  f"revenue to 31.7 million and EBITDA to {FMT['ebitda_last'][1:-1]} million in 2031. First we must "
                  "prove two senior hours per valuation.",
-        "qa": [f"Downside (valuation business, plan costs): EBITDA 2031 {FMT['downside_2031']}, cumulative low "
-               f"{FMT['downside_cum']}; cash runs out in {FMT['downside_out_of_cash']} and the round is "
-               f"{FMT['downside_extra']} short ({FMT['downside_extra_no_dach']} without the DACH expansion).",
-               f"79% is per valuation at full senior use; company gross margin is {FMT['company_gm']} in 2029–31.",
-               "Marketplace assumptions: 300 and 1,500 deals, ≈€1m average ticket (GEWOS: €0.95m), 1.5% fee, €4k "
-               "per deal, one deal manager per ~75 deals, build from 2029; none of it is proven yet.",
-               "The 2029 seed funds the marketplace build faster; the plan itself carries the build costs and stays "
-               "EBITDA-positive."],
+        "qa": [f"Downside (valuation business, plan costs, no cost cuts): EBITDA 2031 {FMT['downside_2031']}, "
+               f"cumulative low {FMT['downside_cum']}; the pre-seed runs out in {FMT['downside_out_of_cash']} and "
+               f"{FMT['downside_extra']} more is needed by 2031 ({FMT['downside_extra_no_dach']} without DACH).",
+               f"About {FMT['mkt_share_ebitda']} of 2031 EBITDA comes from deal fees: at half the deals it is "
+               f"{SENS_SHOWN['0.5x0.015']}, at a 1% fee {SENS_SHOWN['1x0.01']}, with both "
+               f"{SENS_SHOWN['0.5x0.01']} (valuations alone {FMT['valuation_ebitda_last']}).",
+               f"{FMT['gross_margin']} is per valuation at full senior use ({FMT['gross_margin_cap']} at the 85% "
+               f"cap); company gross margin is {FMT['company_gm']} in 2029–31.",
+               f"Marketplace assumptions: {FMT['deals_first']} and {FMT['deals_last']} deals, ≈€1m average ticket "
+               f"(GEWOS ≈€0.94m, rounded up), {FMT['take_rate']} fee, €4k per deal, ≈{FMT['deals_per_manager']} "
+               "deals per deal manager a year, build from 2029; none of it is proven yet.",
+               f"After tax (≈{FMT['tax_first']} in 2027, ≈{FMT['tax_last']} by 2031 with the corporate-tax cut; "
+               f"start-up losses carried forward), net income 2031 is {FMT['net_income_last']}."],
         "sources": ["model", "prototype", "gewos"],
     },
     {
@@ -588,10 +621,10 @@ SLIDES = [
         "notes": "",
         "rows": BACKUP_ROWS,
         "drivers": BACKUP_DRIVERS,
-        "qa": [f"Valuation business alone (before the marketplace): EBITDA 2031 "
-               f"{eur_m(LAST['valuation_ebitda'])}; the marketplace adds {eur_m(LAST['marketplace_ebitda'])}.",
-               f"Cash never falls below {eur_m(min(PLAN[y]['cash_end'] for y in YEARS))} at a year end without a "
-               "further round; the downside needs a seed on 2028 data (financials slide).",
+        "qa": [f"Valuation business alone: EBITDA 2031 {FMT['valuation_ebitda_last']}; the marketplace (incl. "
+               f"the free listing valuations) adds {FMT['marketplace_ebitda_last']}.",
+               f"With the {FMT['seed']} seed early in 2029, year-end cash never falls below {FMT['min_cash']} and "
+               f"always covers at least {FMT['cash_months_min']} months of the next year's costs.",
                "Change any input on the Assumptions sheet and the workbook recalculates; the Checks sheet must stay "
                "TRUE."],
         "sources": ["model"],
