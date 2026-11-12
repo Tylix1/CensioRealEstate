@@ -1,0 +1,195 @@
+{
+  "market": {
+    "income_sales_2024": 73500,
+    "mfh_sales_2024": 34700,
+    "tam_eur": 385875000.0,
+    "tam_valuations": 110250.0,
+    "sam_eur": 60725000.0,
+    "sam_valuations": 17350.0,
+    "som_2031_eur": 4800000,
+    "som_2031_valuations": 2400,
+    "som_share_of_sam": 0.138328530259366
+  },
+  "unit": {
+    "price": 2000,
+    "cost_lines": {
+      "Senior review (2 h)": 300.0,
+      "Data & documents": 40,
+      "Hosting & e-signature": 10,
+      "AI": 5,
+      "Insurance & payments": 70.0
+    },
+    "cost": 425.0,
+    "gross_margin": 0.7875
+  },
+  "plan": {
+    "2027": {
+      "valuations": 100,
+      "revenue": 180000,
+      "segment_revenue": {
+        "Investors (multi-family)": 180000,
+        "Portfolio & fund revaluations": 0,
+        "Banks": 0,
+        "Commercial & DACH": 0
+      },
+      "review_hours": 200.0,
+      "senior_utilisation": 0.13333333333333333,
+      "cogs": 236800.0,
+      "gross_margin": -0.31555555555555553,
+      "opex": 560000.0,
+      "ebitda": -616800.0,
+      "ebitda_margin": -3.4266666666666667,
+      "headcount_ye": 7,
+      "headcount_avg": 6.5,
+      "seniors_ye": 2,
+      "revenue_per_head": 27692.30769230769,
+      "valuations_per_senior": 66.66666666666667
+    },
+    "2028": {
+      "valuations": 550,
+      "revenue": 1010000,
+      "segment_revenue": {
+        "Investors (multi-family)": 900000,
+        "Portfolio & fund revaluations": 110000,
+        "Banks": 0,
+        "Commercial & DACH": 0
+      },
+      "review_hours": 1000.0,
+      "senior_utilisation": 0.4,
+      "cogs": 440600.0,
+      "gross_margin": 0.5637623762376237,
+      "opex": 840000.0,
+      "ebitda": -270600.0,
+      "ebitda_margin": -0.26792079207920794,
+      "headcount_ye": 9,
+      "headcount_avg": 8.0,
+      "seniors_ye": 3,
+      "revenue_per_head": 126250.0,
+      "valuations_per_senior": 220.0
+    },
+    "2029": {
+      "valuations": 1450,
+      "revenue": 2660000,
+      "segment_revenue": {
+        "Investors (multi-family)": 2000000,
+        "Portfolio & fund revaluations": 330000,
+        "Banks": 330000,
+        "Commercial & DACH": 0
+      },
+      "review_hours": 2750.0,
+      "senior_utilisation": 0.6875,
+      "cogs": 772850.0,
+      "gross_margin": 0.7094548872180451,
+      "opex": 1370000.0,
+      "ebitda": 517150.0,
+      "ebitda_margin": 0.1944172932330827,
+      "headcount_ye": 13,
+      "headcount_avg": 11.0,
+      "seniors_ye": 5,
+      "revenue_per_head": 241818.18181818182,
+      "valuations_per_senior": 362.5
+    },
+    "2030": {
+      "valuations": 2950,
+      "revenue": 5530000,
+      "segment_revenue": {
+        "Investors (multi-family)": 3400000,
+        "Portfolio & fund revaluations": 770000,
+        "Banks": 880000,
+        "Commercial & DACH": 480000
+      },
+      "review_hours": 5825.0,
+      "senior_utilisation": 0.8321428571428572,
+      "cogs": 1405800.0,
+      "gross_margin": 0.7457866184448463,
+      "opex": 2295000.0,
+      "ebitda": 1829200.0,
+      "ebitda_margin": 0.3307775768535262,
+      "headcount_ye": 19,
+      "headcount_avg": 16.0,
+      "seniors_ye": 9,
+      "revenue_per_head": 345625.0,
+      "valuations_per_senior": 421.42857142857144
+    },
+    "2031": {
+      "valuations": 4800,
+      "revenue": 9160000,
+      "segment_revenue": {
+        "Investors (multi-family)": 4800000,
+        "Portfolio & fund revaluations": 1320000,
+        "Banks": 1760000,
+        "Commercial & DACH": 1280000
+      },
+      "review_hours": 9800.0,
+      "senior_utilisation": 0.8521739130434782,
+      "cogs": 2309600.0,
+      "gross_margin": 0.7478602620087337,
+      "opex": 3200000.0,
+      "ebitda": 3650400.0,
+      "ebitda_margin": 0.3985152838427948,
+      "headcount_ye": 25,
+      "headcount_avg": 22.0,
+      "seniors_ye": 14,
+      "revenue_per_head": 416363.63636363635,
+      "valuations_per_senior": 417.39130434782606
+    }
+  },
+  "breakeven_year": 2029,
+  "proceeds": {
+    "ask": 1500000,
+    "gross_spend_2027_28": 2077400.0,
+    "bucket_total": 2077400.0,
+    "buckets": {
+      "Build: product & AI": 0.301217868489458,
+      "Deliver: senior valuers": 0.30314335226725714,
+      "Sell: sales & partnerships": 0.19827669201886974,
+      "Run: operations, legal & compliance": 0.19736208722441514
+    },
+    "net_burn_2027_28": 887400.0,
+    "working_capital": 83013.69863013699,
+    "capex": 40000,
+    "buffer": 489586.301369863,
+    "runway_months_zero_revenue": 18.214586912384817,
+    "valuations_2027_28": 650,
+    "revenue_2028": 1010000,
+    "customers_2028": 25
+  },
+  "downside": {
+    "years": {
+      "2027": {
+        "revenue": 97200.0,
+        "ebitda": -694502.0
+      },
+      "2028": {
+        "revenue": 545400.0,
+        "ebitda": -556839.0
+      },
+      "2029": {
+        "revenue": 1436400.0,
+        "ebitda": -428782.8235294118
+      },
+      "2030": {
+        "revenue": 2986200.0,
+        "ebitda": -307431.7058823528
+      },
+      "2031": {
+        "revenue": 4946400.0,
+        "ebitda": 123111.29411764722
+      }
+    },
+    "ebitda_2031": 123111.29411764722,
+    "cum_min": -1987555.5294117646
+  },
+  "team": {
+    "people_2031": 25,
+    "seniors_2031": 14,
+    "valuations_2031": 4800,
+    "valuations_per_senior_2031": 417.39130434782606,
+    "classic_hours_per_report": 34.88,
+    "classic_reports_per_valuer_low": 28.6697247706422,
+    "classic_reports_per_valuer_high": 50.0,
+    "classic_valuers_low": 96.0,
+    "classic_valuers_high": 167.424,
+    "censio_review_hours": 2.0
+  }
+}
