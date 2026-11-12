@@ -34,9 +34,9 @@ ONE_PAGER = {
     # Course p. 13: "[Workflow] for [specific user] in [industry]."
     "wedge": "Signed desktop income valuations of multi-family houses for acquisition teams in German residential "
              "real-estate investment.",
-    "pain": "Fast or signed, pick one: short reports (2–7 days) are only indicative; a signed full valuation of a "
-            "€1–3m building costs €4.4–6.8k and 3–6 weeks (≈35 expert hours, est.), ≈€90–135k a year for a team "
-            "pricing ~20 bids. Signing experts (all fields) average 60 years.",
+    "pain": "Slow and costly either way: even an indicative valuation of a €1–3m building costs €3–5k at a large "
+            "firm; a signed full report costs more and takes 3–6 weeks (≈35 expert hours, est.). That is ≥ €100k a "
+            "year for a team pricing ~20 bids, and the signing experts (all fields) average 60 years.",
     "budget": "Head of Acquisitions at fund managers, family offices and mid-sized residential investors, whose "
               "investment committee or lender wants an independent, signed value before the bid; paid per deal "
               "from the due-diligence budget (labour, not IT).",

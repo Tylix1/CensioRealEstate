@@ -145,6 +145,8 @@ SOURCES = {
     "bvs": "BVS Honorarrichtlinie 2026 (non-binding fee guideline)",
     "jveg": "JVEG Anlage 1, Sachgebiet 7 (€125/h since 1 Jun 2025)",
     "speed": "ImmoScout24, jacasa (3–4 weeks, up to 6); service.berlin.de, Heidelberg board (4–6 months)",
+    "fees": "Team's market experience (indicative valuations at large firms €3–5k); ftimmobilien24 Munich guide "
+            "(multi-family reports €4–8k); Haus & Grund (0.5–1.5% of value)",
     "ihk": "IHK Nürnberg / DIHK 2025 (publicly appointed experts, all fields)",
     "crr": "CRR III Art. 229 and EBA Q&A 2020_5470",
     "darmstadt": "LG Darmstadt, 10 Nov 2025, 19 O 527/16; IHK AI guidance for experts, 24 Jun 2026",
@@ -166,6 +168,7 @@ SHORT = {
     "bvs": "BVS fee guideline 2026",
     "jveg": "JVEG",
     "speed": "ImmoScout24; Berlin and Heidelberg valuation boards",
+    "fees": "team market experience; Munich guide; Haus & Grund",
     "ihk": "IHK/DIHK 2025",
     "crr": "CRR III Art. 229; EBA Q&A",
     "darmstadt": "LG Darmstadt 19 O 527/16",
@@ -203,8 +206,8 @@ SLIDES = [
                    "in 48 hours, for less than half the fee of a full report.",
         "notes": "Our vision: every property decision rests on a value anyone can trace to its sources. Our mission: "
                  "AI prepares, a senior valuer signs, in 48 hours. Orange means AI on every slide, violet the senior.",
-        "qa": [f"Less than half: {FMT['price']} is 46% of the BVS guideline fee for a full report at €1m (€4,360) "
-               "and 57% of the conservative €3,500 average we use for the market size.",
+        "qa": [f"Less than half: {FMT['price']} is 46% of the BVS guideline fee for a full report at €1m (€4,360 "
+               "net, before surcharges and VAT) and below a large firm's €3–5k for an indicative valuation alone.",
                "Desktop valuation = from documents and public data, no site visit; stated in every report. "
                "Buy-side investors inspect the building in their own technical due diligence."],
         "sources": ["bvs"],
@@ -213,26 +216,30 @@ SLIDES = [
         "key": "problem",
         "eyebrow": "Problem",
         "title": "Every deal waits weeks for one signature",
-        "sub": "Valuing a €1–3m apartment building costs €4.4–6.8k and 3–6 weeks, and the experts who sign "
-               "are ageing",
+        "sub": "Even an indicative valuation of a €1–3m apartment building costs €3–5k at a large firm; a signed one "
+               "costs more and takes 3–6 weeks",
         "seconds": 30,
         "stats": [
             ("Time", "3–6 weeks", "for a full valuation report from a private valuer; public valuation boards "
                                   "take months (Heidelberg: 4–6)"),
-            ("Cost", "€4.4–6.8k", "net fee for a €1–3m apartment building under the valuers' own fee guideline"),
+            ("Cost", "€3–5k+", "for just an indicative valuation at a large firm; a signed full report costs "
+                               "more (up to 0.5–1.5% of value)"),
             ("People", "60 years", "average age of Germany's sworn experts (all fields), with 10–12% fewer "
                                    "than five years ago"),
         ],
         "footnote": f"≈{FMT['classic_hours']} billable expert hours in a full report's fee, incl. site visit and "
                     "travel (est.: €4,360 ÷ €125/h court rate)",
-        "notes": "When an investor buys an apartment building for one to three million euros, a full valuation costs "
-                 "4,400 to 6,800 euros and takes three to six weeks. That fee pays for about 35 hours of expert time. "
-                 "And the experts who sign are ageing: Germany's sworn experts, across all fields, are 60 on average.",
+        "notes": "When an investor buys a one-to-three-million-euro apartment building, even an indicative valuation "
+                 "from a large firm costs three to five thousand euros; a signed full report costs more and takes "
+                 "three to six weeks. And the experts who sign are ageing: Germany's sworn experts, across all fields, "
+                 "are 60 on average.",
         "qa": ["The expert count covers all fields; no official count of property valuers exists. HypZert certifies "
                "~200 new valuers a year (>2,000 in total), which is the pool we hire from.",
                "The 35 hours are an estimate: the BVS fee at €1m divided by the €125/h court rate. They include "
-               "the site visit, travel and the written report."],
-        "sources": ["speed", "bvs", "ihk", "jveg", "hypzert"],
+               "the site visit, travel and the written report.",
+               "Fees: €3–5k for an indicative valuation at large firms is our team's market experience; public "
+               "guides show €4–8k for multi-family reports (Munich) and 0.5–1.5% of value (Haus & Grund)."],
+        "sources": ["fees", "speed", "bvs", "ihk", "jveg", "hypzert"],
     },
     {
         "key": "solution",
@@ -323,9 +330,9 @@ SLIDES = [
         "axis": ("Complete & signed", "Indicative"),
         "players": {
             "classic": ("Valuation firms & sworn experts", "CBRE · JLL · Savills · öbuv / HypZert valuers",
-                        "full report with site visit · 3–6 weeks · €4.4–6.8k"),
-            "short": ("Short reports", "Kurzgutachten: signed, but indicative",
-                      "2–7 days · €300–900 · not for banks or courts"),
+                        "€5k+ · 3–6 weeks · full report with site visit"),
+            "short": ("Indicative valuations", "large firms' desktop or short reports",
+                      "days to weeks · €3–5k · indicative only"),
             "avm": ("Automated models & portals", "PriceHubble · Sprengnetter · on-geo LORA indication · ImmoScout24",
                     "seconds · nobody signs"),
             "censio": ("Censio", "Signed desktop valuation; site visit on request", f"48 hours · {FMT['price']}"),
@@ -340,19 +347,19 @@ SLIDES = [
              "for one senior reviewing a queue, and every correction is logged as training data. US precedent: "
              "Bowery Valuation, appraiser-signed, $35m Series B (2021)."),
         ],
-        "notes": "Today you must choose. Automated models answer in seconds, but nobody signs them. Short reports are "
-                 "cheap, but only indicative. Full reports are signed, but take weeks, and EU bank rules require an "
+        "notes": "Today you must choose. Automated models answer in seconds, but nobody signs them. Indicative "
+                 "valuations cost three to five thousand euros. Full reports are signed, but take weeks, and EU bank rules require an "
                  "independent valuer. Censio is built to be both; in the US, Bowery raised 35 million dollars this "
                  "way.",
         "qa": ["Also competing: the buyer's own spreadsheet (the status quo, unsigned) and, for bank loans, in-house "
                "valuers working on platforms like on-geo LORA (used by ≈98% of Sparkassen). VALUE AG also sells "
                "valuations.",
-               "Why €2,000 and not a €300–900 short report? A short report is indicative; a complete, signed "
-               "ImmoWertV valuation with every figure sourced costs €4,360+ today.",
+               "Why €2,000? A large firm charges €3–5k for an indicative valuation and more for a signed full "
+               "report; we deliver a signed, sourced desktop valuation in 48 hours for less.",
                "Is LG Darmstadt a risk for us? That fee was cut because the expert hid AI use in a court report. "
                "Censio's reports disclose every AI step, and each judgement call is the signing valuer's, as the "
                "IHK guidance for experts asks."],
-        "sources": ["crr", "darmstadt", "bowery", "pricehubble", "ongeo", "speed"],
+        "sources": ["crr", "darmstadt", "bowery", "fees", "ongeo"],
     },
     {
         "key": "traction",
