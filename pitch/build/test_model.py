@@ -35,15 +35,16 @@ def test_unit_economics(n):
 
 def test_plan(n):
     p = n["plan"]
-    assert [p[y]["valuations"] for y in p] == [100, 550, 1450, 2950, 4800]
+    assert [p[y]["valuations"] for y in p] == [100, 550, 1450, 3550, 7800]  # incl. free owner-listing valuations
     assert p["2031"]["valuation_revenue"] == pytest.approx(9.16e6)
     assert p["2031"]["marketplace_revenue"] == pytest.approx(22.5e6)  # 1,500 deals x EUR 1m x 1.5%
     assert p["2031"]["revenue"] == pytest.approx(31.66e6)
     assert p["2029"]["marketplace_revenue"] == 0  # the marketplace opens in 2030
     assert p["2028"]["ebitda"] < 0 < p["2029"]["ebitda"]
     assert n["breakeven_year"] == 2029
-    assert [p[y]["headcount_ye"] for y in p] == [7, 9, 13, 26, 43]
-    assert p["2031"]["ebitda_margin"] == pytest.approx(0.48, abs=0.01)
+    assert [p[y]["headcount_ye"] for y in p] == [7, 9, 15, 32, 64]
+    assert p["2031"]["ebitda_margin"] == pytest.approx(0.40, abs=0.01)
+    assert p["2029"]["valuation_ebitda"] > 0  # valuations alone break even while the marketplace is built
     assert all(p[y]["senior_utilisation"] <= 0.85 for y in p)
 
 
@@ -58,10 +59,11 @@ def test_proceeds(n):
 
 def test_team(n):
     t = n["team"]
-    assert t["valuations_per_senior_2031"] == pytest.approx(331, abs=1)
-    assert 95 <= t["classic_valuers_low"] <= 97
-    assert 167 <= t["classic_valuers_high"] <= 169
-    assert t["people_2031"] == 43
+    assert t["valuations_per_senior_2031"] == pytest.approx(363, abs=1)
+    assert 155 <= t["classic_valuers_low"] <= 157
+    assert 271 <= t["classic_valuers_high"] <= 273
+    assert t["people_2031"] == 64
+    assert t["seniors_2031"] + t["deal_team_2031"] + t["platform_2031"] + t["sales_ops_2031"] + t["founders"] == 64
     assert t["deals_2031"] == 1500
 
 

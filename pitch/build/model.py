@@ -26,7 +26,10 @@ SEGMENTS = {
     "Portfolio & fund revaluations": ([0, 100, 300, 700, 1200], [1100] * 5, 1.0),
     "Banks": ([0, 0, 150, 400, 800], [2200] * 5, 6.0),  # 3 h review + 3 h site visit incl. travel (lending values)
     "Commercial & DACH": ([0, 0, 0, 150, 400], [3200] * 5, 3.5),
+    # Owners list on the marketplace with a signed value; free to list (customer acquisition), seniors still sign.
+    "Owner listings": ([0, 0, 0, 600, 3000], [0] * 5, 2.0),
 }
+PAID_SEGMENTS = [k for k in SEGMENTS if k != "Owner listings"]
 PRICE = 2_000                    # A list price per signed valuation (beachhead)
 SENIOR_COST = 150_000            # A fully loaded senior valuer per year
 REVIEW_HOURS = 1_000             # A review hours per senior per year
@@ -40,8 +43,8 @@ PAYMENTS_RATE = 0.01             # A payments and other, share of price
 # ---- Team: year-end and average heads, cost per head ---------------------
 FOUNDERS = 4                                     # CEO, AI, business development, sales
 FOUNDER_COST = [60_000, 80_000, 110_000, 130_000, 150_000]
-SENIORS_YE = [2, 3, 5, 10, 17]
-SENIORS_AVG = [1.5, 2.5, 4.0, 8.5, 14.5]
+SENIORS_YE = [2, 3, 5, 12, 25]
+SENIORS_AVG = [1.5, 2.5, 4.0, 10.0, 21.5]
 PLATFORM_YE = [1, 2, 2, 3, 4]
 PLATFORM_AVG = [1.0, 1.5, 2.0, 2.5, 3.5]
 PLATFORM_COST = 120_000
@@ -69,12 +72,12 @@ DEALS = [0, 0, 0, 300, 1500]     # A deals closed on Censio per year
 AVG_TICKET = 1_000_000           # A ~ GEWOS 2024 average income-property deal (EUR 0.95m)
 TAKE_RATE = 0.015                # A deal fee; brokers charge ~3-7% on multi-family and commercial deals
 DEAL_VARIABLE = 4_000            # A per closed deal: KYC, escrow, contracts
-DEAL_TEAM_YE = [0, 0, 0, 4, 10]  # senior transaction managers
-DEAL_TEAM_AVG = [0, 0, 0, 2.0, 8.0]
+DEAL_TEAM_YE = [0, 0, 0, 6, 20]  # senior transaction managers, ~75 AI-assisted deals each a year
+DEAL_TEAM_AVG = [0, 0, 0, 3.0, 14.0]
 DEAL_TEAM_COST = 140_000
-MKT_TECH_YE = [0, 0, 0, 2, 5]
-MKT_TECH_AVG = [0, 0, 0, 1.5, 4.5]
-MKT_NON_STAFF = {"marketing": [0, 0, 0, 600, 2500], "compliance": [0, 0, 0, 100, 150]}  # thousand EUR
+MKT_TECH_YE = [0, 0, 2, 4, 8]    # the marketplace is built in 2029 (seed round), launched in 2030
+MKT_TECH_AVG = [0, 0, 1.0, 3.0, 6.5]
+MKT_NON_STAFF = {"marketing": [0, 0, 200, 1000, 3000], "compliance": [0, 0, 50, 100, 150]}  # thousand EUR
 
 ASK = 1_500_000
 CAPEX = 40_000
@@ -221,9 +224,10 @@ def downside(p: dict, drop_expansion: bool = False) -> dict:
     the DACH expansion. The marketplace is left out: it only starts after a seed round."""
     cum, worst, rows = 0.0, 0.0, {}
     for i, year in enumerate(YEARS):
-        n = p[year]["valuations"] * 0.6
+        n = sum(SEGMENTS[k][0][i] for k in PAID_SEGMENTS) * 0.6
         rev = p[year]["valuation_revenue"] * 0.6 * 0.9
-        hours = sum(v[0][i] * (3.0 if k.startswith("Investors") else v[2]) for k, v in SEGMENTS.items()) * 0.6
+        hours = sum(SEGMENTS[k][0][i] * (3.0 if k.startswith("Investors") else SEGMENTS[k][2])
+                    for k in PAID_SEGMENTS) * 0.6
         seniors = max(1.5, hours / (REVIEW_HOURS * 0.85))
         cogs = seniors * SENIOR_COST + n * (AI_COST + DATA_COST + HOSTING_COST) + rev * (INSURANCE_RATE + PAYMENTS_RATE)
         opex = p[year]["valuation_opex"] - (NON_STAFF["expansion"][i] * 1000 if drop_expansion else 0)
@@ -256,6 +260,10 @@ def team(p: dict) -> dict:
         "seniors_2031": last["seniors_ye"],
         "valuations_2031": last["valuations"],
         "deals_2031": last["deals"],
+        "platform_2031": PLATFORM_YE[-1] + MKT_TECH_YE[-1],
+        "sales_ops_2031": SALES_YE[-1] + OPS_YE[-1],
+        "founders": FOUNDERS,
+        "listings_2031": SEGMENTS["Owner listings"][0][-1],
         "deal_team_2031": last["deal_team_ye"],
         "valuations_per_senior_2031": last["valuations_per_senior"],
         "classic_hours_per_report": classic_hours_per_report,

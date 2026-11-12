@@ -123,6 +123,8 @@ FMT = {
     "experts_last": str(T["seniors_2031"] + T["deal_team_2031"]),
     "som_total_share": pct(LAST["revenue"] / M["deal_sam_eur"]),
     "rev_per_head_last": eur_m(LAST["revenue_per_head"]),
+    "deal_share_last": pct(LAST["marketplace_revenue"] / LAST["revenue"]),
+    "per_senior_spoken": f"{round(T['valuations_per_senior_2031'], -1):.0f}",
 }
 
 BUCKETS = P["buckets"]
@@ -137,9 +139,9 @@ LEGEND_TAILS = {
 TEAM_2031 = [
     ("Valuers", T["seniors_2031"], "valuer"),
     ("Deal team", T["deal_team_2031"], "ink"),
-    ("Platform & AI", 9, "brand_accent"),
-    ("Sales & ops", 3, "ink2"),
-    ("Founders", 4, "brand"),
+    ("Platform & AI", T["platform_2031"], "brand_accent"),
+    ("Sales & ops", T["sales_ops_2031"], "ink2"),
+    ("Founders", T["founders"], "brand"),
 ]
 
 DEFAULT_TEAM = [
@@ -247,7 +249,8 @@ SLIDES = [
         "key": "problem",
         "eyebrow": "Problem",
         "title": "Every deal waits weeks for one signature",
-        "sub": "Valuation, financing and closing run one after another, by hand, and the valuation is the first wall",
+        "sub": "A deal runs valuation, financing and closing by hand, one after another, and brokers take 3–7%. "
+               "The valuation is the first wall",
         "seconds": 30,
         "stats": [
             ("Time", "3–6 weeks", "for a full valuation report from a private valuer; public valuation boards "
@@ -269,7 +272,7 @@ SLIDES = [
                "the site visit, travel and the written report.",
                "Fees: €3–5k for an indicative valuation at large firms is our team's market experience; public "
                "guides show €4–8k for multi-family reports (Munich) and 0.5–1.5% of value (Haus & Grund)."],
-        "sources": ["fees", "speed", "bvs", "ihk", "jveg", "hypzert"],
+        "sources": ["fees", "broker", "speed", "bvs", "ihk", "jveg", "hypzert"],
     },
     {
         "key": "solution",
@@ -320,17 +323,17 @@ SLIDES = [
     {
         "key": "market",
         "eyebrow": "Market size",
-        "title": f"A €390m wedge into a {FMT['deal_tam']} deal market",
+        "title": f"A €390m wedge into a {FMT['deal_tam']}+ deal market",
         "sub": f"We enter through valuations and grow into a fee on every deal: {FMT['eu_investment']} of European "
                "real-estate investment in 2025 alone",
         "seconds": 25,
         "rings": [
-            ("TAM", FMT["deal_tam"], "a year",
-             f"Europe's deal market: {FMT['eu_investment']} of real-estate investment (2025) × {FMT['take_rate']} "
-             "for valuation and deal (est.)"),
+            ("TAM", FMT["deal_tam"] + "+", "a year",
+             f"Europe, institutional deals only: {FMT['eu_investment']} invested (2025) × {FMT['take_rate']} deal "
+             "fee (est.); smaller deals and valuations come on top"),
             ("SAM", FMT["deal_sam"], "a year",
-             f"Germany: {FMT['de_income_turnover']} of income-property sales × {FMT['take_rate']}, plus €390m of "
-             "valuations (est.)"),
+             f"Germany, every multi-family and commercial sale: {FMT['de_income_turnover']} (2025f) × "
+             f"{FMT['take_rate']} deal fee, plus €390m of valuations (est.)"),
             ("SOM", FMT["revenue_last"], "in 2031",
              f"Our plan: {FMT['valuation_revenue_last']} valuations + {FMT['marketplace_revenue_last']} deal fees "
              f"({FMT['deals_last']} deals), ≈{FMT['som_total_share']} of the SAM"),
@@ -341,8 +344,10 @@ SLIDES = [
         "notes": "Every deal starts with a valuation, about 390 million euros a year in Germany: our wedge. The prize "
                  "is the deal: 241 billion euros of European investment in 2025. At one and a half percent, that is "
                  "3.6 billion euros a year.",
-        "qa": ["1.5% for valuation plus deal is our assumption; brokers charge about 3–7% on multi-family and "
-               "commercial deals, freely negotiable.",
+        "qa": ["A 1.5% deal fee is our assumption; valuations are billed separately at fixed fees. Brokers charge "
+               "about 3–7% on multi-family and commercial deals, freely negotiable.",
+               "CBRE's €241bn counts institutional deals only (Germany ≈€33bn of it); our SAM counts every German "
+               "income-property sale, including the ≈€1m deals we target, so a Europe TAM on that basis is larger.",
                f"Beachhead: buy-side valuations of multi-family houses, ≈{FMT['sam']} a year ({FMT['mfh_sales']} "
                "sales × 50% × €3,500, est.).",
                "Context: 872,000 property sales worth €278bn in Germany in 2025 (AK OGA)."],
@@ -370,15 +375,19 @@ SLIDES = [
              "EU bank rules (CRR III Art. 229) require an independent valuer; a model may not be the sole review. "
              "A court paid €0 for an expert report written with undisclosed AI (LG Darmstadt, 2025). Censio "
              "discloses every AI step."),
-            ("brand", "Why we can win",
-             "Every valuation and every deal closed on Censio adds a verified price and rent roll to our own "
-             "comparables: data the official purchase-price register keeps confidential and no frontier model can "
-             "see. US precedent: Bowery Valuation, $35m Series B."),
+            ("brand", "Our data flywheel",
+             "Each valuation adds a rent roll, each deal closed on Censio its verified price: our own cap rates and "
+             "sales comparables, data the official register keeps confidential and no frontier model can see. More "
+             "data, sharper values, fewer senior minutes, more deals."),
         ],
         "notes": "Today you must choose. Automated models answer in seconds, but nobody signs them. Indicative "
                  "valuations cost three to five thousand euros. Full reports are signed, but take weeks. Censio is "
-                 "built to be both, and every deal we close improves our comparables, data no frontier model can see.",
-        "qa": ["Our comparables: the valuation boards' purchase-price register is confidential; detailed extracts go "
+                 "built to be both, and every valuation and deal sharpens our sales comparisons: a data flywheel no "
+                 "frontier model can copy.",
+        "qa": ["If the next GPT, Claude or Gemini release ships our features, it cuts our preparation cost but "
+               "cannot sign, carry liability or see our closing prices and corrections.",
+               "US precedent for a tech-enabled, appraiser-signed firm: Bowery Valuation, $35m Series B (2021).",
+               "Our comparables: the valuation boards' purchase-price register is confidential; detailed extracts go "
                "only to experts with a legitimate interest, per valuation (§ 195 BauGB). Our own closed deals give "
                "us full prices with rent rolls for the sales-comparison approach.",
                "Also competing: the buyer's own spreadsheet, in-house bank valuers on platforms like on-geo LORA "
@@ -392,18 +401,18 @@ SLIDES = [
     {
         "key": "traction",
         "eyebrow": "Traction · north star",
-        "title": "North star: valuations in 48 hours, deals in 7 days",
+        "title": "North star: valued in 48 hours, funded bid in 7 days",
         "sub": "One North Star per phase. Today: a working prototype, no customers yet",
         "seconds": 22,
         "stars": [
             ("Phase 1 · valuation firm", "Signed valuations delivered within 48 hours",
-             f"weekly · today 0 · 2027 plan: {FMT['valuations'][0]}"),
+             f"reviewed weekly · today 0 · 2027: {FMT['valuations'][0]} a year"),
             ("Phase 2 · marketplace, from 2030", "Listings with a funded bid within 7 days",
              "monthly · replaces phase 1 when the marketplace opens"),
         ],
         "inputs": [
             ("Senior minutes per valuation", "target ≤ 120"),
-            ("Valuation clients who also list", "share, from 2030"),
+            ("Closing prices captured", "share of client purchases"),
         ],
         "timeline": [
             ("Today", "Working prototype",
@@ -414,7 +423,7 @@ SLIDES = [
         ],
         "notes": "We steer by one number per phase: first, signed valuations delivered within 48 hours; from 2030, "
                  "listings that get a funded bid within seven days. Today that number is zero: a working prototype, "
-                 "no customers yet. Next: 50 shadow valuations with five investors.",
+                 "no customers yet. Next: 50 shadow valuations.",
         "qa": ["Shadow valuation = we value a deal the investor is already valuing, and compare our result and time "
                "with the signed report they receive.",
                "The 48 hours run from complete documents; missing documents pause the clock."],
@@ -430,21 +439,23 @@ SLIDES = [
         "path": [
             ("2027", "Valuations for multi-family investors", "€2,000",
              "the wedge: asset managers, family offices, housing firms"),
-            ("2028", "All income property, funds, DACH", "€1.1–3.2k",
-             "offices, retail, logistics; quarterly fund revaluations"),
+            ("2028", "Fund & portfolio revaluations", "€1,100",
+             "quarterly revaluations for property funds (KAGB)"),
             ("2029", "Banks: lending values and financing", "€2,200",
              "site visits by HypZert seniors; loans pre-approved on our file"),
-            ("2030", "Marketplace across Europe", f"{FMT['take_rate']} fee",
-             "owners list with a signed value, investors bid, lenders finance"),
+            ("2030", "Marketplace + commercial & DACH", f"{FMT['take_rate']} fee",
+             "owners list with a signed value; investors bid"),
         ],
-        "later": "2031+: the deal engine. Value, finance and close any building within a week. Valuation fees stay "
-                 "fixed, never tied to a closing.",
-        "notes": "We enter with signed valuations for multi-family investors at 2,000 euros, then all income property, "
-                 "funds and DACH, then banks and financing. From 2030 our marketplace: owners list with a signed "
-                 "value, investors bid, and we earn a deal fee. Revenue reaches 31.7 million euros in 2031.",
+        "later": "2031+: Europe, then the deal engine. Value, finance and close any building within a week. "
+                 "Valuation fees stay fixed, never tied to a closing.",
+        "notes": "We enter with signed valuations for multi-family investors at 2,000 euros, then fund revaluations, "
+                 "then banks and financing. From 2030 our marketplace, plus commercial and DACH: owners list with a "
+                 "signed value, investors bid, and we earn a deal fee. Revenue reaches 31.7 million euros in 2031.",
         "qa": [f"Plan: {FMT['deals_first']} deals in 2030 and {FMT['deals_last']} in 2031 at ≈€1m each and a "
                f"{FMT['take_rate']} fee (est.); valuations alone reach {FMT['valuation_revenue_last']} in 2031.",
                "2027 is a €1,800 launch price; €2,000 from 2028. Segment volumes and prices are in model.py.",
+               "Owners list for free: their signed valuation is part of the marketplace (600 in 2030, 3,000 in "
+               "2031, in the valuation counts).",
                "Independence: valuers are not paid on deals; valuation fees are fixed."],
         "sources": ["model", "broker", "kagb", "belwertv"],
     },
@@ -467,8 +478,9 @@ SLIDES = [
                   f"{FMT['classic_valuers_high']} valuers for the valuations alone (est.)",
         "first_hire": "First hire: a HypZert / öbuv senior who signs from 2027",
         "notes": "AI-native means: AI does the junior work, so we hire only seniors. We four founders run the company; "
-                 "senior valuers sign and senior deal managers close. One senior signs about 330 "
-                 "valuations a year, instead of 30 to 50. By 2031, 43 people run 4,800 valuations and 1,500 deals.",
+                 "senior valuers sign and senior deal managers close. One senior signs about "
+                 f"{FMT['per_senior_spoken']} valuations a year, instead of 30 to 50. By 2031, {FMT['people_last']} "
+                 f"people run {FMT['valuations_last']} valuations and {FMT['deals_last']} deals.",
         "qa": ["Who signs the first report? Our first hire, a HypZert / öbuv senior valuer, paid from the Deliver "
                "share. Hiring pool: >2,000 HypZert valuers, ~200 newly certified a year.",
                f"Revenue per person in 2031: ≈{FMT['rev_per_head_last']} (plan).",
@@ -480,28 +492,30 @@ SLIDES = [
     {
         "key": "financials",
         "eyebrow": "Financial projections",
-        "title": f"Break-even in {FMT['breakeven']}, {FMT['revenue_last']} revenue by 2031",
-        "sub": f"Valuations break even in {FMT['breakeven']}; from 2030 the marketplace lifts revenue to "
-               f"{FMT['revenue_last']} and EBITDA to {FMT['ebitda_last']} in 2031",
+        "title": f"{FMT['revenue_last']} revenue by 2031, {FMT['deal_share_last']} from deal fees",
+        "sub": f"Valuations break even in {FMT['breakeven']} and fund the marketplace build; from 2030 deal fees lift "
+               f"EBITDA to {FMT['ebitda_last']} ({FMT['ebitda_margin_last']}) in 2031",
         "seconds": 22,
         "downside": f"Downside for the valuation business (−40% volume, −10% price, 3 senior hours): the round runs "
                     f"out in {FMT['downside_out_of_cash']} and {FMT['downside_extra']} more is needed, so we raise a "
                     "seed on 2028 data",
-        "notes": "Valuations alone break even in 2029. From 2030 the deal fee takes revenue to 31.7 million and "
-                 "EBITDA to 15.3 million in 2031. Each valuation earns 79 percent gross; first we must prove two "
-                 "senior hours per valuation.",
+        "notes": "Valuations alone break even in 2029 and fund the marketplace build. From 2030 the deal fee takes "
+                 f"revenue to 31.7 million and EBITDA to {FMT['ebitda_last'][1:-1]} million in 2031. First we must "
+                 "prove two senior hours per valuation.",
         "qa": [f"Downside (valuation business, plan costs): EBITDA 2031 {FMT['downside_2031']}, cumulative low "
                f"{FMT['downside_cum']}; cash runs out in {FMT['downside_out_of_cash']} and the round is "
                f"{FMT['downside_extra']} short ({FMT['downside_extra_no_dach']} without the DACH expansion).",
                f"79% is per valuation at full senior use; company gross margin is {FMT['company_gm']} in 2029–31.",
-               "Marketplace assumptions: deals per year, ≈€1m average ticket (GEWOS: €0.95m), 1.5% fee, €4k cost "
-               "per deal, a senior deal team; none of it is proven yet."],
+               "Marketplace assumptions: 300 and 1,500 deals, ≈€1m average ticket (GEWOS: €0.95m), 1.5% fee, €4k "
+               "per deal, one deal manager per ~75 deals, build from 2029; none of it is proven yet.",
+               "The 2029 seed funds the marketplace build faster; the plan itself carries the build costs and stays "
+               "EBITDA-positive."],
         "sources": ["model", "prototype", "gewos"],
     },
     {
         "key": "ask",
         "eyebrow": "Use of proceeds",
-        "title": f"{FMT['ask']} pre-seed to prove the wedge",
+        "title": f"{FMT['ask']} to prove the wedge, start the flywheel",
         "sub": f"24 months to {FMT['valuations_2027_28']} signed valuations, {FMT['customers_2028']} customers and "
                f"{FMT['revenue_2028']} revenue, with {FMT['runway']} months of runway at zero revenue",
         "seconds": 22,
@@ -511,8 +525,8 @@ SLIDES = [
         "milestones": [
             ("2027", f"First senior signs · {FMT['valuations'][0]} valuations · 10 customers"),
             ("2028", f"{FMT['valuations'][1]} valuations · {FMT['customers_2028']} customers · "
-                     f"{FMT['revenue'][1]} revenue"),
-            ("2029", "Seed round to build the marketplace; ≤ 2 senior hours per valuation proven"),
+                     f"{FMT['revenue'][1]} revenue · first 100 closing prices"),
+            ("2029", "Seed for the marketplace, on proof: ≤ 2 senior hours, 30 owners ready to list"),
         ],
         "closing": "Censio. Buildings change hands as easily as shares.",
         "notes": "We're raising 1.5 million euros pre-seed to prove the wedge: 650 signed valuations and one million "

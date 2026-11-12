@@ -436,7 +436,8 @@ def s_gtm(slide, s):
     # Native stacked columns: revenue by segment, totals in the category labels.
     data = CategoryChartData()
     data.categories = [f"{y}\n{r}" for y, r in zip(C.YEARS, C.FMT["revenue"])]
-    names = list(C.PLAN[C.YEARS[0]]["segment_revenue"])
+    names = [k for k in C.PLAN[C.YEARS[0]]["segment_revenue"]
+             if any(C.PLAN[y]["segment_revenue"][k] for y in C.YEARS)]  # free owner listings carry no revenue
     for name in names:
         data.add_series(name, [C.PLAN[y]["segment_revenue"][name] / 1e6 for y in C.YEARS])
     x = 7.6

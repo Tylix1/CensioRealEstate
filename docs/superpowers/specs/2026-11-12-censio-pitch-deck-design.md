@@ -122,6 +122,9 @@ After the independent review (5 lenses, each finding checked by a second agent; 
 | Pfandbrief bank lending 2025 | €148.6bn new loans (+15.7%); MFH loans +27.4% | [vdp press release](https://www.pfandbrief.de/wp-content/uploads/2026/03/20260324_PM_vdp_Kreditgeschaeft_Q4_2025_DE_final.pdf) |
 | Valuer fee guideline | €4,360 net (€1m), €5,580 (€2m), €6,800 (€3m) | [BVS-Honorarrichtlinie 2026](https://www.bvs-ev.de/fileupload/files/6a8ea166d1f80_BVS-Honorarrichtlinie_Fassung_2026.pdf) (non-binding) |
 | Fees for income property | Indicative valuation at large firms €3–5k (team's market experience, not a public source); multi-family reports €4–8k (Munich guide); 0.5–1.5% of value (Haus & Grund) | [ftimmobilien24](https://www.ftimmobilien24.com/immobilienmakler-münchen/verkehrswertgutachten-muenchen/), [Haus & Grund Frankfurt](https://www.hausundgrund.de/verein/frankfurtammain/fachwissen/2023102/immobilienbewertung?page=1) |
+| European real-estate investment 2025 | €241bn, +13% (institutional deals; Germany ≈€33bn) | [CBRE press release, Jan 2026](https://www.cbre.co.uk/press-releases/european-real-estate-investment-climbs-to-euro241-billion-in-2025-fuelled-by-big-gains-) |
+| Broker fees, multi-family and commercial | ~3–7%, freely negotiable | [Immowelt](https://www.immowelt.de/ratgeber/vermieten/maklerprovision-wer-zahlt), [reduco.ai](https://reduco.ai/blog/immobilienverkauf/maklerprovision-wer-zahlt) |
+| Purchase-price register (Kaufpreissammlung) | Confidential; extracts only with a legitimate interest, per valuation | [§ 195 BauGB](https://lxgesetze.de/baugb/195), [Brandenburg rules](https://bravors.brandenburg.de/verwaltungsvorschriften/auskunftkpsvv) |
 | Court rate for property valuers | €125/h (since 1 Jun 2025) | [JVEG Anlage 1](https://www.gesetze-im-internet.de/jveg/anlage_1.html) |
 | Turnaround | Full report 3–4 weeks, up to 6; short report 2–7 days (consumer guides quote €300–900 for owner-occupied homes, not income property) | [ImmoScout24](https://www.immobilienscout24.de/wissen/verkaufen/immobilienbewertung-dauer.html), [jacasa](https://www.jacasa.de/ratgeber/immobilienwert/wertgutachten-immobilie) |
 | Public valuation boards | Heidelberg 4–6 months; Berlin ≥1 year in single cases | [service.berlin.de](https://service.berlin.de/dienstleistung/330803/pdf/) |
@@ -147,30 +150,28 @@ The single source of these numbers is `pitch/build/model.py`; it writes `pitch/b
 
 | Assumption | Value | Why |
 |---|---|---|
-| Product scope | Signed **desktop** valuation (documents and public data, no site visit); site visit on request | What the prototype produces ("Desktop valuation, no internal inspection") |
-| Valuations per income-property sale | 1.5 (range 1–2) | Buyer and/or lender. No official count of valuations exists. |
-| Average market fee per valuation | €3,500 | Between the BVS minimum (€2,750) and the €1m row (€4,360); average MFH deal ~€0.9m |
-| Share of MFH purchases with a buy-side valuation | 50% (30–70%) | Not every buyer commissions one |
-| Segments: valuations a year 2027–31, price, senior hours | Investors 100·450·1,000·1,700·2,400 at €1,800 (2027) / €2,000, 2 h · Funds 0·100·300·700·1,200 at €1,100, 1 h · Banks 0·0·150·400·800 at €2,200, 6 h (3 h review + 3 h site visit incl. travel, €100 travel cost) · Commercial & DACH 0·0·0·150·400 at €3,200, 3.5 h | Investors first; bank lending values need an inspection (BelWertV § 5) |
-| Senior review capacity | 1,000 review hours per senior a year; utilisation kept ≤ 85% | |
-| Fully loaded senior valuer | €150k per year | Senior HypZert/öbuv level |
-| Variable cost per valuation | AI €5 (est. ≈€0.45 from token prices, plus buffer), data €40, hosting €10, PI insurance 2.5%, payments 1% | |
-| Team (year end) | 4 founders + seniors 2·3·5·10·17 + platform 1·2·2·3·4 + sales 0·0·1·2·2 + ops 0·0·1·1·1 = 7·9·13·20·28 | Founders are the overhead; no juniors |
-| Customers | 10 (2027), 25 (2028) | ≈20 valuations per customer a year, counted per bid |
-| Classic comparison | 20–35 h per full report, 1,000 report hours a year → 30–50 reports per valuer | 35 h = BVS fee at €1m ÷ €125/h court rate (billable hours incl. site visit) |
-| Pre-seed | €1.5m | Net burn 2027–28 €0.89m, working capital €0.08m, equipment €0.04m, reserve €0.49m |
+| Story | The AI-native deal engine for real estate; the signed desktop valuation is the wedge and stays a business; a marketplace with a deal fee opens in 2030 | Team decision (vision: a building changes hands as easily as a share) |
+| Product scope (wedge) | Signed desktop valuation (documents and public data, no site visit); site visit on request | What the prototype produces |
+| Valuations per income-property sale | 1.5 (range 1–2) | Buyer and/or lender. No official count exists. |
+| Average market fee per valuation | €3,500 | Large firms charge €3–5k for an indicative valuation (team experience) |
+| Share of MFH purchases with a buy-side valuation | 50% (30–70%) | |
+| Valuation segments 2027–31 | Investors 100·450·1,000·1,700·2,400 at €1,800/€2,000, 2 h · Funds 0·100·300·700·1,200 at €1,100, 1 h · Banks 0·0·150·400·800 at €2,200, 6 h (incl. site visit, €100 travel) · Commercial & DACH 0·0·0·150·400 at €3,200, 3.5 h · Owner listings 0·0·0·600·3,000, free to list, 2 h | |
+| Marketplace | Deals 0·0·0·300·1,500; ≈€1m ticket (GEWOS average €0.95m); 1.5% deal fee; €4k cost per deal; deal team 6·20 (≈75 deals each); marketplace tech 2·4·8 from 2029; marketing €0.2m·€1.0m·€3.0m; compliance €0.05m·€0.1m·€0.15m | A fraction of brokers' 3–7%; built in 2029, launched 2030 |
+| Market size | TAM €241bn × 1.5% = €3.6bn+ (Europe, institutional only); SAM €79bn × 1.5% + €390m valuations = €1.6bn (Germany, all income-property sales) | |
+| Senior review capacity | 1,000 review hours per senior a year; utilisation ≤ 85% | |
+| Team (year end) | 7 · 9 · 15 · 32 · 64 (2031: 25 valuers, 20 deal team, 12 platform & AI, 3 sales & ops, 4 founders) | No juniors |
+| Pre-seed | €1.5m | Net burn 2027–28 €0.89m, working capital €0.08m, equipment €0.04m, reserve €0.49m; seed in 2029 for the marketplace (not in the plan) |
 
 ### Plan output (numbers.json)
 
 | | 2027 | 2028 | 2029 | 2030 | 2031 |
 |---|---|---|---|---|---|
-| Signed valuations | 100 | 550 | 1,450 | 2,950 | 4,800 |
-| Revenue | €0.18m | €1.01m | €2.66m | €5.53m | €9.16m |
-| Gross margin | -32% | 56% | 70% | 70% | 69% |
-| EBITDA | −€0.62m | −€0.27m | +€0.50m | +€1.56m | +€3.12m |
-| Headcount (year end) | 7 | 9 | 13 | 20 | 28 |
-| Senior valuers (year end) | 2 | 3 | 5 | 10 | 17 |
+| Signed valuations (incl. free owner listings) | 100 | 550 | 1,450 | 3,550 | 7,800 |
+| Deals closed on Censio | 0 | 0 | 0 | 300 | 1,500 |
+| Revenue | €0.18m | €1.01m | €2.66m | €10.03m | €31.66m |
+| of which deal fees | €0.00m | €0.00m | €0.00m | €4.50m | €22.50m |
+| EBITDA | −€0.62m | −€0.27m | +€0.13m | +€2.73m | +€12.52m |
+| Valuation business EBITDA | −€0.62m | −€0.27m | +€0.50m | +€1.31m | +€1.91m |
+| Headcount (year end) | 7 | 9 | 15 | 32 | 64 |
 
-Downside case (−40% volume, −10% price, 3 senior hours on the beachhead, costs held at plan): EBITDA 2031 −€0.13m, cumulative low −€2.29m; the round falls €0.9m short, which dropping the DACH expansion (€0.9m in 2030–31) covers. This is why the 90-day test of review time matters most.
-
-Use of proceeds: shares of the 2027–28 gross spend (€2.08m), funded by the €1.5m round and €1.19m of revenue; founders are counted where their role works (CEO: Run; AI: Build; business development and sales: Sell).
+Downside (valuation business only; −40% volume, −10% price, 3 senior hours): EBITDA 2031 −€0.13m, cumulative low −€2.29m; cash runs out in 2029 and the round is €0.9m short (€0.5m without the DACH expansion), so a seed on 2028 data is needed.

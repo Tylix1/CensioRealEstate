@@ -58,19 +58,20 @@ ONE_PAGER = {
     "playbook": [
         ("Year 1 · 2027", "Prove the wedge",
          "Signed desktop valuations of multi-family houses for investors' acquisition teams in Germany: €2,000, "
-         "48 h.", "100", "signed valuations"),
+         "48 h.", f"{P[Y[0]]['valuations']:,}", "signed valuations"),
         ("Year 2 · 2028", "Repeatability",
-         "Every income property (offices, retail, logistics) and quarterly fund revaluations; Germany, Austria, "
-         "Switzerland.", "1,000", "signed valuations"),
+         "Same firms, second budget: quarterly fund and portfolio revaluations; 25 paying customers in Germany.",
+         f"{P[Y[1]]['valuations']:,}", "signed valuations"),
         ("Year 3 · 2029", "Scale & compound",
-         "Deeper into the deal: lending values with a site visit for banks and the full due-diligence pack; first "
-         "markets beyond DACH.", "5,000", "signed valuations"),
+         "Banks: lending values with a site visit and the full due-diligence pack; a seed round builds the "
+         "marketplace.", f"{P[Y[2]]['valuations']:,}", "signed valuations"),
         ("Year 4 · 2030", "Network effect",
-         "Marketplace across Europe: owners list with a signed value, investors bid, lenders pre-approve financing "
-         "on the same file; every listing draws buyers, every buyer draws listings.", "1,000", "fast funded bids"),
+         "Marketplace opens in Germany, plus commercial property and DACH: owners list with a signed value, "
+         "investors bid, lenders pre-approve; every listing draws buyers.", f"{P[Y[3]]['deals']:,}+",
+         "fast funded bids"),
         ("Year 5 · 2031+", "Lead the category",
-         "The deal engine for real estate: value, finance and close any building within a week, in Europe, then "
-         "worldwide; our signed, traceable deal file becomes the standard.", "10,000", "fast funded bids"),
+         "The deal engine across Europe, then worldwide: value, finance and close any building within a week; our "
+         "signed, traceable deal file becomes the standard.", f"{P[Y[4]]['deals']:,}+", "fast funded bids"),
     ],
     # Course p. 27-29: one controllable metric with unit, quality bar, scope and cadence. One North Star at a
     # time: the marketplace metric replaces the valuation metric when the marketplace opens (playbook Year 4).
@@ -88,23 +89,23 @@ ONE_PAGER = {
                    ("Cadence", "monthly")]},
     ],
     "north_star_proxy": "One North Star at a time: Phase 2 replaces Phase 1 when the marketplace opens. Proxies: "
-                        "senior minutes per valuation (≤ 120); share of valuation clients who also list.",
+                        "senior minutes per valuation (≤ 120); closing prices captured.",
     # Course p. 5 moat names, ordered by the playbook stage that builds them (template p. 37: "along that journey").
     "moats": [
         ("Brand & trust + regulation", "market · Y1", "we sign, insure and disclose every AI step; banks need an "
                                                        "independent valuer (CRR III)."),
         ("Cost advantage", "new with AI · Y1", "≈€0.45 of AI + 2 senior hours per valuation vs ≈35 h (est.)."),
         ("Workflow lock-in", "amplified by AI · Y2", "we keep each client's valuation file."),
-        ("Data flywheel", "new with AI · Y3–4", "every valuation and deal on Censio adds a verified price and rent "
-                                                "roll to our comparables."),
+        ("Data flywheel", "new with AI · Y3–4", "each valuation adds a rent roll, each deal a verified price."),
         ("Network of users", "pre-AI · Y4", "owners, buyers and lenders draw each other."),
     ],
     "frontier_test": "If the next GPT, Claude or Gemini release ships our feature, do we still exist? Yes: it cuts "
                      "our preparation cost but cannot sign or carry liability, and rivals using it lack our "
                      "closing prices, correction data, client files and marketplace. Verdict: defensible vertical platform, not a "
                      "wrapper.",
-    "team_model": "Founders are the overhead; the operating team is senior valuers and deal managers (27 of 43 "
-                  "people in 2031) plus a small platform team. No juniors: AI does the junior work. First hire: a HypZert / "
+    "team_model": f"Founders are the overhead; the operating team is senior valuers and deal managers "
+                  f"({C.T['seniors_2031'] + C.T['deal_team_2031']} of {C.T['people_2031']} people in 2031) plus a "
+                  "small platform team. No juniors: AI does the junior work. First hire: a HypZert / "
                   "öbuv senior valuer.",
 }
 
